@@ -10,6 +10,10 @@ export_presets.cfg
 .mono/
 data_*/
 
-
 Test/bin/*
 Test/obj/*
+
+
+
+.obsidian/
+.vscode/
