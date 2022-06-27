@@ -1,0 +1,16 @@
+<Project Sdk="Godot.NET.Sdk/3.3.0">
+  <PropertyGroup>
+    <NoWarn>CS1591</NoWarn>
+
+    <DocumentationFile>Documentation/Test</DocumentationFile>
+    <TargetFramework>net471</TargetFramework>
+       <CoreCompileDependsOn>$(CoreCompileDependsOn);ExcludeTestsFolder</CoreCompileDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="ExcludeTestsFolder">
+        <ItemGroup>
+            <Compile Remove="Test\**\*.cs" />
+        </ItemGroup>
+    </Target>
+
+</Project>

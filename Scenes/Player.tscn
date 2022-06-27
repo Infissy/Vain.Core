@@ -1,0 +1,44 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Source/MainCamera.cs" type="Script" id=1]
+[ext_resource path="res://Resources/Icons/default.png" type="Texture" id=2]
+[ext_resource path="res://Source/Entity.cs" type="Script" id=3]
+[ext_resource path="res://Source/ComponentSystem/ComponentContainer.cs" type="Script" id=4]
+[ext_resource path="res://Scenes/Components/Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/Components/PlayerSpellCaster.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Components/UserMovementInput.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/Components/Movable.tscn" type="PackedScene" id=8]
+
+[sub_resource type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 16 )
+
+[node name="Player" type="KinematicBody2D"]
+script = ExtResource( 3 )
+
+[node name="ComponentContainer" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="Player" parent="ComponentContainer" instance=ExtResource( 5 )]
+
+[node name="UserMovementInput" parent="ComponentContainer" instance=ExtResource( 7 )]
+
+[node name="PlayerSpellCaster" parent="ComponentContainer" instance=ExtResource( 6 )]
+
+[node name="Movable" parent="ComponentContainer" instance=ExtResource( 8 )]
+_speed = 3.0
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 3 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource( 1 )
