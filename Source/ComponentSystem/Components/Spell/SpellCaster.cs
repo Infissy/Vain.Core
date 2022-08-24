@@ -2,6 +2,12 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
+
+//Not workign
+
+
+
+
 namespace Vain.SpellSystem
 {
     public class SpellCaster : Component, IKillListenable
@@ -59,9 +65,9 @@ namespace Vain.SpellSystem
         {
             base._Ready();
 
-            _movable = ComponentEntity.ComponentContainer.GetComponent<Movable>();
+            _movable = GetComponent<Movable>();
 
-            _movable.OnCollision += collisionHandler;
+           //_movable.OnCollision += collisionHandler;
         }
 
 
@@ -104,7 +110,7 @@ namespace Vain.SpellSystem
             }
         }
 
-        public void CastSpell(int index, Vector2 target){
+        public void CastSpell(int index, Vector3 target){
             
             if(_spellChannelers[index] != null)
             {
@@ -113,10 +119,10 @@ namespace Vain.SpellSystem
                 
                 this.AddChild(spellInstance);
 
-                bool successfulCast = spellInstance.ComponentContainer.GetComponent<SpellBehaviour>().Cast(ComponentEntity, target);
+                //bool successfulCast = spellInstance.GetComponent<SpellBehaviour>().Cast(ComponentEntity, target);
                 
 
-                if(successfulCast){
+                if(true/*successfulCast*/){
                     _spellChannelers[index].NumberOfCasts--;  
                     if(_spellChannelers[index].NumberOfCasts == 0){
                         _spellChannelers[index] = null;
@@ -164,15 +170,18 @@ namespace Vain.SpellSystem
         
         public void OnKill()
         {
-            ComponentEntity.QueueFree();
+            base.ComponentEntity.QueueFree();
 
             
             foreach (SpellChanneler channeler in _spellChannelers)
             {
                 if(channeler != null){
                     var spellDrop = channeler.SpellDropPrefab as Entity;
-                    spellDrop.Position = ComponentEntity.Position - spellDrop.Position;
-                    spellDrop.ComponentContainer.GetComponent<SpellDrop>().SpellChanneler = channeler;
+
+                    var drop_movable = spellDrop.GetComponent<Movable>();
+                    var movable = base.ComponentEntity.GetComponent<Movable>();
+                    //drop_movable.Position = ComponentEntity.Position - spellDrop.Position;
+                    //spellDrop.ComponentContainer.GetComponent<SpellDrop>().SpellChanneler = channeler;
 
                 }
                 
@@ -190,9 +199,10 @@ namespace Vain.SpellSystem
 
 
 
-        void collisionHandler(Node collider)
-        {
-            if(collider is SpellDrop spellDrop)
+        void collisionHandler(CollisionEventArgs args)
+        {       
+            
+            if(args.Collider is SpellDrop spellDrop)
             {
                 AddSpell(spellDrop.SpellChanneler);
             }

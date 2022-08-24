@@ -5,7 +5,8 @@ using Godot;
 using Vain.Log;
 
 
-
+/// Effectable component for a entity to be able to get an effect from something
+///
 
 namespace Vain
 {
@@ -86,7 +87,7 @@ namespace Vain
                     case EffectType.SPEEDBOOST:
                         if(_movable != null)
                         {
-                        _movable?.SetSpeedBoost(effects[i].Value);
+                            _movable.SpeedModifier = effects[i].Value;
 
                         }
                         
@@ -113,7 +114,11 @@ namespace Vain
                     {
 
                         case EffectType.SPEEDBOOST:
-                        _movable?.SetSpeedBoost(1-effectsApplied[i].Value);
+                        
+                        if (_movable != null)
+                            _movable.SpeedModifier = 1-effectsApplied[i].Value;
+
+                            
                         break;
 
 

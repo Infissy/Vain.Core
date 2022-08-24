@@ -2,6 +2,9 @@
 using Vain;
 using Godot;
 
+//Not workign
+
+
 namespace Vain.SpellSystem
 {
     public class SpellDrop : Component , IPickable
@@ -17,7 +20,7 @@ namespace Vain.SpellSystem
         {
            
                 
-                entity.ComponentContainer.GetComponent<SpellCaster>().AddSpell(SpellChanneler);
+                //entity.ComponentContainer.GetComponent<SpellCaster>().AddSpell(SpellChanneler);
                 
                 ComponentEntity.Kill();
 

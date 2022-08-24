@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Godot;
+
+//Not working
 
 namespace Vain.SpellSystem
 {
@@ -8,16 +11,20 @@ namespace Vain.SpellSystem
     {
 
         
+        
+        
 
 
-
-
-
+        [Export(PropertyHint.MultilineText)]
+        protected string behaviour;
     
+
+
+
 
         [Export] 
         protected float Lifetime;
-        [Export]
+  
         protected List<Effect> effects = new List<Effect>();
         protected bool EffectFetched = false;
 
@@ -28,6 +35,9 @@ namespace Vain.SpellSystem
             return effects;
             
         }}
+
+
+       
 
         public abstract bool Cast(Entity owner, Vector2 target);
         

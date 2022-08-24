@@ -14,9 +14,14 @@ namespace Vain
 
 		public override void _Ready()
 		{
+			//TODO: Enable component hierarchy
+			_entity = GetParent<ComponentContainer>().GetParent<Entity>();
 
-			_entity = GetParent<ComponentContainer>().GetOwner<Entity>();
+		}
 
+		protected T GetComponent<T>() where T : Component
+		{
+			return _entity.GetComponent<T>();
 		}
 		
 	}

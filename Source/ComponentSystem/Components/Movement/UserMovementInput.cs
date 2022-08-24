@@ -31,10 +31,30 @@ namespace Vain
                 var mouseEvent = inputEvent as InputEventMouseButton;
                 if(mouseEvent.IsPressed() &&mouseEvent.ButtonIndex ==  2){
                     
-                    
-                    _movable.Target = MainCamera.Instance.MousePosition;
+                    var camera = MainCamera.Instance;
 
-                    Logger.SetContext(ComponentEntity).Debug($"User move input at {_movable.Target}" );
+
+                    var from = camera.ProjectRayOrigin(mouseEvent.Position);
+                    var to = from + camera.ProjectRayNormal(mouseEvent.Position) * 100;
+                    
+
+                    var space = camera.GetWorld().DirectSpaceState;
+
+                    var intersection = space.IntersectRay(from,to);
+
+                    
+                    if(intersection.Count > 0)
+                    {
+                        _movable.Target = (Vector3) intersection["position"] ;
+                        
+
+                        GD.Print(_movable.Target);
+        
+
+                        Logger.SetContext(ComponentEntity).Debug($"User move input at {_movable.Target}" );
+                    }
+
+
 
                 }
 

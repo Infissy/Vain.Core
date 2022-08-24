@@ -30,14 +30,17 @@ namespace Vain
 
 
 
-        public ComponentContainer ComponentContainer => _container;
+        ComponentContainer ComponentContainer => _container;
+        
+        
+        
+        
         public static List<Entity> Entities {get => _entities;}
 
         public int ID {get  => _id;}
 
-        
 
-        
+
 
 
         static int Register(Entity entity){
@@ -74,8 +77,7 @@ namespace Vain
             
         
         }
-
-
+        
         public override void _PhysicsProcess(float delta)
         {
             base._PhysicsProcess(delta);
@@ -83,17 +85,6 @@ namespace Vain
             _delta = delta;
         }
 
-
-        public Node Query (Type nodeType) 
-        {
-            foreach (var child in GetChildren())
-            {
-                if(child.GetType() == nodeType)
-                    return child as Node;
-            }
-
-            return null;
-        }
 
         public void Kill()
         {
@@ -105,6 +96,9 @@ namespace Vain
 
             QueueFree();
         }
+
+
+
         public override void _ExitTree()
         {
             base._ExitTree();
@@ -113,6 +107,11 @@ namespace Vain
             Unregister(_id,this);
         }
         
+
+        public T GetComponent<T>() where T : Component
+        {
+            return ComponentContainer.Components.Where(c => c.GetType() == typeof(T)).First() as T;
+        }
 
     
             

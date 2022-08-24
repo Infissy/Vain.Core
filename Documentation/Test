@@ -6,17 +6,17 @@
     <members>
         <member name="T:Vain.Command.Runner">
             <summary>
-                Main Class that handles command execution
+             Main Class that handles command execution
             </summary>
         </member>
         <member name="T:Vain.Console.GameConsole">
             <summary>
-                GameConsole is the main  <see cref="P:Godot.Node"/> that contains the logic for the output.
+             GameConsole is the main  <see cref="P:Godot.Node"/> that contains the logic for the output.
             </summary>
         </member>
         <member name="T:OutputContainer">
             <summary>
-                OutputContainer: Class and Node that contains all the RichTextLabel containing the lines of the  <see cref="T:Vain.Console.GameConsole"/>.
+             OutputContainer: Class and Node that contains all the RichTextLabel containing the lines of the  <see cref="T:Vain.Console.GameConsole"/>.
             </summary> 
         </member>
         <member name="M:OutputContainer._Ready">

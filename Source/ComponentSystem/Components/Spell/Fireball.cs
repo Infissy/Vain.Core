@@ -2,6 +2,11 @@ using Godot;
 using System.Collections.Generic;
 using Vain;
 
+
+//Not working
+
+
+
 namespace Vain.SpellSystem
 
 {
@@ -40,15 +45,15 @@ namespace Vain.SpellSystem
             SetProcess(false);
             
             
-            _movable = ComponentEntity.ComponentContainer.GetComponent<Movable>();
+            //_movable = ComponentEntity.ComponentContainer.GetComponent<Movable>();
 
 
 
             
 
-            _movable.SpeedBoost += this._speed - _movable.Speed;
+            //_movable.SpeedBoost += this._speed - _movable.Speed;
             
-            _movable.OnCollision += collisionHandler;
+            //_movable.OnCollision += collisionHandler;
 
             
 
@@ -62,7 +67,7 @@ namespace Vain.SpellSystem
 
             base._PhysicsProcess(delta);
 
-            _movable.Target =  ComponentEntity.Position + _direction;
+            //_movable.Target =  ComponentEntity.Position + _direction;
             
             
 
@@ -87,18 +92,18 @@ namespace Vain.SpellSystem
         public override bool Cast(Entity owner, Vector2 target)
         {
 
-            if(owner.ComponentContainer.GetComponent<Player>() != null)
-                _castByPlayer = true;
-            else
-                _castByPlayer = false;
+            //if(owner.ComponentContainer.GetComponent<Player>() != null)
+                //_castByPlayer = true;
+            //else
+               // _castByPlayer = false;
 
 
 
 
-            var ownerPosition = owner.Position;
-            ComponentEntity.Position = ownerPosition;
+            //var ownerPosition = owner.Position;
+            //ComponentEntity.Position = ownerPosition;
 
-            _direction = (target-ownerPosition).Normalized();
+            //_direction = (target-ownerPosition).Normalized();
             this.SetPhysicsProcess(true);
             this.SetProcess(true);
             
@@ -116,7 +121,7 @@ namespace Vain.SpellSystem
         {
 
             if(collider is Entity entity)
-                if(entity.ComponentContainer.GetComponent<Player>(true) != null ^ _castByPlayer)
+                //if(entity.ComponentContainer.GetComponent<Player>(true) != null ^ _castByPlayer)
                     applySpell(entity);
         }
         
@@ -128,15 +133,15 @@ namespace Vain.SpellSystem
 
                 
             
-                Hittable hittable = entity.ComponentContainer.GetComponent<Hittable>(true);
-                Effectable effectable = entity.ComponentContainer.GetComponent<Effectable>(true);
-                if(hittable != null && effectable != null){
+                //Hittable hittable = entity.ComponentContainer.GetComponent<Hittable>(true);
+                // Effectable effectable = entity.ComponentContainer.GetComponent<Effectable>(true);
+                //if(hittable != null && effectable != null){
                 
-                    effectable.ApplyEffects(this.effects);
+                //  effectable.ApplyEffects(this.effects);
         
                     ComponentEntity.Kill();
                 
-                }
+                //}
             
         
         }

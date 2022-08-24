@@ -3,9 +3,9 @@ namespace Vain
 
 {
         
-    public class MainCamera : Godot.Camera2D
-    {
-        public Vector2 MousePosition => GetGlobalMousePosition();
+    public class MainCamera : Camera  {
+        
+        
 
         public static MainCamera Instance;
         

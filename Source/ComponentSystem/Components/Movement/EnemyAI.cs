@@ -65,26 +65,26 @@ namespace Vain
             // TODO : Check for null has to be done elsewhere
             if(_playerEntity != null){
 
-                
-
+                var playerPosition = _playerEntity.GetComponent<Movable>().Position;
+              
 
                 switch(enemyAIType){
                     case EnemyAIType.FollowPlayer:
 
 
-                        _movable.Target = _playerEntity.Position ;
+                        _movable.Target = playerPosition;
 
 
                         break;
                     case EnemyAIType.KeepDistance:
                         
                 
-                        Vector2 posRelative =   _playerEntity.Position - ComponentEntity.Position ; 
+                        var posRelative =   playerPosition - _movable.Position ; 
                         
                         
                         //TODO: Add Jitter or random movements 
 
-                        Vector2 target =    _playerEntity.Position -  posRelative.Normalized() * DistanceToPlayer ;
+                        var target =    playerPosition -  posRelative.Normalized() * DistanceToPlayer ;
 
                         
                         

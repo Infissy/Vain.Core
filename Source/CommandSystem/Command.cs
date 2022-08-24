@@ -6,6 +6,12 @@ using System.Collections.Generic;
 using Vain.Log;
 using Vain.UI;
 
+
+
+
+//Not working
+
+
 namespace Vain.Command{
 
     public class Command
@@ -49,7 +55,7 @@ namespace Vain.Command{
             CommandName  = "playerpos",
 
 
-            CommandFunction = (pm) => Logger.Information(Player.Instance.Entity.Position.ToString())
+           // CommandFunction = (pm) => Logger.Information(Player.Instance.Entity.Position.ToString())
 
 
         };
@@ -63,7 +69,7 @@ namespace Vain.Command{
                 
                 var entity = Entity.Entities.Where(e => e.ID == int.Parse(pm[0] as string)).First();
 
-                Logger.Information(entity.Position.ToString());
+               // Logger.Information(entity.Position.ToString());
             }
 
 
@@ -156,14 +162,14 @@ namespace Vain.Command{
                 var msg = "\n";
                 
 
-
+                /*
                 foreach (var component in entity.ComponentContainer.Components)
                 {
                     msg += $"   {component.GetType().Name } \n";
                 
 
                 }
-
+                */
                 Logger.Information(msg);
             }
 

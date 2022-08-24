@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
+//TODO: Character controller terrain aware 
+
+
 namespace Vain
 {
     
@@ -19,62 +23,87 @@ namespace Vain
         [Export]
         float _speed = 500;
         [Export]
-        float _speedBoost = 1;
+        float _speedModifier = 1;
+        
+
+
+        
+        KinematicBody _collider;
+
+        [Export]
+        Vector3 _target;
     
-
-
-    
-
+        
         public float Speed => _speed;
 
+        public float SpeedModifier {
 
-        public float SpeedBoost;
+            get => _speedModifier;
+            set => _speedModifier = value;
 
-        Vector2 _target = Vector2.Zero;
+        }
 
+        
 
-
-        public delegate void CollisionHandler(Node collider);
-
-        public event CollisionHandler OnCollision;
-
+        public event EventHandler<CollisionEventArgs> OnCollision;
 
 
-        public Vector2 Target {
+
+
+        
+
+
+        public Vector3 Target {
             get => _target;
             set  => _target = value;
         }
+
+        public Vector3 Position{
+            get => _collider.GlobalTranslation;
+        }
+
 
         public override void _Ready()
         {
             
             
             base._Ready();
-
+            _collider = GetChild<KinematicBody>(0) ?? throw new NullReferenceException("No collider found as a child of this component.");
             
+          
             
         }
 
 
+
+
+        
         public override void _PhysicsProcess(float delta)
         {   
-            
-            Vector2 direction = (_target - ComponentEntity.Position);
-            
-            KinematicCollision2D collision = null;
-            if(direction.Length()<10)
+
+
+            if(_target != default)
             {
+
+                var relativePosition = (_target - _collider.GlobalTranslation);
+                var direction = relativePosition.Normalized();
+                
+                KinematicCollision collision = null;
+                if(relativePosition.Length()<0.1)
+                {
+                        
+                    if(!_collider.TestMove(_collider.Transform,direction * _speed * _speedModifier))
+                        collision =  _collider.MoveAndCollide(direction * _speed * _speedModifier * 0.001f);
+
                     
-                if(!ComponentEntity.TestMove(ComponentEntity.Transform,direction.Normalized() * _speed * _speedBoost))
-                  collision =  ComponentEntity.MoveAndCollide(direction.Normalized() * _speed * _speedBoost * 0.001f);
 
+                }
+                else
+                    collision = _collider.MoveAndCollide(-direction.Normalized() * _speed * _speedModifier); 
                 
-
+    
             }
-            else
-                collision = ComponentEntity.MoveAndCollide(direction.Normalized() * _speed * _speedBoost); 
-
-                
+            /*
             if(collision != null)
             {
                 if(collision.Collider is Node collider)
@@ -85,7 +114,7 @@ namespace Vain
                 if(collision.Collider is Entity colliderEntity)
                 
             }
-            
+            */
    
 
 

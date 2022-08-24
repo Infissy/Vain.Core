@@ -1,7 +1,7 @@
 
 using Godot;
 
-
+//Health component, for a entity to die after health gets to 0
 namespace Vain
 {
     

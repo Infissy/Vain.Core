@@ -1,0 +1,58 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Source/Entity.cs" type="Script" id=1]
+[ext_resource path="res://Source/ComponentSystem/ComponentContainer.cs" type="Script" id=2]
+[ext_resource path="res://Source/ComponentSystem/Components/Movement/Movable.cs" type="Script" id=3]
+[ext_resource path="res://Source/MainCamera.cs" type="Script" id=4]
+[ext_resource path="res://Source/ComponentSystem/Components/Movement/UserMovementInput.cs" type="Script" id=5]
+[ext_resource path="res://debug_draw.gd" type="Script" id=6]
+
+[sub_resource type="PlaneMesh" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+
+[sub_resource type="CapsuleMesh" id=3]
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 0.227963, 0.199808, 0.231785 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Spatial" type="Spatial" parent="."]
+transform = Transform( 7.69984, 0, 0, 0, 0.996474, 0, 0, 0, 7.69984, -0.909, -0.002, 1.105 )
+
+[node name="Terrain" type="CSGMesh" parent="."]
+transform = Transform( 7.69984, 0, 0, 0, 0.996474, 0, 0, 0, 7.69984, 0.00524657, -0.00150684, -0.00381932 )
+use_collision = true
+mesh = SubResource( 1 )
+material = SubResource( 2 )
+
+[node name="Player" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Container" type="Node" parent="Player"]
+script = ExtResource( 2 )
+
+[node name="Node" type="Node" parent="Player/Container"]
+script = ExtResource( 3 )
+
+[node name="KinematicBody" type="KinematicBody" parent="Player/Container/Node"]
+
+[node name="Player" type="CSGMesh" parent="Player/Container/Node/KinematicBody"]
+transform = Transform( 0.08, 0, 0, 0, -3.49691e-09, -0.108, 0, 0.08, -4.72083e-09, -0.000293493, 0.195844, -0.00810236 )
+use_collision = true
+mesh = SubResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Player/Container/Node/KinematicBody"]
+transform = Transform( -0.410928, 0, 0, 0, 0.856546, 0, 0, 0, -0.47975, 0, 0.181642, 0 )
+shape = SubResource( 4 )
+
+[node name="Node2" type="Node" parent="Player/Container"]
+script = ExtResource( 5 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -0.974303, -7.25913e-09, -0.22524, -0.113423, 0.863959, 0.490623, 0.194598, 0.503563, -0.841758, -0.722694, 1.6856, -2.26568 )
+script = ExtResource( 4 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource( 6 )

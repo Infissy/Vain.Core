@@ -2,6 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Vain;
+
+
+
+
 namespace Vain.SpellSystem
 
 {
@@ -22,7 +26,7 @@ namespace Vain.SpellSystem
                 int spellindex= (int) GD.RandRange(0,_spells.Count-1);
 
                 if(_spells[spellindex].Spell != Spell.None){
-                    CastSpell(spellindex,Player.Instance.Entity.Position);
+                    CastSpell(spellindex,Player.Instance.Entity.GetComponent<Movable>().Position);
 
                 }
             }
