@@ -13,36 +13,11 @@ namespace Vain
     public class Entity : Node 
     {
     
-        
-
-
-        
-        
-
-
-        
+        #region STATIC_ENTITY
         static Stack<int> OldIDs = new Stack<int>();
         static int idCount = 0;
         static List<Entity> _entities  = new List<Entity>();
-        int _id;
-        ComponentContainer _container;
-        float _delta;
-
-
-
-        ComponentContainer ComponentContainer => _container;
-        
-        
-        
-        
         public static List<Entity> Entities {get => _entities;}
-
-        public int ID {get  => _id;}
-
-
-
-
-
         static int Register(Entity entity){
 
             if(OldIDs.Count > 0)
@@ -61,6 +36,35 @@ namespace Vain
             OldIDs.Push(id);
 
         }
+
+        #endregion
+        
+
+
+        
+        
+
+
+        
+
+
+        int _id;
+        
+        ComponentContainer _container;
+
+        float _delta;
+
+
+
+        ComponentContainer ComponentContainer => _container;
+        
+        
+        
+        
+
+        public int ID {get  => _id;}
+
+
 
 
         
@@ -102,8 +106,6 @@ namespace Vain
         public override void _ExitTree()
         {
             base._ExitTree();
-
-
             Unregister(_id,this);
         }
         

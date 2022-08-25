@@ -59,7 +59,7 @@ namespace Vain
         }
 
         public Vector3 Position{
-            get => _collider.GlobalTranslation;
+            get => _collider.GlobalTransform.origin;
         }
 
 
@@ -84,22 +84,26 @@ namespace Vain
 
             if(_target != default)
             {
-
-                var relativePosition = (_target - _collider.GlobalTranslation);
-                var direction = relativePosition.Normalized();
-                
                 KinematicCollision collision = null;
-                if(relativePosition.Length()<0.1)
+
+                
+
+                //_collider.LookAt(_target, Vector3.Up);
+                
+                var movVec = (_target - _collider.GlobalTransform.origin) * _speed * _speedModifier * delta;
+
+
+                if((_target - _collider.GlobalTransform.origin).Length()<0.1)
                 {
                         
-                    if(!_collider.TestMove(_collider.Transform,direction * _speed * _speedModifier))
-                        collision =  _collider.MoveAndCollide(direction * _speed * _speedModifier * 0.001f);
+                    if(!_collider.TestMove(_collider.Transform,movVec))
+                        collision =  _collider.MoveAndCollide(movVec * 0.001f);
 
                     
 
                 }
                 else
-                    collision = _collider.MoveAndCollide(-direction.Normalized() * _speed * _speedModifier); 
+                    collision = _collider.MoveAndCollide(movVec); 
                 
     
             }

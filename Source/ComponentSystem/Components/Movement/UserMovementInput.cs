@@ -47,9 +47,18 @@ namespace Vain
                     {
                         _movable.Target = (Vector3) intersection["position"] ;
                         
+                        
 
-                        GD.Print(_movable.Target);
-        
+                        //TODO: Make system for debug draw
+                        
+                        var d_node = new CSGSphere();
+                        d_node.GlobalTranslate(_movable.Target);
+                        d_node.Scale = Vector3.One * 0.1f;
+                        this.Owner.AddChild(d_node);
+
+
+                        
+                                
 
                         Logger.SetContext(ComponentEntity).Debug($"User move input at {_movable.Target}" );
                     }

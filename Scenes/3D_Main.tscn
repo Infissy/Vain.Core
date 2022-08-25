@@ -19,7 +19,7 @@ extents = Vector3( 0.227963, 0.199808, 0.231785 )
 [node name="Spatial" type="Spatial"]
 
 [node name="Spatial" type="Spatial" parent="."]
-transform = Transform( 7.69984, 0, 0, 0, 0.996474, 0, 0, 0, 7.69984, -0.909, -0.002, 1.105 )
+transform = Transform( 7.69984, 0, 0, 0, 0.996474, 0, 0, 0, 7.69984, -0.444, -0.002, 4.288 )
 
 [node name="Terrain" type="CSGMesh" parent="."]
 transform = Transform( 7.69984, 0, 0, 0, 0.996474, 0, 0, 0, 7.69984, 0.00524657, -0.00150684, -0.00381932 )
