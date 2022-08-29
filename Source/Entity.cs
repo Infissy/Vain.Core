@@ -110,8 +110,11 @@ namespace Vain
         }
         
 
-        public T GetComponent<T>() where T : Component
-        {
+        public T GetComponent<T>(bool optional = false) where T : Component
+        {   
+            if(optional)
+                return ComponentContainer.Components.Where(c => c.GetType() == typeof(T)).FirstOrDefault() as T;
+
             return ComponentContainer.Components.Where(c => c.GetType() == typeof(T)).First() as T;
         }
 

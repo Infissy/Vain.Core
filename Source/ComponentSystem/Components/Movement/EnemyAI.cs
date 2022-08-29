@@ -14,7 +14,7 @@ namespace Vain
     public class EnemyAI : Component
     {
 
-        
+        [Export]        
         EnemyAIType enemyAIType = EnemyAIType.KeepDistance;
 
 

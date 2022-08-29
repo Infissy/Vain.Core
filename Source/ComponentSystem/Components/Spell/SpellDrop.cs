@@ -20,7 +20,7 @@ namespace Vain.SpellSystem
         {
            
                 
-                //entity.ComponentContainer.GetComponent<SpellCaster>().AddSpell(SpellChanneler);
+                GetComponent<SpellCaster>().AddSpell(SpellChanneler);
                 
                 ComponentEntity.Kill();
 

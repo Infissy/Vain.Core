@@ -1,4 +1,7 @@
 using Godot;
+
+
+
 namespace Vain.SpellSystem
 {
 
@@ -13,12 +16,24 @@ namespace Vain.SpellSystem
         string _spellDropPrefab;
 
         [Export]
-        public int NumberOfCasts;
+        public int NumberOfCasts {get; set;}
 
         
-        public Node SpellPrefab=> GD.Load<PackedScene>(_spellPrefab).Instance();
-        public Node SpellDropPrefab => GD.Load<PackedScene>(_spellDropPrefab).Instance();
-        
+
+
+        public Node InstantiateSpell()
+        {
+         
+            return GD.Load<PackedScene>(_spellPrefab).Instance();
+
+        }
+
+     
+        public Node InstantiateSpellDrop()
+        {
+            return GD.Load<PackedScene>(_spellDropPrefab).Instance();
+        }
+
 
     }
 

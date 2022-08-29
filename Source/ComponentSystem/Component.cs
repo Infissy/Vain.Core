@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using Godot;
 namespace Vain
 {
-	
+	[Tool]
+	public class ComponentChecker : Node
+	{
+		public override void _Ready()
+		{
+			GD.Print("Test");
+		}
+	}
 
+
+
+	
 	public abstract class Component : Node
 	{
 		

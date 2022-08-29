@@ -69,17 +69,24 @@ namespace Vain
             
             base._Ready();
             _collider = GetChild<KinematicBody>(0) ?? throw new NullReferenceException("No collider found as a child of this component.");
-            
-          
-            
+
         }
 
 
 
+        public void ForcePosition(Vector3 position)
+        {
 
+            //TODO: Debug eventual problems, movement synching missing
+            _collider.Translate(position);
+
+            
+        }
         
         public override void _PhysicsProcess(float delta)
-        {   
+        {      
+            
+            base._PhysicsProcess(delta);
 
 
             if(_target != default)
@@ -88,12 +95,10 @@ namespace Vain
 
                 
 
-                //_collider.LookAt(_target, Vector3.Up);
+                var movVec = (_target - _collider.GlobalTranslation).Normalized() * _speed * _speedModifier * delta;
+
                 
-                var movVec = (_target - _collider.GlobalTransform.origin) * _speed * _speedModifier * delta;
-
-
-                if((_target - _collider.GlobalTransform.origin).Length()<0.1)
+                if((_target - _collider.GlobalTranslation).Length() < 0.001)
                 {
                         
                     if(!_collider.TestMove(_collider.Transform,movVec))
@@ -103,30 +108,24 @@ namespace Vain
 
                 }
                 else
-                    collision = _collider.MoveAndCollide(movVec); 
+                    _collider.MoveAndCollide(movVec); 
+      
+                
+                
+                if(collision != null)
+                {
+                    if(collision.Collider is Node collider)
+                    {
+
+                        OnCollision.Invoke(this, new CollisionEventArgs(collider));
+                    }
+                    
+                    
+                }
                 
     
             }
-            /*
-            if(collision != null)
-            {
-                if(collision.Collider is Node collider)
-                {
-
-                    OnCollision.Invoke(collider);
-                }
-                if(collision.Collider is Entity colliderEntity)
-                
-            }
-            */
-   
-
-
         }
 
-        
-
-
-       
     }
 }

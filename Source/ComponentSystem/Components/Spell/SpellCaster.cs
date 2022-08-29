@@ -7,10 +7,13 @@ using System.Linq;
 
 
 
+//Component that enables entity to cast spells
+
+
 
 namespace Vain.SpellSystem
 {
-    public class SpellCaster : Component, IKillListenable
+    public abstract class SpellCaster : Component, IKillListenable
     {
 
         public struct SpellsCastCount {
@@ -20,33 +23,19 @@ namespace Vain.SpellSystem
         
         
         Movable _movable;
+
         Dictionary< int , SpellsCastCount > _spells = new Dictionary<int, SpellsCastCount>();
+
         bool _changedSpells;
 
-
-
-
-
-
-
-
-
-        
         [Export]
         SpellChanneler[] _spellChannelers = new SpellChanneler[10];
 
 
-
-
-
-
-
-
-
         protected int SpellCount{get {return _spellChannelers.Length;} }
 
-
-        public Dictionary< int , SpellsCastCount > Spells {
+        public Dictionary< int , SpellsCastCount > Spells 
+        {
             
             get 
             {
@@ -67,7 +56,7 @@ namespace Vain.SpellSystem
 
             _movable = GetComponent<Movable>();
 
-           //_movable.OnCollision += collisionHandler;
+           _movable.OnCollision += collisionHandler;
         }
 
 
@@ -112,18 +101,21 @@ namespace Vain.SpellSystem
 
         public void CastSpell(int index, Vector3 target){
             
-            if(_spellChannelers[index] != null)
+            if(_spellChannelers[index] != null  && _spellChannelers[index].NumberOfCasts > 0)
             {
-
-                var spellInstance  = _spellChannelers[index].SpellPrefab as Entity;
                 
+                var spellInstance  = _spellChannelers[index].InstantiateSpell() as Entity;
+                
+
+
+                //TODO: Better hierarchy, this should not be a component child
                 this.AddChild(spellInstance);
 
-                //bool successfulCast = spellInstance.GetComponent<SpellBehaviour>().Cast(ComponentEntity, target);
+                bool successfulCast = spellInstance.GetComponent<SpellBehaviour>().Cast(ComponentEntity, target);
                 
 
-                if(true/*successfulCast*/){
-                    _spellChannelers[index].NumberOfCasts--;  
+                if(successfulCast){
+                    
                     if(_spellChannelers[index].NumberOfCasts == 0){
                         _spellChannelers[index] = null;
 
@@ -170,23 +162,33 @@ namespace Vain.SpellSystem
         
         public void OnKill()
         {
-            base.ComponentEntity.QueueFree();
 
             
             foreach (SpellChanneler channeler in _spellChannelers)
             {
                 if(channeler != null){
-                    var spellDrop = channeler.SpellDropPrefab as Entity;
+                    
 
+                  
+                    var spellDropInstance = channeler.InstantiateSpellDrop();
+
+                    //! Find better place to store spells
+                    GetTree().Root.AddChild(spellDropInstance);
+
+
+
+                    var spellDrop = spellDropInstance as Entity;
+
+                
                     var drop_movable = spellDrop.GetComponent<Movable>();
-                    var movable = base.ComponentEntity.GetComponent<Movable>();
-                    //drop_movable.Position = ComponentEntity.Position - spellDrop.Position;
-                    //spellDrop.ComponentContainer.GetComponent<SpellDrop>().SpellChanneler = channeler;
+                    drop_movable.ForcePosition(_movable.Position);
+                    spellDrop.GetComponent<SpellDrop>().SpellChanneler = channeler;
 
                 }
                 
             }
             
+            base.ComponentEntity.QueueFree();
             
         }
 
@@ -199,12 +201,17 @@ namespace Vain.SpellSystem
 
 
 
-        void collisionHandler(CollisionEventArgs args)
+        void collisionHandler(object sender, CollisionEventArgs args)
         {       
             
-            if(args.Collider is SpellDrop spellDrop)
+            if(args.Collider is Entity entity )
             {
-                AddSpell(spellDrop.SpellChanneler);
+
+                var spellDrop = entity.GetComponent<SpellDrop>(true);
+
+                
+                if(spellDrop != null)
+                    AddSpell(spellDrop.SpellChanneler);
             }
         }
 

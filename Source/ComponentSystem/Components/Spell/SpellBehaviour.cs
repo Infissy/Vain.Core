@@ -39,7 +39,7 @@ namespace Vain.SpellSystem
 
        
 
-        public abstract bool Cast(Entity owner, Vector2 target);
+        public abstract bool Cast(Entity owner, Vector3 target);
         
         
         

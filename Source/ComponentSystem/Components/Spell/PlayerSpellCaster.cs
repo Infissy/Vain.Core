@@ -22,7 +22,7 @@ namespace Vain.SpellSystem
                 switch ((KeyList)keyEvent.Scancode)
                 {
                     case KeyList.Q:
-                    //CastSpell(0,mousepos);
+                    CastSpell(0,MainCamera.Instance.MouseTargetInScene);
                         break;
                 }
             }
