@@ -13,7 +13,3 @@ _speed = 4.0
 
 [node name="CollisionShape" type="CollisionShape" parent="KinematicBody2"]
 shape = SubResource( 3 )
-
-[node name="CSGCylinder" type="CSGCylinder" parent="KinematicBody2"]
-radius = 0.231
-height = 0.425

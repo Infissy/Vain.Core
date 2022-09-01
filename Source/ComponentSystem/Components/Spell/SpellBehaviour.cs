@@ -14,10 +14,7 @@ namespace Vain.SpellSystem
         
         
 
-
-        [Export(PropertyHint.MultilineText)]
-        protected string behaviour;
-    
+        
 
 
 
@@ -29,12 +26,17 @@ namespace Vain.SpellSystem
         protected bool EffectFetched = false;
 
 
-        public List<Effect> Effects {get{
-            EffectFetched = true;
+        public List<Effect> Effects 
+        {
+            get{
+                
+                
+                EffectFetched = true;
             
-            return effects;
+                return effects;
             
-        }}
+            }
+        }
 
 
        

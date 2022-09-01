@@ -29,7 +29,10 @@ namespace Vain
 
         
         KinematicBody _collider;
-
+        GeometryInstance _mesh;
+        
+        
+        
         [Export]
         Vector3 _target;
     
@@ -68,8 +71,8 @@ namespace Vain
             
             
             base._Ready();
-            _collider = GetChild<KinematicBody>(0) ?? throw new NullReferenceException("No collider found as a child of this component.");
-
+            _collider = GetChildren().OfType<KinematicBody>().FirstOrDefault() ?? throw new NullReferenceException("No collider found as a child of this component.");
+            _mesh = GetChildren().OfType<GeometryInstance>().FirstOrDefault();
         }
 
 
@@ -82,7 +85,16 @@ namespace Vain
 
             
         }
-        
+
+
+        public override void _Process(float delta)
+        {
+            base._Process(delta);
+
+            _mesh?.GlobalTranslate(_collider.GlobalTransform.origin);
+
+            
+        }
         public override void _PhysicsProcess(float delta)
         {      
             
