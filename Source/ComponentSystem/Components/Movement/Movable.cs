@@ -107,10 +107,10 @@ namespace Vain
 
                 
 
-                var movVec = (_target - _collider.GlobalTranslation).Normalized() * _speed * _speedModifier * delta;
+                var movVec = (_target - _collider.GlobalTransform.origin).Normalized() * _speed * _speedModifier * delta;
 
                 
-                if((_target - _collider.GlobalTranslation).Length() < 0.001)
+                if((_target - _collider.GlobalTransform.origin).Length() < 0.001)
                 {
                         
                     if(!_collider.TestMove(_collider.Transform,movVec))
