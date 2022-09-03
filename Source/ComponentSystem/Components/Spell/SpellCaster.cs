@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Vain.SpellSystem
 {
-    public abstract class SpellCaster : Component, IKillListenable
+    public abstract class SpellCaster : Component, IKillListenable, IInitalizable
     {
 
         public struct SpellsCastCount {
@@ -28,7 +28,7 @@ namespace Vain.SpellSystem
 
         bool _changedSpells;
 
-        [Export]
+        [EditableField]
         SpellChanneler[] _spellChannelers = new SpellChanneler[10];
 
 
@@ -50,13 +50,12 @@ namespace Vain.SpellSystem
         }
 
 
-        public override void _Ready()
+        public void Initialize()
         {
-            base._Ready();
-
+            
             _movable = GetComponent<Movable>();
 
-           _movable.OnCollision += collisionHandler;
+            _movable.OnCollision += collisionHandler;
         }
 
 
@@ -111,7 +110,7 @@ namespace Vain.SpellSystem
                 //TODO: Better hierarchy, this should not be a component child
                 this.AddChild(spellInstance);
 
-                bool successfulCast = spellInstance.GetComponent<SpellBehaviour>().Cast(ComponentEntity, target);
+                bool successfulCast = spellInstance.GetComponent<SpellBehaviour>().Cast(base.Entity, target);
                 
 
                 if(successfulCast){
@@ -173,7 +172,7 @@ namespace Vain.SpellSystem
                     var spellDropInstance = channeler.InstantiateSpellDrop();
 
                     //! Find better place to store spells
-                    GetTree().Root.AddChild(spellDropInstance);
+                    Entity.GetTree().Root.AddChild(spellDropInstance);
 
 
 
@@ -188,7 +187,7 @@ namespace Vain.SpellSystem
                 
             }
             
-            base.ComponentEntity.QueueFree();
+            base.Entity.Kill();
             
         }
 

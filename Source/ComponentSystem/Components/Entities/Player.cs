@@ -3,17 +3,14 @@ namespace Vain
 {
     
 
-    public class Player : Component
+    public class Player : Component, IInitalizable
     {
         
         public static Player Instance;
 
-        public Entity Entity => ComponentEntity;
 
-        public override void _Ready(){
+        public void Initialize(){
 
-            base._Ready();
-            
             Instance = this;
         }
         

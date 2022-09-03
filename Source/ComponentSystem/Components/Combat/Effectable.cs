@@ -5,13 +5,12 @@ using Godot;
 using Vain.Log;
 
 
-/// Effectable component for a entity to be able to get an effect from something
-///
+// Effectable component for a entity to be able to get an effect from something
 
 namespace Vain
 {
     
-    class Effectable : Component
+    class Effectable : Component, IInitalizable
     {
 
 
@@ -30,10 +29,10 @@ namespace Vain
 
         
 
-        public override void _Ready()
+        public void Initialize()
         {
-            base._Ready();
-            _movable = GetParent<ComponentContainer>().GetComponent<Movable>();
+            
+            _movable = GetComponent<Movable>();
         }
         
         public void ApplyEffects(List<Effect> effectsToApply)
@@ -65,7 +64,7 @@ namespace Vain
         }
 
 
-        public override void _Process(float delta)
+        public void IProcessable(float delta)
         {   
             if(effects.Count > 0 || effectsApplied.Count > 0)
                 handleEffects(delta);
@@ -80,7 +79,7 @@ namespace Vain
 
                 switch(effects[i].effectType){
                     case EffectType.DAMAGE:
-                        Logger.SetContext(ComponentEntity).Debug("Entity Damaged");
+                        Logger.SetContext(Entity).Debug("Entity Damaged");
                         _health?.Damage(effects[i].Value);
                         
                         break;
@@ -131,7 +130,7 @@ namespace Vain
                     
                     eff.Duration -= delta;
                     
-                    Logger.SetContext(ComponentEntity).Debug(eff.Duration.ToString());
+                    Logger.SetContext(Entity).Debug(eff.Duration.ToString());
                     effectsApplied[i] = eff; 
 
                 }

@@ -5,18 +5,25 @@ namespace Vain
 {
 
 
-    class HealthBar : Component
+    class HealthBar : Component , IInitalizable, ILateInitializable
     {
         
         Health _health;
         HealthBarUI _healthBarUI;
 
+        Movable _movable;
 
-        public override void _Ready()
+
+        public void Initialize()
         {
-            base._Ready();
-            _health = GetParent<ComponentContainer>().GetComponent<Health>();
+            
+            _health = GetComponent<Health>();
+            _movable = GetComponent<Movable>();
+
         }
+
+
+
 
         public void LateInitialize()
         {
@@ -26,10 +33,10 @@ namespace Vain
         }
 
 
-        public override void _PhysicsProcess(float deltatime)
+        public void PhysicsProcess(float deltatime)
         {
-            
-            _healthBarUI.Position = (Owner as KinematicBody2D).Position;
+            //TODO: 3D UI Positioning
+            //_healthBarUI.Position = _movable.Position;
         }
 
         

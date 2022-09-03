@@ -31,7 +31,7 @@ namespace Vain
             
         
             if(_currentHealth <= 0){
-                ComponentEntity.Kill();
+                Entity.Kill();
             }
 
 

@@ -15,7 +15,7 @@ namespace Vain
 
 
     
-    public class Movable : Component
+    public class Movable : Component, IInitalizable
     {
 
         
@@ -29,7 +29,7 @@ namespace Vain
 
         
         KinematicBody _collider;
-        GeometryInstance _mesh;
+  
         
         
         
@@ -49,7 +49,7 @@ namespace Vain
         
 
         public event EventHandler<CollisionEventArgs> OnCollision;
-
+        public event EventHandler<CollisionEventArgs> OnMovementUpdate;
 
 
 
@@ -66,13 +66,13 @@ namespace Vain
         }
 
 
-        public override void _Ready()
+        public void Initialize()
         {
             
             
-            base._Ready();
+     
             _collider = GetChildren().OfType<KinematicBody>().FirstOrDefault() ?? throw new NullReferenceException("No collider found as a child of this component.");
-            _mesh = GetChildren().OfType<GeometryInstance>().FirstOrDefault();
+        
         }
 
 

@@ -22,7 +22,7 @@ namespace Vain.SpellSystem
                 
                 GetComponent<SpellCaster>().AddSpell(SpellChanneler);
                 
-                ComponentEntity.Kill();
+                Entity.Kill();
 
                 
                 

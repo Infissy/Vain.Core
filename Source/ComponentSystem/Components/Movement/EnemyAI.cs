@@ -11,7 +11,7 @@ namespace Vain
     }
     
     
-    public class EnemyAI : Component
+    public class EnemyAI : Component , IInitalizable, IProcessable
     {
 
         [Export]        
@@ -22,11 +22,11 @@ namespace Vain
         
         Movable _movable;
 
-        public override void _Ready()
+        public void Initialize()
         {
-            base._Ready();
+         
 
-            _movable = GetParent<ComponentContainer>().GetComponent<Movable>();
+            _movable = GetComponent<Movable>();
 
         }
 
@@ -34,14 +34,14 @@ namespace Vain
         Entity _playerEntity;
 
 
-        [Export]
-        public float DistanceToPlayer = 10;
-        [Export]
-        public float JitterDistance;
-        [Export]
-        public float StasisDelayThreshold;
-        [Export]
-        public float MoveDelayThreshold;
+        [EditableField]
+        float DistanceToPlayer = 10;
+        [EditableField]
+        float JitterDistance;
+        [EditableField]
+        float StasisDelayThreshold;
+        [EditableField]
+        float MoveDelayThreshold;
 
         
         float moveDelay;
@@ -57,10 +57,9 @@ namespace Vain
 
 
 
-        public override void _Process(float delta)
+        public void Process(float delta)
         {
-            
-            base._Process(delta);
+         
             
             // TODO : Check for null has to be done elsewhere
             if(_playerEntity != null){
