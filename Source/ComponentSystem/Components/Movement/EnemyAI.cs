@@ -11,7 +11,7 @@ namespace Vain
     }
     
     
-    public class EnemyAI : Component , IInitalizable, IProcessable
+    public class EnemyAI : Component , IInitialize, IProcessable
     {
 
         [Export]        

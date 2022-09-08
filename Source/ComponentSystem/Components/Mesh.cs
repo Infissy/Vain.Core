@@ -3,7 +3,7 @@ using Godot;
 namespace Vain
 {
 
-    public class Mesh : Component, IInitalizable
+    public class Mesh : Component, IInitialize
     {
         [EditableField]
         PackedScene _meshPrefab;

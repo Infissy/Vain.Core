@@ -1,9 +1,8 @@
-
 namespace Vain
 {
-    public class Enemy : Component
-    {
-        
-    }
-    
+	public class Enemy : Component
+	{
+		
+	}
+	
 }

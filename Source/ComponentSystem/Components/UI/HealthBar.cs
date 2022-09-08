@@ -5,7 +5,7 @@ namespace Vain
 {
 
 
-    class HealthBar : Component , IInitalizable, ILateInitializable
+    class HealthBar : Component , IInitialize, ILateInitializable
     {
         
         Health _health;

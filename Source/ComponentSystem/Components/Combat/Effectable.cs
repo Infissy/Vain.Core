@@ -10,7 +10,7 @@ using Vain.Log;
 namespace Vain
 {
     
-    class Effectable : Component, IInitalizable
+    class Effectable : Component, IInitialize
     {
 
 

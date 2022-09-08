@@ -4,49 +4,48 @@ using Vain.Log;
 
 namespace Vain
 {
-    
+	
 
-    public class UserMovementInput : Component
-    {
-        
-     
+	public class UserMovementInput : Component, IInitialize, INPut
+	{
+		
+	 
 
-        Movable _movable;
-
-
-        public override void _Ready()
-        {
-            base._Ready();
+		Movable _movable;
 
 
-            _movable = GetParent<ComponentContainer>().GetComponent<Movable>();
+		public void Initialize()
+		{
 
-            
-        }
+			_movable = GetComponent<Movable>();
 
-        public override void _UnhandledInput(InputEvent inputEvent)
-        {
-            base._UnhandledInput(inputEvent);
+			
+		}
 
-
-            if (inputEvent is InputEventMouseButton){
-                var mouseEvent = inputEvent as InputEventMouseButton;
-                if(mouseEvent.IsPressed() &&mouseEvent.ButtonIndex ==  2)
-                {
-
-                    var target = MainCamera.Instance.MouseTargetInScene;
-                    if(target != Vector3.Inf)
-                        _movable.Target = target;
-                    
-                }
+		public override void _UnhandledInput(InputEvent inputEvent)
+		{
+			base._UnhandledInput(inputEvent);
 
 
+			if (inputEvent is InputEventMouseButton){
+				var mouseEvent = inputEvent as InputEventMouseButton;
+				if(mouseEvent.IsPressed() && mouseEvent.ButtonIndex ==  2)
+				{
+				
 
-            }
+					var target = MainCamera.Instance.MouseTargetInScene;
+					if(target != Vector3.Inf)
+						_movable.Target = target;
+					
+				}
 
 
-        }
-    }
+
+			}
+
+
+		}
+	}
 
 
 }

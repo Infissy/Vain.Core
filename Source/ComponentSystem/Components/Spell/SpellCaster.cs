@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Vain.SpellSystem
 {
-    public abstract class SpellCaster : Component, IKillListenable, IInitalizable
+    public abstract class SpellCaster : Component, IKillListenable, IInitialize
     {
 
         public struct SpellsCastCount {

@@ -15,14 +15,14 @@ namespace Vain
 
 
     
-    public class Movable : Component, IInitalizable
+    public class Movable : Component, IInitialize, IPhysicsProcessable
     {
 
         
   
-        [Export]
+        [EditableField]
         float _speed = 500;
-        [Export]
+        [EditableField]
         float _speedModifier = 1;
         
 
@@ -70,8 +70,10 @@ namespace Vain
         {
             
             
-     
-            _collider = GetChildren().OfType<KinematicBody>().FirstOrDefault() ?? throw new NullReferenceException("No collider found as a child of this component.");
+            
+            //TODO: Kinematic body initalization
+
+            //_collider = OfType<KinematicBody>().FirstOrDefault() ?? throw new NullReferenceException("No collider found as a child of this component.");
         
         }
 
@@ -86,20 +88,10 @@ namespace Vain
             
         }
 
-
-        public override void _Process(float delta)
-        {
-            base._Process(delta);
-
-            _mesh?.GlobalTranslate(_collider.GlobalTransform.origin);
-
-            
-        }
-        public override void _PhysicsProcess(float delta)
+        
+        public void PhysicsProcess(float delta)
         {      
             
-            base._PhysicsProcess(delta);
-
 
             if(_target != default)
             {
