@@ -1,30 +1,41 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Vain
 {
 	
 
-	public class ComponentContainer : Node
-		
+	public class ComponentContainer 
 	{
 
 
-		public Component[] Components => GetChildren().OfType<Component>().ToArray();
+		public List<Component> _components = new List<Component>();
+			
+		public Component[] Components => _components.ToArray(); 
 
+		
 		public T GetComponent<T>(bool nullable = false) where T : Component
 		{	
-			var resArray = GetChildren().OfType<T>().ToArray();
+			var resArray =  _components.Where(c => c.GetType() == typeof(T)).FirstOrDefault();
 
-			if(resArray.Count() == 0 && nullable)
-				return null;
+
+
 			
+			if(nullable)
+				return resArray as T;
+			else
+			{
+				return resArray as T ?? throw new ComponentNotFoundException<T>();
+			}
 
-
-			return resArray.First();
 		}
 
+		public void AddComponent(Component component)
+		{
+			_components.Add(component);
+		}
 		
 
 	}

@@ -56,19 +56,18 @@ namespace Vain
 
 
 
-        ComponentContainer ComponentContainer => _container;
-        
-        
-        
-        
 
+
+
+        public ComponentContainer ComponentContainer => _container;
+        
         public int ID {get  => _id;}
 
 
 
 
         
-        Entity()
+        protected Entity()
         {
             _id = Register(this);
         }
@@ -77,7 +76,7 @@ namespace Vain
         {
             base._Ready();
             
-            _container = GetChildren().OfType<ComponentContainer>().First();
+            
             
         
         }

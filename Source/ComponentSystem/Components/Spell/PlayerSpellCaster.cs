@@ -6,16 +6,15 @@ using Godot;
 
 namespace Vain.SpellSystem
 {
-    public class PlayerSpellCaster : SpellCaster 
+    public class PlayerSpellCaster : SpellCaster , IUnhandledInputHandler
     {
 
         
         
 
 
-        public override void _Input(Godot.InputEvent @event)
+        public void UnhandledInput(InputEvent @event)
         {
-            base._Input(@event);
             
             if (@event is InputEventKey keyEvent && keyEvent.Pressed)
             {       

@@ -6,7 +6,7 @@ namespace Vain
 {
 	
 
-	public class UserMovementInput : Component, IInitialize, INPut
+	public class UserMovementInput : Component, IInitialize, IUnhandledInputHandler
 	{
 		
 	 
@@ -22,9 +22,9 @@ namespace Vain
 			
 		}
 
-		public override void _UnhandledInput(InputEvent inputEvent)
+		public void UnhandledInput(InputEvent inputEvent)
 		{
-			base._UnhandledInput(inputEvent);
+		
 
 
 			if (inputEvent is InputEventMouseButton){

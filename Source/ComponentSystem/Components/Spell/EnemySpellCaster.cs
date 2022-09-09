@@ -9,16 +9,16 @@ using Vain;
 namespace Vain.SpellSystem
 
 {
-    class EnemySpellCaster : SpellCaster
+    class EnemySpellCaster : SpellCaster, IProcess
     {
 
         Dictionary< int, SpellsCastCount> _spells;
         
         public float ChanceToCast {get;set;}
         
-        public override void _Process(float delta)
+        public void Process(float delta)
         {
-            base._Process(delta);
+         
             _spells = Spells;
         
             if(  GD.Randf() / delta < ChanceToCast && _spells.Count > 0){

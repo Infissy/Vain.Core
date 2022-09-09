@@ -108,7 +108,7 @@ namespace Vain.SpellSystem
 
 
                 //TODO: Better hierarchy, this should not be a component child
-                this.AddChild(spellInstance);
+                //this.AddChild(spellInstance);
 
                 bool successfulCast = spellInstance.GetComponent<SpellBehaviour>().Cast(base.Entity, target);
                 

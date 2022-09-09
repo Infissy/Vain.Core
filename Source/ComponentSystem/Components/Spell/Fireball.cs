@@ -11,7 +11,7 @@ namespace Vain.SpellSystem
 
 {
 
-    public class Fireball : SpellBehaviour
+    public class Fireball : SpellBehaviour, IInitialize, IPhysicsProcessable
     {
 
         
@@ -37,15 +37,13 @@ namespace Vain.SpellSystem
         Movable _movable;
 
 
-        public override void _Ready(){
+        public void Initialize(){
             
 
-            base._Ready();
-            SetPhysicsProcess(false);
-            SetProcess(false);
+        
+       
             
-            
-            _movable = ComponentEntity.GetComponent<Movable>();
+            _movable = GetComponent<Movable>();
 
 
 
@@ -62,10 +60,9 @@ namespace Vain.SpellSystem
         
         }
 
-        public override void _PhysicsProcess(float delta)
+        public void PhysicsProcess(float delta)
         {   
 
-            base._PhysicsProcess(delta);
 
             _movable.Target =  _movable.Position + _direction;
             
@@ -73,18 +70,17 @@ namespace Vain.SpellSystem
 
         }
 
-        public override void _Process(float delta)
+        public void Process(float delta)
         {   
 
-            base._Process(delta);
-
+         
             if(Lifetime > 0){
 
                 Lifetime -= delta;
                 
             }else{
 
-                ComponentEntity.Kill();
+                Entity.Kill();
 
             }
         }
@@ -104,9 +100,7 @@ namespace Vain.SpellSystem
             _movable.ForcePosition(ownerPosition);
 
             _direction = (target-ownerPosition).Normalized();
-            this.SetPhysicsProcess(true);
-            this.SetProcess(true);
-            
+     
             
 
 
@@ -140,7 +134,7 @@ namespace Vain.SpellSystem
                 
                     effectable.ApplyEffects(this.effects);
         
-                    ComponentEntity.Kill();
+                    Entity.Kill();
                 
                 }
             
