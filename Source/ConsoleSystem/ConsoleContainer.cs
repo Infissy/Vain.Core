@@ -1,6 +1,6 @@
 using Godot;
 
-public class ConsoleContainer : VBoxContainer{
+public partial class ConsoleContainer : VBoxContainer{
 
     bool visible = false;
     
@@ -24,7 +24,7 @@ public class ConsoleContainer : VBoxContainer{
 
             if (@event is InputEventKey){
                 var keyevent = @event as InputEventKey;
-                if(keyevent.Pressed  &&  keyevent.Scancode  == (int) KeyList.Backslash ){
+                if(keyevent.Pressed  &&  keyevent.Keycode  == Key.Backslash ){
                     
                     if(!visible)
                         Show();

@@ -6,32 +6,46 @@ namespace Vain
 {
     
 
-    public class Health : Component
+    public partial class Health : Component
     {
 
        
-        float _maxhealth;
-        
-        float _currentHealth;
-
-        public float CurrentHealth => _currentHealth;
-
-        public float MaxHealth => _maxhealth;
       
+
+        [Export]
+        public float CurrentHealth { get; private set; }
+        [Export]
+        public float MaxHealth { get; private set; }
+
+
+        //At the moment useful only for UI, maybe differenciate between heal and damage?
+        [Signal]
+        public delegate void HealthUpdateEventHandler(float health);
+
+        public override void _Ready()
+        {
+            base._Ready();
+            CurrentHealth = MaxHealth;
+        }
+
+
+
         public void Heal(int amount){
 
 
-            _currentHealth = _currentHealth + amount > _maxhealth ? _maxhealth : _currentHealth + amount;
-            
+            CurrentHealth = CurrentHealth + amount > MaxHealth ? MaxHealth : CurrentHealth + amount;
+            EmitSignal(nameof(HealthUpdate),CurrentHealth);
             
         }
 
         public void Damage(float amount){
-            _currentHealth = _currentHealth - amount;
+            CurrentHealth = CurrentHealth - amount;
+            EmitSignal(nameof(HealthUpdate),CurrentHealth);
             
-        
-            if(_currentHealth <= 0){
-                Entity.Kill();
+            
+            if(CurrentHealth <= 0)
+            {
+                Character.Kill();
             }
 
 
@@ -39,6 +53,6 @@ namespace Vain
 
         }
 
-        //Implement Entity destruction
+        
     }
 }

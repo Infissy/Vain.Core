@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmv25tnpgxdee"]
+
+[ext_resource type="Script" path="res://Source/UISystem/SpellSlot.cs" id="1_1yjmv"]
+
+[node name="AspectRatioContainer" type="AspectRatioContainer"]
+custom_minimum_size = Vector2(40, 40)
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_1yjmv")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(0, 0.176471, 0.239216, 1)
+
+[node name="Sprite" type="TextureRect" parent="."]
+offset_right = 64.0
+offset_bottom = 64.0
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Count" type="Label" parent="."]
+offset_top = 20.0
+offset_right = 64.0
+offset_bottom = 43.0

@@ -11,7 +11,7 @@ namespace Vain.Console
     ///<summary>
     /// GameConsole is the main  <see cref="P:Godot.Node"/> that contains the logic for the output.
     ///</summary>
-    public class GameConsole : Node, IFormattedOutput
+    public partial class GameConsole : Godot.Node, IFormattedOutput
     {
         
 
@@ -38,17 +38,17 @@ namespace Vain.Console
             Logger.RegisterOutput(this, (LogLevel) 63 );
             
             
-            var button = FindNode("Button") as Button;
-            _inputBox = FindNode("LineEdit") as LineEdit;
+            var button = GetNode("Button") as Button;
+            _inputBox = GetNode("LineEdit") as LineEdit;
 
 
 
 
 
-            button.Connect("pressed",this,"buttonPressed");
+            button.Connect("pressed",new Callable(this,"buttonPressed"));
 
 
-            _inputBox.Connect("text_entered",this,"buttonPressed");
+            _inputBox.Connect("text_entered",new Callable(this,"buttonPressed"));
             
             
         }
@@ -139,7 +139,7 @@ namespace Vain.Console
             if((format & FormatMasks.ColorMask ) == 0)
                 color = Colors.White;
 
-            parsedMessage = $"[color=#{color.ToHtml(false)}]{parsedMessage}[/color]";
+            parsedMessage = $"[color=#{color.ToHTML(false)}]{parsedMessage}[/color]";
 
             
          

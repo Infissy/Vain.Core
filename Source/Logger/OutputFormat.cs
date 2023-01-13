@@ -14,7 +14,7 @@ namespace Vain.Log
         Grey = 32,
 
     }
-    public class FormatMasks
+    public partial class FormatMasks
     {
         public const OutputFormat Everything = (OutputFormat)63;
         public const OutputFormat ColorMask = OutputFormat.Red | OutputFormat.Green | OutputFormat.Blue| OutputFormat.Grey; 

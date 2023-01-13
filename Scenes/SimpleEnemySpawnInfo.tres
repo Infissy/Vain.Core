@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://q0jstp00ryga"]
+
+[ext_resource type="Script" path="res://Source/Entities/SpawnInfo.cs" id="1_q3i2j"]
+[ext_resource type="Resource" uid="uid://b2msjnkgo1r0m" path="res://Scenes/Spells/FireballChanneler.tres" id="1_trlrd"]
+[ext_resource type="PackedScene" uid="uid://bu307ofnrriv0" path="res://Scenes/Entities/NPC.tscn" id="2_dxwda"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_q3i2j")
+NPCPrefab = ExtResource("2_dxwda")
+EnemySpells = [ExtResource("1_trlrd")]
+NumberOfEnemies = 4
+ChanceToCastSpell = 1.0

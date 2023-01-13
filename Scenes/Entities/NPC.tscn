@@ -1,0 +1,54 @@
+[gd_scene load_steps=10 format=3 uid="uid://bu307ofnrriv0"]
+
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/NPCController.cs" id="1"]
+[ext_resource type="Script" path="res://Source/Entities/NPC.cs" id="2"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Effectable.cs" id="2_tyl24"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Health.cs" id="4"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/SpellSystem/Components/NPCSpellCaster.cs" id="5"]
+[ext_resource type="Resource" uid="uid://b2msjnkgo1r0m" path="res://Scenes/Spells/FireballChanneler.tres" id="5_qc8u4"]
+
+[sub_resource type="CapsuleMesh" id="2"]
+
+[sub_resource type="CapsuleShape3D" id="1"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rrltk"]
+radius = 3.0
+
+[node name="NPC" type="CharacterBody3D"]
+collision_layer = 1025
+script = ExtResource("2")
+HostilityToPlayer = 1.0
+
+[node name="Effectable" type="Node" parent="."]
+script = ExtResource("2_tyl24")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 2.0
+path_max_distance = 5.0
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+mesh = SubResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("1")
+
+[node name="NPCController" type="Node3D" parent="."]
+script = ExtResource("1")
+DistanceToPlayer = 10.0
+AvoidanceDistance = 3.0
+Debug_ShowTarget = true
+
+[node name="Area3D" type="Area3D" parent="NPCController"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCController/Area3D"]
+transform = Transform3D(0.999941, 0, 0.0108208, 0, 1, 0, -0.0108208, 0, 0.999941, 0, 0, 0)
+shape = SubResource("SphereShape3D_rrltk")
+
+[node name="NPCSpellCaster" type="Node" parent="."]
+script = ExtResource("5")
+ChanceToCast = 1.0
+SpellChannelersExport = [ExtResource("5_qc8u4")]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4")
+MaxHealth = 20.0

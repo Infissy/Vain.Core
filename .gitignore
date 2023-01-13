@@ -3,6 +3,10 @@
 export.cfg
 export_presets.cfg
 
+
+mono_crash.*
+
+
 # Imported translations (automatically generated from CSV files)
 *.translation
 
@@ -17,3 +21,5 @@ Test/obj/*
 
 .obsidian/
 .vscode/
+.vs/
+.godot/

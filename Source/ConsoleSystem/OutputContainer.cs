@@ -7,7 +7,7 @@ using Vain.Console;
 /// <summary>
 ///  OutputContainer: Class and Node that contains all the RichTextLabel containing the lines of the  <see cref="GameConsole"/>.
 /// </summary> 
-public class OutputContainer : VBoxContainer
+public partial class OutputContainer : VBoxContainer
 {
 
     [Export] Font Bold; 
@@ -35,12 +35,12 @@ public class OutputContainer : VBoxContainer
     
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         base._Process(delta);
 
         if(oldCount < items.Count ){
-            container.ScrollVertical = (int)container.GetVScrollbar().MaxValue;
+            container.ScrollVertical = (int)container.GetVScrollBar().MaxValue;
             oldCount = items.Count;
         }
     }
@@ -60,11 +60,11 @@ public class OutputContainer : VBoxContainer
             
             label.BbcodeEnabled = true;
 
-            label.BbcodeText = output[i];
-            label.AddFontOverride("normal_font",Normal) ;
-            label.AddFontOverride("bold_font",Bold) ;
-            label.AddFontOverride("italics_font",Italic) ;
-            label.AddFontOverride("bolditalics_font",BoldItalic) ;
+            label.Text = output[i];
+            label.AddThemeFontOverride("normal_font",Normal) ;
+            label.AddThemeFontOverride("bold_font",Bold) ;
+            label.AddThemeFontOverride("italics_font",Italic) ;
+            label.AddThemeFontOverride("bolditalics_font",BoldItalic) ;
 
             items.Add(label);
             AddChild(label);

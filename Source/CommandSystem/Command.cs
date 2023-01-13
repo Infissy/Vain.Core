@@ -14,7 +14,7 @@ using Vain.UI;
 
 namespace Vain.Command{
 
-    public class Command
+    public partial class Command
     {
         public delegate void Function(params object[] parameters);
         
@@ -60,6 +60,8 @@ namespace Vain.Command{
 
         };
 
+
+        /*
         public static Command EntityPos = new Command
         {
             CommandName  = "entitypos",
@@ -74,7 +76,7 @@ namespace Vain.Command{
 
 
         };
-
+        */
 
 
          public static Command ListAvailableCommands = new Command
@@ -99,7 +101,7 @@ namespace Vain.Command{
         
 
 
-
+        /*
         public static Command Entities = new Command
         {
             CommandName  = "entities",
@@ -125,10 +127,12 @@ namespace Vain.Command{
             }
 
 
-
         };
 
+            */
 
+
+        /*
         public static Command Components = new Command
         {
             CommandName  = "components",
@@ -157,26 +161,26 @@ namespace Vain.Command{
                 
                 
                 
-                var entity = Entity.Entities.Where(e => e.ID == id).First();
+                var entity = Character.Where(e => e.ID == id).First();
 
                 var msg = "\n";
                 
 
-                /*
+                
                 foreach (var component in entity.ComponentContainer.Components)
                 {
                     msg += $"   {component.GetType().Name } \n";
                 
 
                 }
-                */
                 Logger.Information(msg);
             }
 
 
 
         };
-
+                */
+        
 
     }
 

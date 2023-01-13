@@ -11,7 +11,7 @@ namespace Vain.Command
     ///<summary>
     /// Main Class that handles command execution
     ///</summary>
-    public class Runner 
+    public partial class Runner 
     {
         static Runner _instance = new Runner();
         
@@ -28,17 +28,18 @@ namespace Vain.Command
         {
             RegisterCommand(DefaultCommands.Print);
             RegisterCommand(DefaultCommands.PlayerPos);
+            /*
             RegisterCommand(DefaultCommands.EntityPos);
-
+            */
 
             RegisterCommand(DefaultCommands.ListAvailableCommands);
                 
-
+            /*
 
             RegisterCommand(DefaultCommands.Entities);
             RegisterCommand(DefaultCommands.Components);
 
-
+            */
 
         }
 

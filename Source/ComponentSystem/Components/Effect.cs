@@ -1,23 +1,14 @@
 using System;
-namespace Vain{
+using Godot;
+namespace Vain.SpellSystem
+{
 
-
-
-    public enum EffectType{
-        STUN,
-        PULL,
-        HEAL,
-        BURN,
-        SPEEDBOOST,
-        DAMAGE,
-
-    }
-
-    
-    public struct Effect{
-
+    public partial class Effect : Resource{
+        [Export]
         public EffectType effectType;
+        [Export]
         public float Duration;
+        [Export]
         public float Value;
     }
 

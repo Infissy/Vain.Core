@@ -8,7 +8,7 @@ using Godot;
 namespace Vain.Log
 {
     //Logger can register outputs to output any message they receive
-    public class Logger
+    public partial class Logger
     {
 
         //? Static private property? Not the best looking solution
@@ -28,12 +28,13 @@ namespace Vain.Log
         static Dictionary<IOutput, LogLevel> _outputs = new Dictionary<IOutput, LogLevel>();
 
 
-        public static ContextLogger SetContext(Node context){
-            
+        public static ContextLogger SetContext(Godot.Node context){
+            /*
             var contextLogger = new ContextLogger(context.Name , (context.Owner is Entity) ? (context.Owner as Entity).ID.ToString() : "Godot");
 
-
             return contextLogger;
+            */
+            return null;
         }
 
 
@@ -211,7 +212,7 @@ namespace Vain.Log
     }
 
 
-    public class ContextLogger : Logger
+    public partial class ContextLogger : Logger
     {  
 
         string _nodename;

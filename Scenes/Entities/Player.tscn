@@ -1,0 +1,40 @@
+[gd_scene load_steps=9 format=3 uid="uid://blmv83rkwlvud"]
+
+[ext_resource type="Script" path="res://Source/Entities/Player.cs" id="1"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/PlayerController.cs" id="2"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/SpellSystem/Components/PlayerSpellCaster.cs" id="3_aia0d"]
+[ext_resource type="Resource" uid="uid://b2msjnkgo1r0m" path="res://Scenes/Spells/FireballChanneler.tres" id="4_cgy7d"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Health.cs" id="5_1o7nu"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Effectable.cs" id="6_r6qs8"]
+
+[sub_resource type="CapsuleMesh" id="2"]
+
+[sub_resource type="CapsuleShape3D" id="1"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2049
+script = ExtResource("1")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 2.0
+path_max_distance = 5.0
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+mesh = SubResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("1")
+
+[node name="PlayerController" type="Node" parent="."]
+script = ExtResource("2")
+Speed = 20.0
+
+[node name="PlayerSpellCaster" type="Node" parent="."]
+script = ExtResource("3_aia0d")
+SpellChannelersExport = [ExtResource("4_cgy7d"), null, null, null, null, null, null, null, null, null]
+
+[node name="Effectable" type="Node" parent="."]
+script = ExtResource("6_r6qs8")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("5_1o7nu")

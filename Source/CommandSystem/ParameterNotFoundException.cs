@@ -1,6 +1,6 @@
 namespace Vain.Command
 {
-    public class ParameterNotFoundException : CommandException
+    public partial class ParameterNotFoundException : CommandException
     {
 
     }
