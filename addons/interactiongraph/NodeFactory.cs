@@ -52,81 +52,13 @@ namespace Vain.InteractionSystem.InteractionGraph
         public static void GenerateInteractions()
         {
 
-            var interactionNodesDictionary = new Dictionary<Type,List<FieldInfo>>();
-
-            
-
-
-            var interactionTypes = Assembly
+           var interactionTypes = Assembly
                 .GetAssembly(typeof(Interaction)).GetTypes()
                 .Where(
                     type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(Interaction))
                     );
 
-
-
-            foreach (var interactionType in interactionTypes)
-            {
-
-
-                var fields = new List<FieldInfo>();
-
-
-                
-                foreach(var field in interactionType.GetFields())
-                {
-                    if(field.GetCustomAttribute<ExportAttribute>() != null)
-                    {
-                        fields.Add(field);
-                    }
-
-
-                }
-                if(fields.Count > 0)
-                    interactionNodesDictionary.Add(interactionType,fields);
-
-
-
-                            
-            }
-
-
-            var interactionTemplate = ResourceLoader.Load<PackedScene>(INTRACTION_NODE).Instantiate<GraphNode>();
-
-
-            foreach (var interactionNodeData in interactionNodesDictionary)
-            {
-                var nodeBuilder = InteractionNodeBuilder.CreateNode(interactionTemplate, interactionNodeData.Key.Name);
-
-                foreach (var field in interactionNodeData.Value)
-                {
-                    
-                    if(field.GetCustomAttribute<ExportAttribute>() != null)
-                    {
-                        var fieldType = field.FieldType;
-
-
-                        var fieldAdded = false;
-
-                        if(isNumericType(fieldType))
-                        {
-                            nodeBuilder.AddNumericField(field.Name);
-                        }
-
-                        if(!fieldAdded && fieldType.GetType() == typeof(Interaction))
-                        {
-                            
-                        }
-
-                        
-                    }
-                }
-
-            }
-
-
-
-
+            
 
 
 

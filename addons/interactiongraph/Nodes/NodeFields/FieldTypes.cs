@@ -4,8 +4,10 @@ namespace Vain.InteractionSystem.InteractionGraph
 
     abstract class FieldType {}
 
+
+    abstract class InternalFieldType : FieldType {}
     //Wrappers around custom type
-    abstract class NumericFieldType : FieldType {}
+    abstract class NumericFieldType : InternalFieldType {}
 
     class FloatType : NumericFieldType {}
 
