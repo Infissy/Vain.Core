@@ -22,8 +22,8 @@ namespace Vain
 			//TODO: Export with clamp
 			[Export]
 			public float ChanceToCastSpell;
-			
-
+			[Export]
+			public NPCBehaviour Behaviour;
 		}
 
 }

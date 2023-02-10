@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bu307ofnrriv0"]
+[gd_scene load_steps=11 format=3 uid="uid://bu307ofnrriv0"]
 
 [ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/NPCController.cs" id="1"]
 [ext_resource type="Script" path="res://Source/Entities/NPC.cs" id="2"]
 [ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Effectable.cs" id="2_tyl24"]
 [ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Health.cs" id="4"]
+[ext_resource type="Resource" uid="uid://b0nqjgckivxor" path="res://Scenes/Entities/NPCResources/StaticBehaviour.tres" id="4_okaje"]
 [ext_resource type="Script" path="res://Source/ComponentSystem/Components/SpellSystem/Components/NPCSpellCaster.cs" id="5"]
 [ext_resource type="Resource" uid="uid://b2msjnkgo1r0m" path="res://Scenes/Spells/FireballChanneler.tres" id="5_qc8u4"]
 
@@ -17,7 +18,7 @@ radius = 3.0
 [node name="NPC" type="CharacterBody3D"]
 collision_layer = 1025
 script = ExtResource("2")
-HostilityToPlayer = 1.0
+AggressionLevel = 1.0
 
 [node name="Effectable" type="Node" parent="."]
 script = ExtResource("2_tyl24")
@@ -34,7 +35,7 @@ shape = SubResource("1")
 
 [node name="NPCController" type="Node3D" parent="."]
 script = ExtResource("1")
-DistanceToPlayer = 10.0
+Behaviour = ExtResource("4_okaje")
 AvoidanceDistance = 3.0
 Debug_ShowTarget = true
 
@@ -43,6 +44,8 @@ Debug_ShowTarget = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NPCController/Area3D"]
 transform = Transform3D(0.999941, 0, 0.0108208, 0, 1, 0, -0.0108208, 0, 0.999941, 0, 0, 0)
 shape = SubResource("SphereShape3D_rrltk")
+
+[node name="Node" type="Node" parent="NPCController"]
 
 [node name="NPCSpellCaster" type="Node" parent="."]
 script = ExtResource("5")

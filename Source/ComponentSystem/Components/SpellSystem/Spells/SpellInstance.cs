@@ -7,7 +7,7 @@ using Godot.Collections;
 namespace Vain.SpellSystem
 {
 
-    public  abstract partial class SpellInstance : Area3D
+    public abstract partial class SpellInstance : Area3D
     {
 
         
@@ -34,15 +34,11 @@ namespace Vain.SpellSystem
 
         public Character Caster{get; set;}
 
-        public override void _Ready()
-        {
-            base._Ready();
-            Connect("body_entered",new Callable(this,"OnCollision"));
-        }
+    
 
-        public abstract bool Perform(Character owner, Vector3 target);
+        internal abstract bool Perform(Character owner, Vector3 target);
         
-        
+      
         
     }
 }

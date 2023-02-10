@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://rqgq1j2t1xw6"]
+
+[ext_resource type="Script" path="res://Source/UISystem/DialogueBox.cs" id="1_ih3xr"]
+
+[node name="DialogueBox" type="MarginContainer"]
+offset_right = 600.0
+offset_bottom = 140.0
+theme_override_constants/margin_bottom = 40
+script = ExtResource("1_ih3xr")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 600.0
+offset_bottom = 100.0
+theme_override_constants/margin_left = 30
+
+[node name="Label" type="Label" parent="MarginContainer"]
+offset_left = 30.0
+offset_top = 37.0
+offset_right = 600.0
+offset_bottom = 63.0
+text = "Sample Text
+"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(600, 100)
+offset_right = 600.0
+offset_bottom = 100.0
+color = Color(1, 1, 1, 0.0588235)

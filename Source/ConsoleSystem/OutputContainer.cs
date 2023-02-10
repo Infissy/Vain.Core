@@ -56,7 +56,7 @@ public partial class OutputContainer : VBoxContainer
 
             label.FitContentHeight = true;
 
-            label.SizeFlagsHorizontal = (int) (SizeFlags.Expand | SizeFlags.Fill);
+            label.SizeFlagsHorizontal = SizeFlags.Expand | SizeFlags.Fill;
             
             label.BbcodeEnabled = true;
 

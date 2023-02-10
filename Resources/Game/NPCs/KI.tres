@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://brq85epmp1t34"]
+
+[ext_resource type="Script" path="res://Source/Entities/NPCData.cs" id="1_bl0l1"]
+
+[resource]
+script = ExtResource("1_bl0l1")
+Name = "Ki"

@@ -38,9 +38,9 @@ namespace Vain
 		// Start is called before the first frame update
 		public override void _Ready()
 		{ 
-
 			
-			_player = GetNode<PlayableGame>("/root/Game/PlayableGame").PlayableCharacter;
+			
+			_player = SingletonManager.GetSingleton<Player>();
 
 
 		 
@@ -63,6 +63,12 @@ namespace Vain
 				{ 
 
 					var instance = _enemies[0].NPCPrefab.Instantiate<NPC>();
+					
+
+					instance.GetComponent<NPCController>().Behaviour = _enemies[0].Behaviour;
+					
+					instance.HostilityToPlayer = instance.AggressionLevel;
+
 
 					Vector3 deltapos = (new Vector3(GD.Randf(), 0, GD.Randf()).Normalized() * 30);
 					

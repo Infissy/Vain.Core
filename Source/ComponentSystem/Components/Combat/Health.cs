@@ -14,10 +14,13 @@ namespace Vain
 
         [Export]
         public float CurrentHealth { get; private set; }
+        
+        
+        
         [Export]
         public float MaxHealth { get; private set; }
 
-
+        
         //At the moment useful only for UI, maybe differenciate between heal and damage?
         [Signal]
         public delegate void HealthUpdateEventHandler(float health);
@@ -39,6 +42,9 @@ namespace Vain
         }
 
         public void Damage(float amount){
+            
+            
+            
             CurrentHealth = CurrentHealth - amount;
             EmitSignal(nameof(HealthUpdate),CurrentHealth);
             

@@ -1,6 +1,6 @@
+using Vain;
 
 using Godot;
-
 //Not working
 
 
@@ -9,7 +9,13 @@ namespace Vain.SpellSystem
 	public partial class PlayerSpellCaster : SpellCaster 
 	{
 
-		
+		MainCamera _camera;
+		public override void _Ready()
+		{
+			base._Ready();
+			_camera = SingletonManager.GetSingleton<MainCamera>();
+		}
+
 		
 
 
@@ -21,7 +27,7 @@ namespace Vain.SpellSystem
 				switch (keyEvent.Keycode)
 				{
 					case Key.Q:
-					CastSpell(0,MainCamera.Instance.MouseTargetInScene);
+					CastSpell(0,_camera.GetMouseScenePosition());
 						break;
 				}
 			}

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bakqo6cwaiwbs"]
+
+[ext_resource type="Script" path="res://Source/PlayableGame.cs" id="1_xn1cw"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractionHandler.cs" id="3_osyq0"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("1_xn1cw")
+
+[node name="Node" type="Node" parent="Node"]
+script = ExtResource("3_osyq0")

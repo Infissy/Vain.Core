@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Vain"
-run/main_scene="res://Scenes/Maps/Main.tscn"
+run/main_scene="res://Scenes/Maps/TestMap.tscn"
 config/features=PackedStringArray("4.0", "C#")
 config/icon="res://icon.png"
 
@@ -27,6 +27,14 @@ window/size/test_height=720
 
 project/assembly_name="Vain"
 
+[editor]
+
+export/convert_text_resources_to_binary=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/interactiongraph/plugin.cfg")
+
 [layer_names]
 
 3d_physics/layer_1="terrain"
@@ -35,9 +43,7 @@ project/assembly_name="Vain"
 
 [mono]
 
-export/include_scripts_content=true
 runtime/unhandled_exception_policy=1
-export/export_assemblies_inside_pck=false
 project/assembly_name="Vain"
 
 [physics]

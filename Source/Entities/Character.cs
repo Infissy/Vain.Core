@@ -6,13 +6,14 @@ using Godot;
 
 namespace Vain
 {
+
+    
     public partial class Character : CharacterBody3D 
     {
         
  
         List<Component> _components;
 
-        
         
         
         
@@ -31,7 +32,7 @@ namespace Vain
             if(_components == null)
                 loadComponents();
             
-
+            
         
 
         }

@@ -12,18 +12,14 @@ namespace Vain
 	}
 	
 	
-	public partial class NPCController : CharacterController , HostileTargetBehavior
+	public partial class NPCController : CharacterController 
 	{
 
-		[Export]        
-		NPCAIBehaviour enemyAIType = NPCAIBehaviour.KeepDistance;
 		
-		public Character HostileTarget {get;set;}
-		
+	
 
-		[Export]
-		public float DistanceToPlayer {get; set;}
-
+		[Export] 
+		public NPCBehaviour Behaviour {get; set;}
 
 
 		[Export]
@@ -32,10 +28,8 @@ namespace Vain
 		Area3D _avoidanceArea;
 
 		[ExportGroup("Debug")]
-		
-		
 		[Export]
-		public bool Debug_ShowTarget{ get; set; }
+		public bool Debug_ShowTarget{ get; set;}
 		CSGSphere3D _debugMesh;
 
 
@@ -74,42 +68,41 @@ namespace Vain
 		 
 			base._Process(delta);
 
-			if(HostileTarget != null)
-				AgentTick();
+		
+			AgentTick();
 			
 			
 		}
 	
-
+	
 		void AgentTick()
 		{
+			
+
+			var targetLocation = Behaviour.BehaviourTick(base.Character as NPC);
+			
+
+
+			targetLocation = avoidFilter(targetLocation);
+
+
+			//TODO: add human like delay to movements to simulate reaction time. 
+
+
+			if(Debug_ShowTarget)
+				_debugMesh.GlobalPosition = targetLocation;
+
+            Agent.TargetLocation = targetLocation;
 		
 
 
-			Vector3 targetPosition = Character.GlobalPosition; 
+		}
 
-
-			//TODO: Add Jitter or random movements 
-			switch(enemyAIType){
-				case NPCAIBehaviour.FollowPlayer:
-					targetPosition = HostileTarget.GlobalPosition;
-
-
-					break;
-
-
-
-				case NPCAIBehaviour.KeepDistance:
-					
-		
-					
-					
-					targetPosition =    HostileTarget.GlobalPosition - (HostileTarget.GlobalPosition - Character.GlobalPosition).Normalized() * DistanceToPlayer ;
-
-					break;
-
-				}
-
+		//TODO: Maybe look into moving the filter to the external behaviour to be adaptive to the situation
+		Vector3 avoidFilter(Vector3 targetLocation)
+		{
+			
+			
 
             var insideBodies = _avoidanceArea.GetOverlappingBodies().OfType<NPC>().Where(npc => npc != Character);
 
@@ -137,20 +130,12 @@ namespace Vain
 
                 //Takes the average position of the enemies, and weights on depending on the distance to the npc
                 //Nearer the average position is to the NPC more the NPC weights the direction to get away from enemies
-                targetPosition = ((avoidPosition - targetPosition) * (1 - ((averageEnemyPosition - Character.GlobalPosition).Length() / AvoidanceDistance))) + targetPosition;
+                targetLocation = ((avoidPosition - targetLocation) * (1 - ((averageEnemyPosition - Character.GlobalPosition).Length() / AvoidanceDistance))) + targetLocation;
 
 
             }
 
-
-
-
-			if(Debug_ShowTarget)
-				_debugMesh.GlobalPosition = targetPosition;
-
-            Agent.TargetLocation = targetPosition;
-			//TODO: add human like delay to movements to simulate reaction time. 
-
+			return targetLocation;
 
 		}
 

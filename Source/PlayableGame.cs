@@ -1,6 +1,12 @@
-using Godot;
+using System;
+using System.Reflection;
 using System.Linq;
+using System.Collections.Generic;
 
+
+using Godot;
+
+using Vain.InteractionSystem;
 namespace Vain
 {
 
@@ -8,59 +14,59 @@ namespace Vain
     public partial class PlayableGame : Node
     {  
  
+        //Searches for attributes up to 3 levels down
+    const int MAX_LEVEL_DEPTH_ANALYISIS = 4;
         
+        List<Node> singletonList = new List<Node>();
 
-        
-        //Passing value so various events can unsubscribe or do stuff before descarding the old character
-        [Signal]
-        public delegate void CharacterChangedEventHandler(Character oldCharacter);
-        
-        Character _character;
-    
-
-
-        //Late initialization, defaults to player unless you change to something else. Emits signal so everything bound to current character can reload to new character
-
-
-
-        public Character PlayableCharacter 
+        public override void _EnterTree()
         {
-            
-            get
-            {
-                if(_character == null)
-                    _character = GetChildren().OfType<Node3D>().First().GetNode<Player>("Player");
+            base._EnterTree();
 
-                return _character;
-            }
-            
-            set
-            {   
-                var oldCharacter = _character;
-                _character = value;
-                EmitSignal(nameof(CharacterChanged),oldCharacter);
+            exploreTree(this,0);
 
-            }
-            
-            
-        } 
-        
+            singletonList.ForEach(singleton => SingletonManager.Register(singleton));
 
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            //TODO: Get child should theorically get the map node, find a better solution less reliant on hierarchy
-            var player = GetChildren().OfType<Node3D>().First().GetNode<Player>("Player");
-            PlayableCharacter = player;
 
         }
 
-   
+        void exploreTree(Node parent,int level)
+        {
+            if(level < MAX_LEVEL_DEPTH_ANALYISIS)
+            {
+                filterNode(parent);
+                foreach (var child in parent.GetChildren())
+                {
+                    exploreTree(child,level + 1);
+                }    
+                
+            }
+        }
+
+
+        void filterNode(Node node)
+        {
+            //Check only for node with script
+            if(node.GetScript().Obj != null)
+            {
+                var nodeType = node.GetType();
+
+                //If node is singleton
+                if(nodeType.GetCustomAttribute<SingletonAttribute>() != null)
+                {
+
+                    singletonList.Add(node);
+                    
+                }
+
+            }
 
 
 
+
+
+
+        }
 
     }
 }

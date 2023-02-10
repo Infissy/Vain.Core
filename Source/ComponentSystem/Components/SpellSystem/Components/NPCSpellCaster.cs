@@ -8,14 +8,13 @@ using Vain;
 
 namespace Vain.SpellSystem
 {
-	partial class NPCSpellCaster : SpellCaster , HostileTargetBehavior
+	partial class NPCSpellCaster : SpellCaster 
 	{
 
 
 		[Export]
 		public float ChanceToCast { get; set; }
-        public Character HostileTarget { get; set; }
-
+     
 
 		
 
@@ -28,7 +27,7 @@ namespace Vain.SpellSystem
 
 
 
-			if (HostileTarget != null)
+			if ((Character as NPC).HostileTarget != null)
                 castTick(delta);
             
 
@@ -48,7 +47,7 @@ namespace Vain.SpellSystem
                 {
 
 
-                    base.CastSpell(spellindex, HostileTarget.Position);
+                    base.CastSpell(spellindex, (Character as NPC).HostileTarget.Position);
 
                 }
             }

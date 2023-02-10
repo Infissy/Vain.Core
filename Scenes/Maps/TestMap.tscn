@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://b2551it435aej"]
+
+[ext_resource type="Script" path="res://Source/PlayableGame.cs" id="1_xuhpb"]
+[ext_resource type="PackedScene" uid="uid://bu307ofnrriv0" path="res://Scenes/Entities/NPC.tscn" id="2_3ehuh"]
+[ext_resource type="PackedScene" uid="uid://jbptoywckfy6" path="res://Scenes/Maps/Terrain/SimplePlaneTerrain.tscn" id="2_51san"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/Interactible.cs" id="3_etc8m"]
+[ext_resource type="Resource" uid="uid://c5wksib5kwsy2" path="res://Scenes/Entities/NPCResources/SimpleDialogue.tres" id="4_2wmoi"]
+[ext_resource type="PackedScene" uid="uid://blmv83rkwlvud" path="res://Scenes/Entities/Player.tscn" id="4_dvqbl"]
+[ext_resource type="Script" path="res://Source/MainCamera.cs" id="5_3by7g"]
+[ext_resource type="Script" path="res://Source/UISystem/DialogueHandler.cs" id="6_cn730"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractionHandler.cs" id="7_42e4s"]
+[ext_resource type="PackedScene" uid="uid://rqgq1j2t1xw6" path="res://Scenes/UI/DialogueBox.tscn" id="7_voq2s"]
+
+[node name="Game" type="Node"]
+
+[node name="PlayableGame" type="Node3D" parent="."]
+script = ExtResource("1_xuhpb")
+
+[node name="TestMap" type="Node3D" parent="PlayableGame"]
+
+[node name="NPC" parent="PlayableGame/TestMap" instance=ExtResource("2_3ehuh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.895601, -34.5501)
+
+[node name="Interactible" type="Node" parent="PlayableGame/TestMap/NPC"]
+script = ExtResource("3_etc8m")
+_interaction = ExtResource("4_2wmoi")
+
+[node name="Terrain" parent="PlayableGame/TestMap" instance=ExtResource("2_51san")]
+
+[node name="Player" parent="PlayableGame/TestMap" instance=ExtResource("4_dvqbl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.187643, 0)
+
+[node name="Camera" type="Camera3D" parent="PlayableGame/TestMap"]
+transform = Transform3D(1, 0, 0, 0, 0.806383, 0.591394, 0, -0.591394, 0.806383, 0, 13.4191, 17.0639)
+current = true
+fov = 60.0
+script = ExtResource("5_3by7g")
+
+[node name="InteractionHandler" type="Node" parent="PlayableGame"]
+script = ExtResource("7_42e4s")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DialogueHandler" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("6_cn730")
+_dialogueBox = ExtResource("7_voq2s")
+
+[node name="GraphNode" type="GraphNode" parent="CanvasLayer/DialogueHandler"]
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 54.0
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+
+[node name="GraphEdit" type="GraphEdit" parent="CanvasLayer/DialogueHandler/GraphNode"]
+layout_mode = 2

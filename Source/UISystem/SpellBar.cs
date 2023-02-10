@@ -16,7 +16,7 @@ namespace Vain.SpellSystem.UI
             base._Ready();
 
 
-            _player = GetNode<PlayableGame>("/root/Game/PlayableGame").PlayableCharacter;
+            _player = SingletonManager.GetSingleton<Player>();
 
             _player.GetComponent<SpellCaster>().SpellPickup += loadSpells;
 

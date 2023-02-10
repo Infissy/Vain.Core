@@ -19,6 +19,7 @@ namespace Vain.SpellSystem
 			base.Monitoring = true;
 
 			base.BodyEntered += bodyEnteredHandler;
+
 		}
 			
 

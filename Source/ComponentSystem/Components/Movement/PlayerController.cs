@@ -25,7 +25,7 @@ namespace Vain
 				{
 				
 
-					var target = MainCamera.Instance.MouseTargetInScene;
+					var target = SingletonManager.GetSingleton<MainCamera>().GetMouseScenePosition();
 					if(target != Vector3.Inf)
 						base.Agent.TargetLocation = target;
 					

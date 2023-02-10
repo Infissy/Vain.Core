@@ -1,7 +1,5 @@
 using Godot;
 using System.Collections.Generic;
-using Vain;
-
 
 //Not working
 
@@ -18,7 +16,11 @@ namespace Vain.SpellSystem
 		
 
 
-	   
+	   public override void _Ready()
+	   {
+			base._Ready();
+			BodyEntered += OnCollision;
+	   }
 		
 
 		public override void _Process(double delta)
@@ -37,17 +39,13 @@ namespace Vain.SpellSystem
 			}
 		}
 
-		public override bool Perform(Character owner, Vector3 target)
+		internal override bool Perform(Character owner, Vector3 target)
 		{
-		  
+
 
 			var ownerPosition = owner.GlobalPosition;
 			GlobalTranslate(ownerPosition);
-
 			Direction = (target-ownerPosition).Normalized();
-	 
-			
-
 
 			return true;
 

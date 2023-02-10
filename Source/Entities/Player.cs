@@ -2,12 +2,9 @@ using Godot;
 namespace Vain
 {
 	
-
+	[Singleton]
 	public partial class Player : Character
 	{
-		
-		Camera3D _camera;
-
 		
 		
 

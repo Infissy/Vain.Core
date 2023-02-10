@@ -7,7 +7,7 @@ namespace Vain
     {
         
         
-        protected Character Character { get; private set; }
+        public Character Character { get; private set; }
 
 
 
