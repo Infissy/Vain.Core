@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Vain.Core;
 using Vain.Log;
 
 namespace Vain
@@ -27,7 +28,7 @@ namespace Vain
 
 					var target = SingletonManager.GetSingleton<MainCamera>().GetMouseScenePosition();
 					if(target != Vector3.Inf)
-						base.Agent.TargetLocation = target;
+						EmitSignal(SignalName.MovementInput,target);
 					
 				}
 

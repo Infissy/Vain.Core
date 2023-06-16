@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://b8bpal4nh72nm"
+path="res://.godot/imported/octree_generation_shader.glsl-f142885f91d3fd322aa36d2582213f1d.res"
+
+[deps]
+
+source_file="res://Resources/3D/SpellSystem/octree_generation_shader.glsl"
+dest_files=["res://.godot/imported/octree_generation_shader.glsl-f142885f91d3fd322aa36d2582213f1d.res"]
+
+[params]
+

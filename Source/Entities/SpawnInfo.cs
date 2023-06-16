@@ -7,17 +7,20 @@ using Vain.SpellSystem;
 
 namespace Vain
 {
+	/// <summary>
+	/// Resource that handles the directives for the <see cref="EnemySpawner"> for spawing a certain kind of enemy. 
+	/// </summary>
     public partial class SpawnInfo : Resource
     {
 
 			[Export]
-			public PackedScene NPCPrefab;
+			public PackedScene EnemyPrefab;
 			
 			[Export(PropertyHint.ArrayType)]
 			public Array<SpellChanneler> EnemySpells;
 			
 			[Export]
-			public int NumberOfEnemies;
+			public uint NumberOfEnemies;
 			
 			//TODO: Export with clamp
 			[Export]

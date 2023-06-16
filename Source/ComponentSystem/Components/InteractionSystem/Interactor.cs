@@ -1,18 +1,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Vain.Core;
 
 namespace Vain.InteractionSystem
 {
+ 
     //TODO: At the moment all the system is focused to the interaction between NPC and Player, maybe allow NPC to NPC interaction for more complex social behaviours 
     public partial class Interactor : Component
     {
+        const string ACTION = "player_interact";
+
+
+
         //TODO: Think about 3D dialogue so interaction between characters can be displayed
         [Signal]
         public delegate void OnDialogueEventHandler(string dialogue);
 
-       
+   
         Area3D _area;
+
         InteractionHandler _system;
         List<Interactible> _interactibles = new List<Interactible>();
         
@@ -65,16 +72,16 @@ namespace Vain.InteractionSystem
 
 
         
-		public override void _UnhandledInput(InputEvent inputEvent)
-		{
-		
-			
-			base._UnhandledInput(inputEvent);
+        public override void _UnhandledInput(InputEvent inputEvent)
+        {
+        
+            
+            base._UnhandledInput(inputEvent);
 
-			
-			if (inputEvent is InputEventKey key)
+            
+            if (inputEvent is InputEventKey key)
             {
-                if(key.Keycode == Key.E && _interactibles.Count > 0)
+                if(Input.IsActionJustPressed(ACTION) && _interactibles.Count > 0)
                 {
                     
                     Interactible nearestInteractible = _interactibles.OrderBy<Interactible,float>(
@@ -92,13 +99,14 @@ namespace Vain.InteractionSystem
 
 
 
-       void handleInteraction(Interaction interaction)
-       {
+        void handleInteraction(Interaction interaction)
+        {
             if(interaction is DialogueInteraction dialogueInteraction)
             {
-                EmitSignal(nameof(OnDialogue),dialogueInteraction.Dialogue);
+            
+                EmitSignal(SignalName.OnDialogue,dialogueInteraction.Dialogue);
             }
-       }
+        }
     }
     
 }

@@ -3,16 +3,19 @@ using System.Linq;
 using System.Collections.Generic;
 
 
+using Vain.Core;
+
+
 using Vain.Log;
 using Vain.UI;
 
-
-
+using Godot;
 
 //Not working
 
 
-namespace Vain.Command{
+namespace Vain.CommandSystem
+{
 
     public partial class Command
     {
@@ -55,28 +58,28 @@ namespace Vain.Command{
             CommandName  = "playerpos",
 
 
-           // CommandFunction = (pm) => Logger.Information(Player.Instance.Entity.Position.ToString())
+            CommandFunction = (pm) => Logger.Information(SingletonManager.GetSingleton<Player>().Position.ToString())
 
 
         };
 
 
-        /*
-        public static Command EntityPos = new Command
+        
+        public static Command CharacterPosition = new Command
         {
             CommandName  = "entitypos",
 
 
             CommandFunction = (pm) => {
                 
-                var entity = Entity.Entities.Where(e => e.ID == int.Parse(pm[0] as string)).First();
+                var entity = SingletonManager.GetSingleton<LevelManager>().Characters.Where(e => e.RuntimeID == int.Parse(pm[0] as string)).First();
 
-               // Logger.Information(entity.Position.ToString());
+                Logger.Information(entity.Position.ToString());
             }
 
 
         };
-        */
+        
 
 
          public static Command ListAvailableCommands = new Command
@@ -101,7 +104,7 @@ namespace Vain.Command{
         
 
 
-        /*
+        
         public static Command Entities = new Command
         {
             CommandName  = "entities",
@@ -113,9 +116,9 @@ namespace Vain.Command{
                 
 
 
-                foreach (var entity in Entity.Entities)
+                foreach (var entity in SingletonManager.GetSingleton<LevelManager>().Entities)
                 {
-                    msg += $"   ({entity.ID}){entity.Name}  \n";
+                    msg += $"   ({entity.RuntimeID}){(entity as Node).Name}  \n";
                 
 
                 }
@@ -129,7 +132,7 @@ namespace Vain.Command{
 
         };
 
-            */
+            
 
 
         /*

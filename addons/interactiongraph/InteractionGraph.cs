@@ -8,28 +8,55 @@ namespace Vain.InteractionSystem.InteractionGraph
     [Tool]
     public partial class InteractionGraph : EditorPlugin
     {
-        
+     
         Control dock;
 
         public override void _EnterTree()
         {
+
+       
             dock = GD.Load<PackedScene>("res://addons/interactiongraph/MainGraph.tscn").Instantiate<Control>();
 
             dock.GetNode<Button>("VBoxContainer/Panel/HBoxContainer/Characters").Pressed += () => NodeFactory.GenerateCharacters();
             dock.GetNode<Button>("VBoxContainer/Panel/HBoxContainer/Interactions").Pressed += () => NodeFactory.GenerateInteractions();
 
-            AddControlToBottomPanel(dock, "InteractionEdit");
-            
-            
+            GetEditorInterface().GetEditorMainScreen().AddChild(dock);
+            _MakeVisible(false);
         }
 
         public override void _ExitTree()
+        { 
+            
+            if (dock != null)
+            {
+                dock.QueueFree();
+            }
+        }
+
+        
+
+        public override bool _HasMainScreen()
         {
-            // Clean-up of the plugin goes here.
-            // Remove the dock.
-            RemoveControlFromBottomPanel(dock);
-            // Erase the control from the memory.
-            dock.QueueFree();
+            return true;
+        }
+
+        public override void _MakeVisible(bool visible)
+        {
+            if (dock != null)
+            {
+                dock.Visible = visible;
+            }
+        }
+
+        public override string _GetPluginName()
+        {
+            return "Interaction Graph";
+        }
+
+        public override Texture2D _GetPluginIcon()
+        {
+            // Must return some kind of Texture for the icon.
+            return GetEditorInterface().GetBaseControl().GetThemeIcon("Node", "EditorIcons");
         }
 
     }

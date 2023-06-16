@@ -1,3 +1,4 @@
+#if TOOLS
 using Godot;
 using System.Collections.Generic;
 
@@ -24,3 +25,5 @@ namespace Vain.InteractionSystem.InteractionGraph
 
 
 }
+
+#endif

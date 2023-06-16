@@ -1,6 +1,6 @@
+#if TOOLS
 using Godot;
 using System;
-
 namespace Vain.InteractionSystem.InteractionGraph
 {
         
@@ -14,8 +14,7 @@ namespace Vain.InteractionSystem.InteractionGraph
             
         }
 
-        public void clicked()
-        {
-        }
+        
     }
 }
+#endif

@@ -30,7 +30,7 @@ namespace Vain
 		[ExportGroup("Debug")]
 		[Export]
 		public bool Debug_ShowTarget{ get; set;}
-		CSGSphere3D _debugMesh;
+		CsgSphere3D _debugMesh;
 
 
 		public override void _Ready()
@@ -42,7 +42,7 @@ namespace Vain
 
 			if(Debug_ShowTarget)
 			{ 
-				_debugMesh = new CSGSphere3D();
+				_debugMesh = new CsgSphere3D();
 				_debugMesh.Radius = 0.2f;
 				_debugMesh.Material = new StandardMaterial3D() { AlbedoColor = Colors.Red};
 
@@ -79,20 +79,20 @@ namespace Vain
 		{
 			
 
-			var targetLocation = Behaviour.BehaviourTick(base.Character as NPC);
+			var targetPosition = Behaviour.BehaviourTick(base.Character as NPC);
 			
 
 
-			targetLocation = avoidFilter(targetLocation);
+			targetPosition = avoidFilter(targetPosition);
 
 
 			//TODO: add human like delay to movements to simulate reaction time. 
 
 
 			if(Debug_ShowTarget)
-				_debugMesh.GlobalPosition = targetLocation;
+				_debugMesh.GlobalPosition = targetPosition;
 
-            Agent.TargetLocation = targetLocation;
+            EmitSignal(SignalName.MovementInput,targetPosition);
 		
 
 

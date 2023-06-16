@@ -22,10 +22,10 @@ namespace Vain
 		List<Effect> effectsApplied = new List<Effect>();
 
 
-	   
+	   	[RequiredComponent]
 		CharacterController _characterController;
 
-
+		[RequiredComponent]
 		Health _health;
 
 		

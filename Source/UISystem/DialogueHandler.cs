@@ -1,4 +1,5 @@
 using Godot;
+using Vain.Core;
 using Vain.InteractionSystem;
 namespace Vain.UI.DialogueSystem
 {

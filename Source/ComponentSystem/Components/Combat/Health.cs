@@ -37,7 +37,7 @@ namespace Vain
 
 
             CurrentHealth = CurrentHealth + amount > MaxHealth ? MaxHealth : CurrentHealth + amount;
-            EmitSignal(nameof(HealthUpdate),CurrentHealth);
+            EmitSignal(SignalName.HealthUpdate,CurrentHealth);
             
         }
 
@@ -46,7 +46,7 @@ namespace Vain
             
             
             CurrentHealth = CurrentHealth - amount;
-            EmitSignal(nameof(HealthUpdate),CurrentHealth);
+            EmitSignal(SignalName.HealthUpdate,CurrentHealth);
             
             
             if(CurrentHealth <= 0)

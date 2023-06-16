@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
+using Vain.Core;
+using Vain.Log.Visualizer;
+
 
 namespace Vain.Log
 {
-    //Logger can register outputs to output any message they receive
+    
+    // !  At the moment the logging system is broken
+    
     public partial class Logger
     {
 
@@ -28,13 +33,14 @@ namespace Vain.Log
         static Dictionary<IOutput, LogLevel> _outputs = new Dictionary<IOutput, LogLevel>();
 
 
-        public static ContextLogger SetContext(Godot.Node context){
-            /*
-            var contextLogger = new ContextLogger(context.Name , (context.Owner is Entity) ? (context.Owner as Entity).ID.ToString() : "Godot");
+        public static ContextLogger SetContext(Node context){
+            
+            //TODO: Temporarely set script as identifier, later on should be implemented with ids 
+            var contextLogger = new ContextLogger(context.Name , "Script");
 
             return contextLogger;
-            */
-            return null;
+            
+          
         }
 
 
@@ -99,7 +105,7 @@ namespace Vain.Log
         }
         
 
-         public static void Command(string message, string parameters = "", bool showTimestamp = true)
+        public static void Command(string message, string parameters = "", bool showTimestamp = true)
         {
             var formattedMessage  = new List<FormattedMessage>();
             if (showTimestamp)
@@ -113,7 +119,16 @@ namespace Vain.Log
             
         }
 
-        static  protected void outputMessage ( List<FormattedMessage> messages, LogLevel level)
+
+        //FIXME: Runtime has to work only in debug, or choose if some information is accessible to the user, that can improve performance also
+        public static void Runtime(string label,string message, string parameters="")
+        {
+
+            //TODO: parameters will define formatting
+            SingletonManager.GetSingleton<DebugOverlay>().Log(label,message);
+        }
+
+        static protected void outputMessage ( List<FormattedMessage> messages, LogLevel level)
         
         {
             //TODO: Optimize

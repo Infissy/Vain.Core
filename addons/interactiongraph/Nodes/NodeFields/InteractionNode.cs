@@ -1,3 +1,4 @@
+#if TOOLS
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,54 +10,77 @@ namespace Vain.InteractionSystem.InteractionGraph
     partial class InteractionNode : GraphNode
     {
         
-        const string INTERACTION_FOLDER_PATH = "";
+        const string INTERACTION_FOLDER_PATH = "res://addons/interactiongraph/Nodes/InteractionsTemplate/";
         
         
         
 
-        List<NodeField> _fields = new List<NodeField>();
+        List<Node> _fields = new List<Node>();
         
 
         Interaction Interaction {get;set;}
         
 
 
-        static public PackedScene CreateTemplate(Type interaction)
+        static public InteractionNode CreateTemplate(Type interaction)
         {
 
             
             var interactionNode = new InteractionNode();
 
             interactionNode.Name = interaction.Name;
-
+            interactionNode.Title = interaction.Name;
             
-            foreach(var interactionField in interaction.GetFields())
+            foreach(var interactionField in interaction.GetProperties())
             {
                 if(interactionField.GetCustomAttribute<ExportAttribute>() != null)
                 {
                     
                     
-                    var type = interactionField.FieldType;
+                    var type = interactionField.PropertyType;
                     
+                    var field = new NodeField(type, interactionField.Name); 
+                    
+                    interactionNode.AddChild(field);
 
                     
-                   var field = new NodeField() 
+                    field.Owner = interactionNode;
+                    field._Ready();
 
+
+                    
+                    var slotIndex = interactionNode.GetChildCount()-1;
+
+
+
+                    //Defaults to true, all internal fields then are set to false;
+                    interactionNode.SetSlotEnabledLeft(slotIndex,true);
+
+
+
+
+                    if(type.IsPrimitive)
+                    {
+                        interactionNode.SetSlotEnabledLeft(slotIndex,false);
+                    }
 
                 }
 
 
             }
 
+            interactionNode.SetSlotEnabledRight(0,true);
+
 
             var scene = new PackedScene();
             scene.Pack(interactionNode);
-            ResourceSaver.Save(scene,INTERACTION_FOLDER_PATH);
+            var res = ResourceSaver.Save(scene, INTERACTION_FOLDER_PATH + $"{interactionNode.Name}.tscn");
 
-            return scene;
+            return interactionNode;
 
         }
 
 
     }
 }
+#endif

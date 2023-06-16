@@ -2,7 +2,7 @@
 using System;
 
 
-namespace Vain.Command
+namespace Vain.CommandSystem
 {
     public abstract class CommandException : Exception
     {

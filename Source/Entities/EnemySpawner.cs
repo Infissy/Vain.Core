@@ -1,98 +1,147 @@
 using System;
-
+using System.Linq;
 using System.Collections.Generic;
 
 using Godot;
-using Godot.Collections;
-
-
 
 //TODO: Reformat and delete useless stuff
 
 
+using Vain.SpellSystem;
+using Vain.Core;
+
 namespace Vain
 {
 
-	public partial class EnemySpawner : Node
+	/// <summary>
+	/// EnemySpawner handles the spawn of hostile NPCs in combat scenarios.
+	/// </summary>
+
+	public partial class EnemySpawner : Node 
 	{
 		
 
 
 
-		[Export(PropertyHint.ArrayType)]
-		Array<SpawnInfo> _enemies = new Array<SpawnInfo>();
-		
 
 
-		
-		Array<SpawnInfo> _tempEnemies = new Array<SpawnInfo>();
-
-
-
-
-		int _diedEnemies;
-
-
+		Dictionary<string,uint> _enemiesToSpawn = new Dictionary<string, uint>();
+		uint _diedEnemies;
 		Character _player;
 
-		// Start is called before the first frame update
+
+
+
+		[Export]
+		public bool Active {get;set;}
+
+		[Export]
+		Godot.Collections.Dictionary<string,SpawnInfo> SpawnInfo {get;set;}
+
+
+		public override void _EnterTree()
+		{
+			base._EnterTree();
+			SingletonManager.Register(this);
+		}
+
+
+
 		public override void _Ready()
 		{ 
 			
 			
 			_player = SingletonManager.GetSingleton<Player>();
-
-
-		 
 			
-
-			List<Vector3> enemiesLocations = new List<Vector3>();
-
-
-			if(_enemies != null){
-				_diedEnemies =  _enemies[0].NumberOfEnemies;
+			if(SpawnInfo != null)
+			{
+				foreach (var spawnInfo in SpawnInfo)
+				{
+					
+					_enemiesToSpawn.Add(spawnInfo.Key,0);
+				
+				}
 			}
 
+
+
+			//TODO: Spawn enemies from external system(game rule)
+			SpawnRandomEnemy(10);
 
 			
 		}
 
 		public override void _Process(double delta){
-			if(_diedEnemies > 0 && _player != null ){
-				for (int i = 0; i < _diedEnemies; i++)
-				{ 
-
-					var instance = _enemies[0].NPCPrefab.Instantiate<NPC>();
-					
-
-					instance.GetComponent<NPCController>().Behaviour = _enemies[0].Behaviour;
-					
-					instance.HostilityToPlayer = instance.AggressionLevel;
+			//TODO: Spawn for enemy type
+			if(_diedEnemies > 0 && _player != null && Active ){
 
 
-					Vector3 deltapos = (new Vector3(GD.Randf(), 0, GD.Randf()).Normalized() * 30);
-					
-					
-					AddChild(instance);
-					instance.GlobalPosition = _player.GlobalPosition + deltapos;
-					
-					//TODO: Fix resource instantiation, even duplicate can't avoid making the resource shared between enemies, at the moment every enemy has their own spells preassigned
-					/*
-					NPCSpellCaster caster = instance.GetComponent<NPCSpellCaster>();
-					caster.AddSpells(_enemies[0].EnemySpells);
-					caster.ChanceToCast = _enemies[0].ChanceToCastSpell;
-					*/
-
-					instance.CharacterKilled += EnemyDestroyed;
-				}
+			
+				SpawnRandomEnemy(_diedEnemies);
 
 				_diedEnemies = 0;
 			}
 		
 		}
 
+
+
+		public void SpawnRandomEnemy(uint count)
+		{
+
+
+			var names = SpawnInfo.Keys;
+			var randN = GD.RandRange(0,names.Count-1);
+			GD.Print(names);
+			SpawnEnemy(names.ElementAt(randN),count);
+
+
+		}
+
+		/// <param name="enemyName"></param>
+		/// <param name="count"></param>
+		public void SpawnEnemy(String enemyName, uint count)
+		{
+
+			if(!SpawnInfo.ContainsKey(enemyName))
+				return;
+			
+			
+			
+			
+			for (int i = 0; i < count; i++)
+			{ 
+				
+				var instance = SpawnInfo[enemyName].EnemyPrefab.Instantiate<Enemy>();
+					
+
+				instance.GetComponent<NPCController>().Behaviour = SpawnInfo[enemyName].Behaviour;
+				
+	
+
+				Vector3 deltapos = (new Vector3(GD.Randf(), 0, GD.Randf()).Normalized() * 30);
+				
+				
+				AddChild(instance);
+				instance.GlobalPosition = _player.GlobalPosition + deltapos;
+				
+				//TODO: Fix resource instantiation, even duplicate can't avoid making the resource shared between enemies, at the moment every enemy has their own spells preassigned
+				//TODO: Create a system to check if a system is enabled as to add components
+				var caster = instance.GetComponent<NPCSpellCaster>();
+				caster.AddSpells(SpawnInfo[enemyName].EnemySpells);
+				caster.ChanceToCast = SpawnInfo[enemyName].ChanceToCastSpell;
+				
+
+				instance.CharacterKilled += EnemyDestroyed;
+			}
+			
+
+		}
+
+
+
 		public void EnemyDestroyed(){
-			GD.Print("Enemy Destroyed");
+			
 			_diedEnemies++;
 
 		}

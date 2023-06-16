@@ -1,3 +1,5 @@
+#if TOOLS
+
 using Godot;
 
 using System;
@@ -18,10 +20,9 @@ namespace Vain.InteractionSystem.InteractionGraph
         static string NPC_DIR = "res://Resources/Game/NPCs";
         static string NPC_NODE = "res://addons/interactiongraph/Nodes/CharacterNode.tscn";
 
-        static string INTRACTION_NODE = "res://addons/interactiongraph/Nodes/Interaction.tscn";
         public static void GenerateCharacters()
         {
-            List<NPCData> npcDataList  = new List<NPCData>();
+            List<WorldNPC> npcDataList  = new List<WorldNPC>();
 
 
             var dir = DirAccess.Open(NPC_DIR);
@@ -33,8 +34,10 @@ namespace Vain.InteractionSystem.InteractionGraph
                 
                 var file = ResourceLoader.Load(NPC_DIR + "/" + filename);
 
-                if(file is NPCData data)
-                    npcDataList.Add(data);
+                if(file is PackedScene scene)
+                {
+                    npcDataList.Add(scene.Instantiate<WorldNPC>());
+                }
 
                 var npc = ResourceLoader.Load<PackedScene>(NPC_NODE).Instantiate<CharacterNode>();
 
@@ -59,7 +62,10 @@ namespace Vain.InteractionSystem.InteractionGraph
                     );
 
             
-
+            foreach (var interaction in interactionTypes)
+            {
+                InteractionNode.CreateTemplate(interaction);
+            }
 
 
 
@@ -84,3 +90,4 @@ namespace Vain.InteractionSystem.InteractionGraph
         
     }
 }
+#endif

@@ -1,4 +1,5 @@
 using Godot;
+using Vain.Core;
 
 namespace Vain
 {
@@ -15,17 +16,25 @@ namespace Vain
 
 
         public override Vector3 BehaviourTick(NPC character)
-        {
+        {	
+
+			if(character.AggressionLevel < character.HostileTarget.Position.DistanceTo(character.GlobalPosition) )
+				return character.GlobalPosition;
+
+
+
             Vector3 targetPosition = character.GlobalPosition; 
+		
 
 
 			//TODO: Add Jitter or random movements 
 			switch(enemyAIType){
+
+
 				case NPCAIBehaviour.FollowPlayer:
-					targetPosition = character.HostileTarget.GlobalPosition;
 
+					return character.HostileTarget.GlobalPosition;
 
-					break;
 
 
 
@@ -34,13 +43,13 @@ namespace Vain
 		
 					
 					
-					targetPosition =    character.HostileTarget.GlobalPosition - (character.HostileTarget.GlobalPosition - character.GlobalPosition).Normalized() * DistanceToPlayer ;
+					return targetPosition =    character.HostileTarget.GlobalPosition - (character.HostileTarget.GlobalPosition - character.GlobalPosition).Normalized() * DistanceToPlayer ;
 
-					break;
+			
 
 				}
 
-            return targetPosition;
+			return character.GlobalPosition;
         }
 
 

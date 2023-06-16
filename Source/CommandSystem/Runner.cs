@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Vain.Log;
-namespace Vain.Command
+namespace Vain.CommandSystem
 
 {
 
@@ -27,8 +27,8 @@ namespace Vain.Command
         public Runner()
         {
             RegisterCommand(DefaultCommands.Print);
-            RegisterCommand(DefaultCommands.PlayerPos);
             /*
+            RegisterCommand(DefaultCommands.PlayerPos);
             RegisterCommand(DefaultCommands.EntityPos);
             */
 

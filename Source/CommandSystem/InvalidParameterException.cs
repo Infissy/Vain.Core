@@ -1,4 +1,4 @@
-namespace Vain.Command
+namespace Vain.CommandSystem
 {
     public partial class InvalidParameterException : CommandException
     {

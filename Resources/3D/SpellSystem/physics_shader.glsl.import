@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://ci8prybx7ij15"
+path="res://.godot/imported/physics_shader.glsl-e96bbf9b2866c7f7f8675517f63222eb.res"
+
+[deps]
+
+source_file="res://Resources/3D/SpellSystem/physics_shader.glsl"
+dest_files=["res://.godot/imported/physics_shader.glsl-e96bbf9b2866c7f7f8675517f63222eb.res"]
+
+[params]
+

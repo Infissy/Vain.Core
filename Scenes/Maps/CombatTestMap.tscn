@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cpoou0nwf5fch"]
+[gd_scene load_steps=6 format=3 uid="uid://cpoou0nwf5fch"]
 
 [ext_resource type="PackedScene" uid="uid://jbptoywckfy6" path="res://Scenes/Maps/Terrain/SimplePlaneTerrain.tscn" id="1_77ep1"]
 [ext_resource type="PackedScene" uid="uid://blmv83rkwlvud" path="res://Scenes/Entities/Player.tscn" id="1_np5vl"]
 [ext_resource type="Script" path="res://Source/PlayableGame.cs" id="1_ntetg"]
 [ext_resource type="Script" path="res://Source/MainCamera.cs" id="2_ofk74"]
 [ext_resource type="Script" path="res://Source/Entities/EnemySpawner.cs" id="4_jesh3"]
-[ext_resource type="Resource" uid="uid://q0jstp00ryga" path="res://Scenes/Entities/NPCResources/SimpleEnemySpawnInfo.tres" id="6_7byyk"]
 
 [node name="Game" type="Node"]
 
@@ -27,4 +26,4 @@ script = ExtResource("2_ofk74")
 [node name="EnemySpawner" type="Node3D" parent="PlayableGame/TestScene"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.7156, 0)
 script = ExtResource("4_jesh3")
-_enemies = [ExtResource("6_7byyk")]
+SpawnInfo = {}

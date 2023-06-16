@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://rphy4c7gvxm1"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/SpellSystem/SpellDrop.cs" id="1_72f5u"]
+[ext_resource type="Script" path="res://Source/SpellSystem/SpellDrop.cs" id="1_72f5u"]
 
 [sub_resource type="SphereShape3D" id="1"]
 

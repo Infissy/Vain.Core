@@ -1,18 +1,14 @@
 {
   "profiles": {
     "Vain": {
-      "commandName": "Executable",
-      "executablePath": "H:\\Coding\\Github\\godot\\bin\\godot.windows.editor.x86_64.mono.exe",
-      "commandLineArgs": "--path . --verbose",
-      "workingDirectory": ".",
-      "nativeDebugging": true
+      "commandName": "Project"
     },
-    "Project": {
+    "Profile 1": {
       "commandName": "Executable",
-      "executablePath": "H:\\Coding\\Github\\godot\\bin\\godot.windows.editor.x86_64.mono.exe",
-      "commandLineArgs": "--verbose --debug --path . --editor",
+      "executablePath": "C:\\Users\\dan\\Desktop\\Godot\\Godot_v4.0-stable_mono_win64\\godot.exe",
+      "commandLineArgs": "--path .",
       "workingDirectory": ".",
-      "nativeDebugging": true
+      "nativeDebugging": false
     }
   }
 }

@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using Vain.Command;
+using Vain.CommandSystem;
 using Vain.Log;
 
 
@@ -126,11 +126,11 @@ namespace Vain.Console
             
 
             if((format & OutputFormat.Red) == OutputFormat.Red)
-                color.r = 255;
+                color.R = 255;
             if((format & OutputFormat.Blue) == OutputFormat.Blue)
-                color.g = 255;
+                color.G = 255;
             if((format & OutputFormat.Green) == OutputFormat.Green)
-                color.b = 255;
+                color.B = 255;
             if((format & OutputFormat.Grey) == OutputFormat.Grey)
                 color = Colors.DarkSlateGray;
 
@@ -139,7 +139,7 @@ namespace Vain.Console
             if((format & FormatMasks.ColorMask ) == 0)
                 color = Colors.White;
 
-            parsedMessage = $"[color=#{color.ToHTML(false)}]{parsedMessage}[/color]";
+            parsedMessage = $"[color=#{color.ToHtml(false)}]{parsedMessage}[/color]";
 
             
          

@@ -1,7 +1,13 @@
 using Godot;
+using Vain.Core;
 
 namespace Vain.SpellSystem.UI
 {
+    /// <summary>
+    /// UI Element that shows player spells.
+    /// </summary>
+    
+  
     public partial class SpellBar : HBoxContainer
     {
         [Export]
@@ -9,7 +15,10 @@ namespace Vain.SpellSystem.UI
 
 
         Character _player;
-
+        public override void _EnterTree()
+        {
+            SingletonManager.Register(this);
+        }
 
         public override void _Ready()
         {

@@ -4,24 +4,36 @@ using System.Collections.Generic;
 
 using Godot;
 
+using Vain.Core;
+
+
 namespace Vain
 {
 
-    
-    public partial class Character : CharacterBody3D 
+    /// <summary>
+    /// Character is the base class for all Characters in the game. Any special characters to be considered as such and have any component need a Character parent.
+    /// </summary>
+        public abstract partial class Character : CharacterBody3D , IEntity
     {
         
- 
+        
+
+
         List<Component> _components;
 
-        
-        
-        
+        public bool ActionLock {get; private set;}
+
+        public uint RuntimeID {get; protected set;}
+
         [Signal]
         public delegate void CharacterKilledEventHandler();
 
 
-   
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+            
+        }
         
         
         
@@ -32,6 +44,7 @@ namespace Vain
             if(_components == null)
                 loadComponents();
             
+            //SingletonManager.GetSingleton<LevelManager>().AddCharacter(this);
             
         
 
@@ -46,6 +59,10 @@ namespace Vain
         }
 
 
+        public void Lock()
+        {
+            
+        }
 
         public T GetComponent<T>(bool optional = false) where T : Node
         {   
@@ -67,7 +84,7 @@ namespace Vain
         public virtual void Kill()
         {
 
-            EmitSignal(nameof(CharacterKilled));
+            EmitSignal(SignalName.CharacterKilled);
            
             this.QueueFree();
 
