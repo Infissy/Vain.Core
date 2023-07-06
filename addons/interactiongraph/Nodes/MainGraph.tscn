@@ -1,0 +1,135 @@
+[gd_scene load_steps=6 format=3 uid="uid://cn807r5nr3xch"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3rmu4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="GDScript" id="GDScript_1ggcs"]
+resource_name = "LoadWindow"
+script/source = "@tool
+extends Button
+
+var popupWindow : Window
+
+
+
+
+
+func _ready():
+	
+	pressed.connect(self._button_pressed)
+	popupWindow = get_node(\"./Window\")
+
+func _button_pressed():
+	popupWindow.popup_centered()
+"
+
+[sub_resource type="GDScript" id="GDScript_0hess"]
+resource_name = "Window"
+script/source = "@tool
+extends Window
+
+
+func _ready():
+	close_requested.connect(self._close_request)
+
+
+func _close_request():
+	self.hide()
+"
+
+[sub_resource type="GDScript" id="GDScript_cvk0b"]
+resource_name = "resource_picker"
+script/source = "@tool
+extends HBoxContainer
+
+var resourcePicker : EditorResourcePicker
+
+func _ready():
+	resourcePicker = EditorResourcePicker.new()
+	
+	resourcePicker.size_flags_horizontal += Control.SIZE_EXPAND_FILL
+	
+	add_child(resourcePicker)
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_8x5hq"]
+resource_name = "MainGraph"
+script/source = "@tool
+extends GraphEdit
+
+@onready var popup_menu : PopupMenu = get_node(\"./PopupMenu\")
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			popup_menu.popup(Rect2i(event.position,popup_menu.size))
+"
+
+[node name="Graph" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Config" type="Button" parent="VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_3rmu4")
+text = "Configuration"
+script = SubResource("GDScript_1ggcs")
+
+[node name="Window" type="Window" parent="VBoxContainer/Panel/MarginContainer/HBoxContainer/Config"]
+position = Vector2i(100, 100)
+size = Vector2i(300, 100)
+script = SubResource("GDScript_0hess")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/MarginContainer/HBoxContainer/Config/Window"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel/MarginContainer/HBoxContainer/Config/Window/VBoxContainer"]
+layout_mode = 2
+script = SubResource("GDScript_cvk0b")
+
+[node name="Label" type="Label" parent="VBoxContainer/Panel/MarginContainer/HBoxContainer/Config/Window/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Test"
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = SubResource("GDScript_8x5hq")
+
+[node name="PopupMenu" type="PopupMenu" parent="VBoxContainer/GraphEdit"]
+initial_position = 2

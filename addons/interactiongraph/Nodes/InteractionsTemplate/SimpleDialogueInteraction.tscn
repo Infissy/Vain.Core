@@ -20,6 +20,6 @@ script = ExtResource("1_ybmbu")
 layout_mode = 2
 script = ExtResource("2_7wfii")
 
-[node name="Label" type="Label" parent="Dialogue"]
+[node name="Dialogue" type="Label" parent="Dialogue"]
 layout_mode = 2
 text = "Dialogue"

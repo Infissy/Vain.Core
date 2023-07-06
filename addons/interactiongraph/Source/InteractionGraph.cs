@@ -15,11 +15,9 @@ namespace Vain.InteractionSystem.InteractionGraph
         {
 
        
-            dock = GD.Load<PackedScene>("res://addons/interactiongraph/MainGraph.tscn").Instantiate<Control>();
+            dock = GD.Load<PackedScene>("res://addons/interactiongraph/Nodes/MainGraph.tscn").Instantiate<Control>();
 
-            dock.GetNode<Button>("VBoxContainer/Panel/HBoxContainer/Characters").Pressed += () => NodeFactory.GenerateCharacters();
-            dock.GetNode<Button>("VBoxContainer/Panel/HBoxContainer/Interactions").Pressed += () => NodeFactory.GenerateInteractions();
-
+           
             GetEditorInterface().GetEditorMainScreen().AddChild(dock);
             _MakeVisible(false);
         }
