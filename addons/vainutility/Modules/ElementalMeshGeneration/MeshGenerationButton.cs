@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Godot;
-using Vain.SpellSystem.Elemental;
+
 namespace Vain.Plugins.VainUtility.ElementalMeshGeneration
 {
     internal partial class MeshGenerationButton : Module
@@ -66,8 +66,10 @@ namespace Vain.Plugins.VainUtility.ElementalMeshGeneration
             Task.WhenAll(tasks).ContinueWith((_) => addPercentage(100));
             */
             var names = DirAccess.GetFilesAt(RESOURCES_PATH);
-            var mesh =ResourceLoader.Load<ElementalMeshResource>(RESOURCES_PATH + names[0]);
-            mesh.GenerateMesh();
+            
+            //TODO: Remove comments as soon as Elemental Spell System is implemented
+            //var mesh =ResourceLoader.Load<ElementalMeshResource>(RESOURCES_PATH + names[0]);
+            //mesh.GenerateMesh();
         }
     }
 }
