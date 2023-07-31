@@ -1,6 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c8n3s7tt4e6le"]
-
-[ext_resource type="Script" path="res://Source/SpellSystem/Elemental/ElementalParticleBuffer.cs" id="1_56el7"]
-
-[resource]
-script = ExtResource("1_56el7")

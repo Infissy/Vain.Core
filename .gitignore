@@ -22,4 +22,5 @@ Test/obj/*
 .obsidian/
 .vscode/
 .vs/
-.godot/
+.godot/Resources/Assets/
+
