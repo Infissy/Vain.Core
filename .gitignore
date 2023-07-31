@@ -23,4 +23,5 @@ Test/obj/*
 .vscode/
 .vs/
 .godot/Resources/Assets/
+# build/
 
