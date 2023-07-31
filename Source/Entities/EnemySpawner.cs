@@ -2,6 +2,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Vain.Singleton;
+
+
 using Godot;
 
 //TODO: Reformat and delete useless stuff
@@ -10,7 +13,7 @@ using Godot;
 using Vain.SpellSystem;
 using Vain.Core;
 
-namespace Vain
+namespace Vain.EnemySystem
 {
 
 	/// <summary>
@@ -27,7 +30,7 @@ namespace Vain
 
 		Dictionary<string,uint> _enemiesToSpawn = new Dictionary<string, uint>();
 		uint _diedEnemies;
-		Character _player;
+		Character? _player;
 
 
 
@@ -36,7 +39,7 @@ namespace Vain
 		public bool Active {get;set;}
 
 		[Export]
-		Godot.Collections.Dictionary<string,SpawnInfo> SpawnInfo {get;set;}
+		Godot.Collections.Dictionary<string,SpawnInfo> SpawnInfo {get;set;} = new Godot.Collections.Dictionary<string, SpawnInfo>();
 
 
 		public override void _EnterTree()
@@ -51,7 +54,7 @@ namespace Vain
 		{ 
 			
 			
-			_player = SingletonManager.GetSingleton<Player>();
+			_player = SingletonManager.GetSingleton<Player>().CurrentCharacter;
 			
 			if(SpawnInfo != null)
 			{
@@ -112,10 +115,10 @@ namespace Vain
 			for (int i = 0; i < count; i++)
 			{ 
 				
-				var instance = SpawnInfo[enemyName].EnemyPrefab.Instantiate<Enemy>();
+				var instance = SpawnInfo[enemyName].EnemyPrefab.Instantiate<Character>();
 					
 
-				instance.GetComponent<NPCController>().Behaviour = SpawnInfo[enemyName].Behaviour;
+				//instance.GetComponent<NPCController>().Behaviour = SpawnInfo[enemyName].Behaviour;
 				
 	
 
@@ -123,13 +126,16 @@ namespace Vain
 				
 				
 				AddChild(instance);
-				instance.GlobalPosition = _player.GlobalPosition + deltapos;
+				instance.GlobalPosition = _player!.GlobalPosition + deltapos;
 				
 				//TODO: Fix resource instantiation, even duplicate can't avoid making the resource shared between enemies, at the moment every enemy has their own spells preassigned
 				//TODO: Create a system to check if a system is enabled as to add components
-				var caster = instance.GetComponent<NPCSpellCaster>();
-				caster.AddSpells(SpawnInfo[enemyName].EnemySpells);
-				caster.ChanceToCast = SpawnInfo[enemyName].ChanceToCastSpell;
+				var caster = instance.GetComponent<SpellCaster>();
+				caster?.AddSpells(SpawnInfo[enemyName].EnemySpells);
+
+
+				
+				//caster.ChanceToCast = SpawnInfo[enemyName].ChanceToCastSpell;
 				
 
 				instance.CharacterKilled += EnemyDestroyed;

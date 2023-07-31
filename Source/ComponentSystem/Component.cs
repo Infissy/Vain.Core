@@ -2,14 +2,14 @@ using System.Reflection;
 using System.Linq;
 using Godot;
 
-namespace Vain
+namespace Vain.Core.ComponentSystem
 {   
-
-    public partial class Component : Node
+    [GlobalClass]
+    public abstract partial class Component : Node
     {
         
         
-        public Character Character { get; private set; }
+        public Character Character { get; private set; } = null!;
 
 
 
@@ -25,9 +25,7 @@ namespace Vain
             {
                 base.UpdateConfigurationWarnings();
             }
-
-
-
+        
         
         }
 
@@ -70,25 +68,33 @@ namespace Vain
         }
 
         */
-        public T GetComponent<T>(bool optional = false) where T : Component
+
+
+
+
+
+        
+
+
+        internal virtual void _CharacterAction(CharacterAction action)
         {
 
-            
+        }
+
+
+        protected T? GetComponent<T>() where T : Component
+        {
 
             //In case we want a component before _ready has been called
             if(Character == null)
                 Character = GetParent<Character>();
             
-            return Character.GetComponent<T>(optional);
+            return Character.GetComponent<T>();
 
 
             
         }
 
-        public override void _Process(double delta)
-        {
-            base._Process(delta);
-            
-        }
+     
     }
 }

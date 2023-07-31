@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvqpv3eh02o8e"]
+
+[ext_resource type="Script" path="res://addons/interactiongraph/Source/CharacterAddWindow.cs" id="1_sj7fw"]
+
+[node name="Window" type="Window"]
+script = ExtResource("1_sj7fw")

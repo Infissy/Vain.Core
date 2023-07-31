@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://b8blg1vxqvnti"]
 
 [ext_resource type="Script" path="res://Source/SpellSystem/Spells/Fireball.cs" id="1_b2oyj"]
 [ext_resource type="Resource" uid="uid://c4y68oca4arwn" path="res://Scenes/Spells/Effect.tres" id="2_8tl83"]

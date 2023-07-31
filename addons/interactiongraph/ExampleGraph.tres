@@ -5,6 +5,8 @@ function = 1
 
 [resource]
 code = "shader_type canvas_item;
+render_mode blend_mix;
+
 
 
 
@@ -26,7 +28,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-71.8282, 4.50299)
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorFunc_qi5ky")

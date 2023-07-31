@@ -1,6 +1,6 @@
 using Godot;
 
-
+using Vain.Singleton;
 namespace Vain.Core
 {
 
@@ -15,7 +15,7 @@ namespace Vain.Core
         /// Character to follow.
         /// </summary>
 
-        public Player Player {get;set;}        
+        public Character Player {get;set;}        
         
     
         /// <summary>
@@ -24,7 +24,11 @@ namespace Vain.Core
         [Export]
         public ushort RaycastRange {get;set;} = 100;
 
+
+
         Vector3 _oldPlayerPosition;
+
+
 
         public override void _EnterTree()
         {
@@ -32,20 +36,15 @@ namespace Vain.Core
             SingletonManager.Register(this);
         }
 
-
-
         public override void _Ready()
         {
             base._Ready();
-                
-            Player = SingletonManager.GetSingleton<Player>();
+            
+            Player = SingletonManager.GetSingleton<Character>();
             _oldPlayerPosition = Player.GlobalPosition;
 
    
         }   
-
-
-
 
         public override void _Process(double delta)
         {

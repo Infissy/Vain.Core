@@ -3,7 +3,7 @@ using Vain;
 using Godot;
 
 //Not workign
-
+using Vain.Core;
 
 namespace Vain.SpellSystem
 {
@@ -30,7 +30,7 @@ namespace Vain.SpellSystem
 		{
 			if(body is Character character)
 			{
-				var casterComponent = character.GetComponent<SpellCaster>(true);
+				var casterComponent = character.GetComponent<SpellCaster>();
 				if(casterComponent != null)
 				{
 					if(casterComponent?.AddSpell(this.SpellChanneler) == true)

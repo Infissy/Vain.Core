@@ -1,7 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://b0nqjgckivxor"]
-
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/StaticBehaviour.cs" id="1_6q1ms"]
-
-[resource]
-resource_local_to_scene = true
-script = ExtResource("1_6q1ms")

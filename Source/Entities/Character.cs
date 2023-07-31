@@ -4,29 +4,46 @@ using System.Collections.Generic;
 
 using Godot;
 
-using Vain.Core;
+using Vain.Core.ComponentSystem;
 
 
-namespace Vain
+namespace Vain.Core
 {
 
     /// <summary>
     /// Character is the base class for all Characters in the game. Any special characters to be considered as such and have any component need a Character parent.
     /// </summary>
-        public abstract partial class Character : CharacterBody3D , IEntity
+    public partial class Character : CharacterBody3D , IEntity
     {
-        
         
 
 
         List<Component> _components;
 
+        CharacterBehaviour _behaviour;
+
+        [Export] 
+        public CharacterBehaviour CharacterBehaviour 
+        {   
+            get => _behaviour;
+            set
+            {
+                var oldBehaviour = _behaviour;
+
+                _behaviour = value;
+
+                EmitSignal(SignalName.CharacterBehaviourUpdate);
+            }
+        }
+        
         public bool ActionLock {get; private set;}
 
         public uint RuntimeID {get; protected set;}
 
         [Signal]
         public delegate void CharacterKilledEventHandler();
+        [Signal]
+        public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviour OldBehaviour);
 
 
         public override void _EnterTree()
@@ -64,7 +81,7 @@ namespace Vain
             
         }
 
-        public T GetComponent<T>(bool optional = false) where T : Node
+        public T? GetComponent<T>() where T : Node
         {   
 
             //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
@@ -73,10 +90,9 @@ namespace Vain
             
           
 
-            if(optional)
-                return _components.Where((c) => c is T).FirstOrDefault() as T;
+           
+            return _components.Where((c) => c is T).FirstOrDefault() as T;
 
-            return _components.Where(c => c is T).First() as T;
         }
 
 
@@ -102,8 +118,8 @@ namespace Vain
 
             foreach ( var node in GetChildren())
             {
-                if(node is Component)
-                    _components.Add(node as Component);
+                if(node is Component component)
+                    _components.Add(component);
             }
             
 

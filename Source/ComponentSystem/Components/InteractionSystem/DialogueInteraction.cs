@@ -1,7 +1,10 @@
-namespace Vain
+using Godot;
+namespace Vain.InteractionSystem
 {
-    interface DialogueInteraction 
+    [GlobalClass]
+    partial class DialogueInteraction : Interaction
     {   
+        [Export]
         public string Dialogue {get; set;}    
     }
 }

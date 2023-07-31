@@ -1,12 +1,12 @@
 [gd_scene load_steps=11 format=3]
 
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/NPCController.cs" id="1"]
-[ext_resource type="Script" path="res://Source/Entities/Enemy.cs" id="1_f83kf"]
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Effectable.cs" id="2_tyl24"]
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Health.cs" id="4"]
-[ext_resource type="Resource" uid="uid://b0nqjgckivxor" path="res://Scenes/Entities/NPCResources/StaticBehaviour.tres" id="4_okaje"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/MovementControllerComponent.cs" id="1"]
+[ext_resource type="Script" path="res://Source/Entities/Character.cs" id="1_f83kf"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/EffectableComponent.cs" id="2_tyl24"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/HealthComponent.cs" id="4"]
+[ext_resource type="Resource" uid="uid://nu6jkagtkod0" path="res://Scenes/Entities/NPCResources/SimpleAggressiveBehaviour.tres" id="4_okaje"]
 [ext_resource type="Script" path="res://Source/SpellSystem/Components/NPCSpellCaster.cs" id="5"]
-[ext_resource type="Resource" uid="uid://b2msjnkgo1r0m" path="res://Scenes/Spells/FireballChanneler.tres" id="5_qc8u4"]
+[ext_resource type="Resource" path="res://Scenes/Spells/FireballChanneler.tres" id="5_qc8u4"]
 
 [sub_resource type="CapsuleMesh" id="2"]
 

@@ -1,6 +1,9 @@
 
 
 using Godot;
+using Vain.Core;
+
+
 
 namespace Vain.SpellSystem
 {

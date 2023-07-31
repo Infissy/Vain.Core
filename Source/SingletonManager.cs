@@ -3,7 +3,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Vain.Core
+namespace Vain.Singleton
 {
     /// <summary>
     /// Manages singletons in the whole game.
@@ -14,7 +14,7 @@ namespace Vain.Core
     {
 
         
- 
+        
         static Dictionary<Type,Node> _dictionary = new Dictionary<Type, Node>();
         static List<Node> _persistentNodes = new List<Node>();
 
@@ -22,23 +22,16 @@ namespace Vain.Core
 
     
 
-        public static T GetSingleton<T>() where T : Node
-        {
-            return (T) _dictionary[typeof(T)];
+        public static T? GetSingleton<T>() where T : Node
+        {   
+
+            Node singleton;
+            bool found =  _dictionary.TryGetValue(typeof(T),out singleton!);
+
+
+            return found ? singleton as T : null;
         }
         
-        public static T GetSigletonOrDefault<T>() where T : Node
-        {
-            try
-            {
-                return GetSingleton<T>();
-            }
-            catch (KeyNotFoundException)
-            {
-                
-                return default(T);
-            }            
-        }
 
 
         public static void Register(Node singleton) 
@@ -49,24 +42,14 @@ namespace Vain.Core
                 _dictionary[singleton.GetType()] = singleton;
         }
         
-        
-    
-
-        
-        
-
+     
         
         public static void Destroy<T>()
         {
             _dictionary.Remove(typeof(T));
         }
-
-
         
     }
-
-
-
 
   
 }

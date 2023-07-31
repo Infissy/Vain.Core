@@ -1,5 +1,6 @@
 using Godot;
 using Vain.Core;
+using Vain.Singleton;
 
 namespace Vain.SpellSystem.UI
 {
@@ -14,7 +15,7 @@ namespace Vain.SpellSystem.UI
         PackedScene _spellSlot;
 
 
-        Character _player;
+        Character _currentCharacter;
         public override void _EnterTree()
         {
             SingletonManager.Register(this);
@@ -24,11 +25,19 @@ namespace Vain.SpellSystem.UI
         {
             base._Ready();
 
+            var player = SingletonManager.GetSingleton<Player>();
+            
+            
+            _currentCharacter = SingletonManager.GetSingleton<Player>().CurrentCharacter;
 
-            _player = SingletonManager.GetSingleton<Player>();
-
-            _player.GetComponent<SpellCaster>().SpellPickup += loadSpells;
-
+            _currentCharacter.GetComponent<SpellCaster>().SpellPickup += loadSpells;
+            
+            player.CurrentCharacterChanged +=  (oldCharacter) =>
+            {
+                oldCharacter.GetComponent<SpellCaster>().SpellPickup -= loadSpells;
+                _currentCharacter.GetComponent<SpellCaster>().SpellPickup += loadSpells;
+            };
+            
 
             loadSpells();
         }
@@ -42,7 +51,7 @@ namespace Vain.SpellSystem.UI
                 child.QueueFree();
             }
 
-            var channelers = _player.GetComponent<SpellCaster>().SpellChannelers;
+            var channelers = _currentCharacter.GetComponent<SpellCaster>().SpellChannelers;
             foreach (SpellChanneler channeler in channelers)
             {
                 

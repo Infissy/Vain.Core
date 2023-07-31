@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Vain.Core;
-
+using Vain.Singleton;
 
 namespace Vain.Log.Visualizer
 {

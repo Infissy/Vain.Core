@@ -2,7 +2,9 @@ using Godot;
 using Godot.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using Vain.Core;
 
+using Vain.Core.ComponentSystem;
 
 namespace Vain.SpellSystem
 {

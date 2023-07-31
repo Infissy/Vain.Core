@@ -6,7 +6,7 @@ using System.Linq;
 using Godot;
 using Vain.Core;
 using Vain.Log.Visualizer;
-
+using Vain.Singleton;
 
 namespace Vain.Log
 {

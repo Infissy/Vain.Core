@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://cvxv0qjcj3pic"]
 
 [ext_resource type="Script" path="res://Source/ConsoleSystem/GameConsole.cs" id="1"]
-[ext_resource type="Script" path="res://Source/ConsoleSystem/OutputContainer.cs" id="2"]
-[ext_resource type="FontFile" path="res://Resources/Fonts/OpenSans/OpenSans-B9K8.tres" id="3"]
-[ext_resource type="FontFile" path="res://Resources/Fonts/OpenSans/OpenSansItalic-KwXl.tres" id="4"]
-[ext_resource type="FontFile" path="res://Resources/Fonts/OpenSans/OpenSansBoldItalic-YWD4.tres" id="5"]
-[ext_resource type="FontFile" path="res://Resources/Fonts/OpenSans/OpenSansBold-8wJJ.tres" id="6"]
+[ext_resource type="Script" path="res://Source/ConsoleSystem/ConsoleContainer.cs" id="2"]
+[ext_resource type="FontFile" path="res://Resources/Assets/Fonts/OpenSans/OpenSans-B9K8.tres" id="3"]
+[ext_resource type="FontFile" path="res://Resources/Assets/Fonts/OpenSans/OpenSansBold-8wJJ.tres" id="4"]
+[ext_resource type="FontFile" path="res://Resources/Assets/Fonts/OpenSans/OpenSansBoldItalic-YWD4.tres" id="5"]
+[ext_resource type="FontFile" path="res://Resources/Assets/Fonts/OpenSans/OpenSansItalic-KwXl.tres" id="6"]
 [ext_resource type="Script" path="res://Source/ConsoleSystem/ConsoleContainer.cs" id="7"]
 
 [node name="Console" type="CanvasLayer"]

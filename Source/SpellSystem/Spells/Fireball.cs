@@ -2,6 +2,8 @@ using Godot;
 using System.Collections.Generic;
 
 //Not working
+using Vain.Core;
+using Vain.Core.ComponentSystem;
 
 
 
@@ -69,7 +71,7 @@ namespace Vain.SpellSystem
 
 				
 			
-				Effectable effectable = entity.GetComponent<Effectable>(true);
+				var effectable = entity.GetComponent<EffectableComponent>();
 				if( effectable != null)
 				{	
 

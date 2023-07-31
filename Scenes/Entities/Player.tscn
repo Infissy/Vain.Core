@@ -1,13 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://2eq41uv1qvu4"]
+[gd_scene load_steps=10 format=3 uid="uid://2eq41uv1qvu4"]
 
 [ext_resource type="Script" path="res://Source/Entities/Player.cs" id="1"]
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/PlayerController.cs" id="2"]
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/MeshController.cs" id="2_ubqr4"]
-[ext_resource type="PackedScene" uid="uid://7ci0ct57tnl7" path="res://Resources/3D/TestCharacter.glb" id="2_x3jwh"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/MovementControllerComponent.cs" id="2"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/AnimationControllerComponent.cs" id="2_ubqr4"]
+[ext_resource type="PackedScene" uid="uid://7ci0ct57tnl7" path="res://Resources/Assets/3D/TestCharacter.glb" id="2_x3jwh"]
 [ext_resource type="Script" path="res://Source/SpellSystem/Components/PlayerSpellCaster.cs" id="3_aia0d"]
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/Health.cs" id="5_1o7nu"]
-[ext_resource type="Resource" path="res://Scenes/Spells/FireballChanneler.tres" id="6_nq7y1"]
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/Interactor.cs" id="7_ftd0l"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/HealthComponent.cs" id="5_1o7nu"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractorComponent.cs" id="7_ftd0l"]
 
 [sub_resource type="CapsuleShape3D" id="1"]
 
@@ -24,6 +23,8 @@ script = ExtResource("2_ubqr4")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 2.0
+debug_enabled = true
+debug_path_custom_color = Color(0, 0.627451, 0.627451, 1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.990524, 0)
@@ -35,7 +36,6 @@ Speed = 20.0
 
 [node name="PlayerSpellCaster" type="Node" parent="."]
 script = ExtResource("3_aia0d")
-SpellChannelersExport = [ExtResource("6_nq7y1")]
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("5_1o7nu")

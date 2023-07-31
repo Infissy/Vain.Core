@@ -1,5 +1,7 @@
 using Godot;
 using Vain.Core;
+using Vain.Core.ComponentSystem;
+using Vain.Singleton;
 
 namespace Vain.UI
 {
@@ -12,11 +14,26 @@ namespace Vain.UI
         {
             base._Ready();
             
-            var healthComponent = SingletonManager.GetSingleton<Player>().GetComponent<Health>();
+            var player =  SingletonManager.GetSingleton<Player>();
+            var healthComponent = player.CurrentCharacter.GetComponent<HealthComponent>();
+
             base.Health = healthComponent.CurrentHealth;
             base.MaxHealth = healthComponent.MaxHealth;
-            healthComponent.HealthUpdate += (health) => base.Health = health;
+           
+            healthComponent.HealthUpdate += updateHealthHandler;
+
+            player.CurrentCharacterChanged += (oldCharacter) =>
+            {
+                oldCharacter.GetComponent<HealthComponent>().HealthUpdate -= updateHealthHandler;
+                player.CurrentCharacter.GetComponent<HealthComponent>().HealthUpdate += updateHealthHandler;
+            };
             
+            
+        }
+
+        void updateHealthHandler(float health)
+        {
+            Health = health;
         }
 
        

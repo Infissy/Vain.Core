@@ -7,8 +7,8 @@ using Vain.Core;
 
 
 using Vain.Log;
+using Vain.Singleton;
 using Vain.UI;
-
 using Godot;
 
 //Not working
@@ -22,11 +22,11 @@ namespace Vain.CommandSystem
         public delegate void Function(params object[] parameters);
         
         
-        public string CommandName;
+        public string CommandName = "default";
 
-        public string CommandParameters;
+        public string CommandParameters = "";
 
-        public Function CommandFunction;
+        public Function CommandFunction = (_)=>{};
         
 
 
@@ -58,7 +58,7 @@ namespace Vain.CommandSystem
             CommandName  = "playerpos",
 
 
-            CommandFunction = (pm) => Logger.Information(SingletonManager.GetSingleton<Player>().Position.ToString())
+            CommandFunction = (pm) => Logger.Information(SingletonManager.GetSingleton<Player>().CurrentCharacter.Position.ToString())
 
 
         };
@@ -108,8 +108,6 @@ namespace Vain.CommandSystem
         public static Command Entities = new Command
         {
             CommandName  = "entities",
-
-            
             CommandFunction = (pm) => {
 
                 var msg = "\n";

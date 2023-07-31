@@ -1,6 +1,10 @@
 using Godot;
 using Vain.Core;
 using Vain.InteractionSystem;
+
+using Vain.Singleton;
+
+
 namespace Vain.UI.DialogueSystem
 {
 
@@ -15,7 +19,10 @@ namespace Vain.UI.DialogueSystem
         {
             base._Ready();
 
-            SingletonManager.GetSingleton<Player>().GetComponent<Interactor>().OnDialogue += dialogueHandler;
+            SingletonManager.GetSingleton<Player>().CurrentCharacter.GetComponent<InteractorComponent>().OnDialogue += dialogueHandler;
+        
+        
+        
         }
 
 

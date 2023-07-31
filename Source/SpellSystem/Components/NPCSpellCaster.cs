@@ -1,68 +1,52 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using Vain.Core.ComponentSystem;
+
 using Vain.Core;
-
-
 
 namespace Vain.SpellSystem
 {
-	partial class NPCSpellCaster : SpellCaster 
+	partial class NPCSpellCaster : SubBehaviour 
 	{
 
 
 		[Export]
 		public float ChanceToCast { get; set; }
+        [Export]
+        public float AggressionLevel {get;set;}
+        
+        
+        
+        public Character HostileCharacter {get;set;}
      
 
-		
-
         public override void _Process(double delta)
-		{
-			base._Process(delta);
-
-
-
-
-
-
-		    if ((Character as Enemy).HostileTarget != null)
-               castTick(delta);
-            
-
-
-        }
-
-
-        //TODO: Output message when spellcaster has 0 slots available
-        void castTick(double delta)
         {
-            var npc = Character as NPC;
+            base._Process(delta);
+		    if (HostileCharacter == null)
+                return;
 
-            if(npc.AggressionLevel < npc.HostileTarget.GlobalPosition.DistanceTo(npc.GlobalPosition))
+             if(AggressionLevel < HostileCharacter.GlobalPosition.DistanceTo(BehaviourCluster.Character.GlobalPosition))
                 return;
 
 
-
+            var spellCasterComponent = BehaviourCluster.Character.GetComponent<SpellCaster>();
+            var spellChannelers = spellCasterComponent.SpellChannelers;
+            
             if (GD.Randf() < ChanceToCast * delta)
             {
-                int spellindex = GD.RandRange(0, SpellChannelers.Count - 1);
+                int spellindex = GD.RandRange(0, spellChannelers.Count - 1);
 
-                if (SpellChannelers[spellindex] != null && SpellChannelers[spellindex].Spell != Spell.NONE)
+                if (spellChannelers[spellindex] != null && spellChannelers[spellindex].Spell != Spell.NONE)
                 {
-
-
-                    base.CastSpell(spellindex, (Character as Enemy).HostileTarget.Position);
-                    
-
+                    spellCasterComponent.CastSpell(spellindex, HostileCharacter.Position);
                 }
             }
+           
+
         }
 
-
-
-		
-		
 	}
 
 }

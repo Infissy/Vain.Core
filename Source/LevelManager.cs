@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Godot;
+
+using Vain.Singleton;
 namespace Vain.Core
 {
     //Should handle all the resources inside a single map/level
@@ -13,6 +15,8 @@ namespace Vain.Core
 
 
         public IEntity [] Entities {get;private set;}
+
+        
         public override void _EnterTree()
         {
             base._EnterTree();

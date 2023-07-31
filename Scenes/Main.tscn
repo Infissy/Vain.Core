@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://buso5mctrsili"]
 
-[ext_resource type="Script" path="res://Source/PlayableGame.cs" id="1_5us41"]
-[ext_resource type="PackedScene" uid="uid://dqrcad3ka5yuf" path="res://Scenes/Maps/TestMap.tscn" id="5_45q64"]
+[ext_resource type="Script" path="res://Source/LevelManager.cs" id="1_5us41"]
+[ext_resource type="PackedScene" uid="uid://b7rdmidb30ftb" path="res://Scenes/Maps/TestMap.tscn" id="5_45q64"]
 
 [node name="Game" type="Node"]
 

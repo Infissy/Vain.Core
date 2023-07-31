@@ -2,6 +2,7 @@ using Godot;
 
 using Vain.InteractionSystem;
 
+using Vain.Singleton;
 
 namespace Vain.Core
 {

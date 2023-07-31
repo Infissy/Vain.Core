@@ -22,6 +22,16 @@ Test/obj/*
 .obsidian/
 .vscode/
 .vs/
-.godot/Resources/Assets/
+.godot/
+
+
 # build/
+
+
+
+addons/zy
+
+
+# Big files
+Resources/Assets/
 

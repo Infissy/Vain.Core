@@ -1,7 +1,7 @@
 using System;
 using Godot;
 using Vain.Core;
-
+using Vain.Singleton;
 namespace Vain.InteractionSystem
 {
 
@@ -19,7 +19,7 @@ namespace Vain.InteractionSystem
         {
             base._Ready();
 
-            GD.Print(SingletonManager.GetSigletonOrDefault<InteractionHandler>());
+            GD.Print(SingletonManager.GetSingleton<InteractionHandler>());
         }
     
 

@@ -22,7 +22,7 @@ namespace Vain.InteractionSystem.InteractionGraph
 
         public static void GenerateCharacters()
         {
-            List<WorldNPC> npcDataList  = new List<WorldNPC>();
+            var npcDataList  = new List<WorldNPCInfo>();
 
 
             var dir = DirAccess.Open(NPC_DIR);
@@ -36,7 +36,7 @@ namespace Vain.InteractionSystem.InteractionGraph
 
                 if(file is PackedScene scene)
                 {
-                    npcDataList.Add(scene.Instantiate<WorldNPC>());
+                    npcDataList.Add(scene.Instantiate<WorldNPCInfo>());
                 }
 
                 var npc = ResourceLoader.Load<PackedScene>(NPC_NODE).Instantiate<CharacterNode>();

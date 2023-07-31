@@ -1,6 +1,10 @@
 using Godot;
-using Vain.UI;
-namespace Vain
+
+
+using Vain.Core.ComponentSystem;
+
+
+namespace Vain.UI
 {
     partial class CharacterHealthBar : Component
     {
@@ -11,7 +15,7 @@ namespace Vain
         {
             base._Ready();
             _bar = GetNode<HealthBar>("SubViewport/HealthBar");
-            var health = GetComponent<Health>();
+            var health = GetComponent<HealthComponent>();
             _bar.MaxHealth = health.MaxHealth;
             _bar.Health = health.CurrentHealth;
 
