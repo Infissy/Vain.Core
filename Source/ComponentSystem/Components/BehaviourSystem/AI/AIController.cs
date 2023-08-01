@@ -12,17 +12,14 @@ namespace Vain.Core.ComponentSystem.Behaviour
 	{
 
 		
+
+		CsgSphere3D _debugMesh;
+		
+		
 		//TODO:: Handle a table of aggros in case it's needed
 		[Export]
-		internal Character HostileCharacter{get;set;}
-		[Export]
 		internal float AggressionLevel {get;set;}
-
-
-
-
-
-
+		
 		[Export]
 		AIMovementStrategy AI {get;set;}
 
@@ -36,12 +33,16 @@ namespace Vain.Core.ComponentSystem.Behaviour
 		[ExportGroup("Debug")]
 		[Export]
 		public bool Debug_ShowTarget{ get; set;}
-		CsgSphere3D _debugMesh;
+		
 
 
 
+		internal Character HostileCharacter{get;set;}
 
 
+		
+		
+		
 		public override void _Ready()
 		{
 

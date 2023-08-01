@@ -20,7 +20,7 @@ namespace Vain.Core
         public override void _EnterTree()
         {
             base._EnterTree();
-            SingletonManager.Register(this);
+            SingletonManager.Register(SingletonManager.Singletons.LEVEL_MANAGER,this);
         }
 
 

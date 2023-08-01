@@ -19,6 +19,12 @@ namespace Vain.SpellSystem
 			public const string SLOT6 = "player_cast_slot6";
 			public const string SLOT7 = "player_cast_slot7";
 			public const string SLOT8 = "player_cast_slot8";
+
+
+			static public bool IsCastAction()
+			{
+				
+			}
 		}
 	
 		

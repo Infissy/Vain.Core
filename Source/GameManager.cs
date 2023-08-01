@@ -24,8 +24,13 @@ namespace Vain.Core
 
         public override void _Ready()
         {
-            
-            SingletonManager.GetSingleton<Player>().PlayerDeath += () =>
+            var player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
+            if(player == null)
+                return;
+
+
+
+            player.CharacterKilled += () =>
             {
                 
                 GetTree().ReloadCurrentScene();

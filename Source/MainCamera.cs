@@ -15,7 +15,7 @@ namespace Vain.Core
         /// Character to follow.
         /// </summary>
 
-        public Character Player {get;set;}        
+        public Character? Player {get;set;}        
         
     
         /// <summary>
@@ -33,14 +33,19 @@ namespace Vain.Core
         public override void _EnterTree()
         {
             base._EnterTree();
-            SingletonManager.Register(this);
+            SingletonManager.Register(SingletonManager.Singletons.MAIN_CAMERA,this);
         }
+
 
         public override void _Ready()
         {
             base._Ready();
             
-            Player = SingletonManager.GetSingleton<Character>();
+            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
+
+            if(Player == null)
+                throw new RequiredSingletonMissingException(SingletonManager.Singletons.PLAYER,typeof(Character));
+
             _oldPlayerPosition = Player.GlobalPosition;
 
    
