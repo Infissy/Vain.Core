@@ -35,10 +35,7 @@ namespace Vain.Core.ComponentSystem.Behaviour
 
             switch (action.Action)
             {
-                case SLOT1:
-                    spellCaster.CastSpell(0,)
-                case SLOT2:
-                default:
+               
             }
         
     }

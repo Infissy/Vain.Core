@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://btippxwivyibp"]
 
 [ext_resource type="Script" path="res://Source/LevelManager.cs" id="1_x2gbd"]
-[ext_resource type="PackedScene" uid="uid://s558lh3ts41k" path="res://Scenes/Maps/Village_1_map.tscn" id="2_64wr4"]
-[ext_resource type="PackedScene" uid="uid://2eq41uv1qvu4" path="res://Scenes/Entities/Player.tscn" id="3_7vn6r"]
+[ext_resource type="PackedScene" uid="uid://s558lh3ts41k" path="res://Prefabs/Maps/Village_1_map.tscn" id="2_64wr4"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Player.tscn" id="3_7vn6r"]
 [ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractionHandler.cs" id="3_ufbpd"]
 [ext_resource type="Script" path="res://Source/MainCamera.cs" id="4_fmpb4"]
 

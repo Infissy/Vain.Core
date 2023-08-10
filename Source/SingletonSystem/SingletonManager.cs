@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Linq;
 
 
 using Godot;
-
+using System.Threading.Tasks;
+using Vain.Core;
 
 namespace Vain.Singleton
 {
@@ -19,42 +21,75 @@ namespace Vain.Singleton
 
         
         
-        static Dictionary<string,Node> _dictionary = new Dictionary<string, Node>();
+        static Dictionary<string,SingletonHandle> _singletons = new Dictionary<string, SingletonHandle>();
+        static Dictionary<string, List<Action>> _initializationCallbacks = new Dictionary<string, List<Action>>();
+       
 
-        static Dictionary<string,Singleton<Node>> _
 
-        public static Singleton<T>? GetSingleton<T>(string key) where T : Node
+
+        public static SingletonCharacter? GetCharacterSingleton(string key, Action? callback = null) 
+        {
+           return GetSingleton<Character>(key,callback) as SingletonCharacter;
+        }
+
+
+
+        public static Singleton<T>? GetSingleton<T>(string key, Action? callback = null) where T : Node
         {   
 
-            Node singleton;
-            bool found =  _dictionary.TryGetValue(key,out singleton!);
-            if(!found || singleton is not T instance)
+            if(_singletons.ContainsKey(key))
+                return _singletons[key] as Singleton<T>;
+
+            if(callback == null)
                 return null;
+                
+            if(!_initializationCallbacks.ContainsKey(key))
+                _initializationCallbacks.Add(key,new List<Action>());
+            _initializationCallbacks[key].Add(callback);
 
-
-            return new Singleton<T>(instance);
+            return null;
         }
-        
 
+   
 
-        public static void Register(string key,Node singleton) 
+        public static void Register<T>(string key,T instance) where T : Node
         {
-            if(!_dictionary.ContainsKey(key))
-                _dictionary.Add(key,singleton);
-            else
-                _dictionary[key] = singleton;
+            if(_singletons.ContainsKey(key))
+            {
+                var singleton = _singletons[key] as Singleton<T>;
+                singleton!.Reference = instance;
+                return;
+            }
+            
+            
+            SingletonHandle singletonHandle = instance is Character character ? new SingletonCharacter(character) : new Singleton<T>(instance);
+            _singletons.Add(key, singletonHandle);
+            
+            if(!_initializationCallbacks.ContainsKey(key))
+                return;
+
+
+            foreach (var callback in _initializationCallbacks[key])
+            {
+                callback.Invoke();
+            }
+            _initializationCallbacks.Remove(key);
+        
         }
         
 
         public static IEnumerable<string> GetSingletonsList()
         {
-            return _dictionary.Keys;
+            return _singletons.Keys;
         }
 
 
         public static void Destroy(string key)
         {
-            _dictionary.Remove(key);
+            _singletons[key].Disposed = true;
+            
+            _singletons.Remove(key);
+
         }
 
 
@@ -67,11 +102,14 @@ namespace Vain.Singleton
             {
                 public static string SPELL_BAR = "ui_spell_bar";
                 public static string HEALTH_BAR = "ui_health_bar";
+                public static string DEBUG_OVERLAY = "ui_debug_overlay";
             }
             public static string MAIN_CAMERA = "main_camera";
             public static string LEVEL_MANAGER = "level_manager";
             public static string PLAYER = "entity_player";
-            
+            public static string INTERACTION_HANDLER = "interaction_handler";
+            public static string ENEMY_SPAWNER = "enemy_spawner";
+            public static string GAME_REGISTRY = "game_registry";
         }
         
     }

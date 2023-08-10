@@ -21,7 +21,7 @@ namespace Vain.Core.ComponentSystem.Behaviour
 				return;
 
 		
-			var target = SingletonManager.GetSingleton<MainCamera>().GetMouseScenePosition();
+			var target = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA).Reference.GetMouseScenePosition();
 
 
 			if(target == Vector3.Inf)

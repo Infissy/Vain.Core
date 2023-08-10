@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Godot;
 
 using Vain.Core.ComponentSystem;
-
+using Vain.Singleton;
 
 namespace Vain.Core
 {
@@ -32,7 +32,7 @@ namespace Vain.Core
 
                 _behaviour = value;
 
-                EmitSignal(SignalName.CharacterBehaviourUpdate);
+                
             }
         }
         
@@ -46,13 +46,7 @@ namespace Vain.Core
         public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviour OldBehaviour);
 
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-            
-        }
-        
-        
+      
         
         public override void _Ready()
         {
@@ -60,8 +54,8 @@ namespace Vain.Core
 
             if(_components == null)
                 loadComponents();
-            
-            //SingletonManager.GetSingleton<LevelManager>().AddCharacter(this);
+
+            SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference?.Register(this);
             
         
 
@@ -76,26 +70,34 @@ namespace Vain.Core
         }
 
 
-        public void Lock()
-        {
-            
-        }
+       
 
-        public T? GetComponent<T>() where T : Node
+        public T? GetComponent<T>() where T : Component
         {   
 
             //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
             if(_components == null)
                 loadComponents();
-            
-          
-
-           
+       
             return _components.Where((c) => c is T).FirstOrDefault() as T;
 
         }
+         
+        public Component GetComponent(Type type) 
+        {   
 
+            //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
+            if(_components == null)
+                loadComponents();
+       
+            return _components.Where((c) => c.GetType() == type).FirstOrDefault();
 
+        }
+
+        public IReadOnlyCollection<Component> GetComponents()
+        {
+            return _components.AsReadOnly();
+        }
 
         public virtual void Kill()
         {

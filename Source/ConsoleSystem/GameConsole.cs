@@ -14,9 +14,9 @@ namespace Vain.Console
     public partial class GameConsole : Godot.Node, IFormattedOutput
     {
         
-
-        public delegate void UpdateHandler();
-        public event UpdateHandler OnUpdate;
+        [Signal]
+        public delegate void OnUpdateEventHandler();
+        
 
 
         LineEdit _inputBox;
@@ -38,19 +38,15 @@ namespace Vain.Console
             Logger.RegisterOutput(this, (LogLevel) 63 );
             
             
-            var button = GetNode("Button") as Button;
-            _inputBox = GetNode("LineEdit") as LineEdit;
+            var button = GetNode("VBoxContainer/HBoxContainer/Button") as Button;
+            _inputBox = GetNode("VBoxContainer/HBoxContainer/LineEdit") as LineEdit;
 
 
 
+            button.Pressed += buttonPressed;
+            _inputBox.TextSubmitted += buttonPressed;
 
-
-            button.Connect("pressed",new Callable(this,"buttonPressed"));
-
-
-            _inputBox.Connect("text_entered",new Callable(this,"buttonPressed"));
-            
-            
+        
         }
         
 
@@ -64,34 +60,24 @@ namespace Vain.Console
         public void buttonPressed(string text){
 
             
-            if(text != "?")
-            {
+            if(text.Length == 0)
+                return;
 
+
+            var parsed = text.Split(' ');
+                
+            CommandRunner.Instance.Run(parsed[0], parsed.Skip(1).ToArray());
+
+
+            _inputBox.Clear();
         
-                var parsed = text.Split(' ');
-                
-                Runner.Instance.Run(parsed[0], parsed.Skip(1).ToArray());
-
-
-                _inputBox.Clear();
-            }
-            else
-            {
-                var parsed = text.Split(' ');
-                
-                Runner.Instance.Run(parsed[0], parsed.Skip(1).ToArray());
-
-
-                _inputBox.Clear();
-            }
-
         }
 
         public void Write(string output)
         {
             _buffer.Add(output);
-            if (OnUpdate == null) return;
-                OnUpdate.Invoke();
+           
+            EmitSignal(SignalName.OnUpdate);
         }
 
         public void Write(FormattedMessage[] formattedOutput)
@@ -106,8 +92,7 @@ namespace Vain.Console
             
 
             _buffer.Add(message);
-            if (OnUpdate == null) return;
-                OnUpdate.Invoke();
+            EmitSignal(SignalName.OnUpdate);
         }
 
 

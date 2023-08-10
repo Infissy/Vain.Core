@@ -15,7 +15,7 @@ namespace Vain.SpellSystem.UI
         PackedScene _spellSlot;
 
 
-        Character? _currentCharacter;
+        Singleton<Character>? _currentCharacter;
         public override void _EnterTree()
         {
             SingletonManager.Register(SingletonManager.Singletons.UI.SPELL_BAR,this);
@@ -29,15 +29,10 @@ namespace Vain.SpellSystem.UI
             
             _currentCharacter = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
 
-            var caster = _currentCharacter?.GetComponent<SpellCaster>();
+            var caster = _currentCharacter?.Reference?.GetComponent<SpellCaster>();
             if(caster != null)
                 caster.SpellPickup += loadSpells;
             
-            _currentCharacter.CurrentCharacterChanged +=  (oldCharacter) =>
-            {
-                oldCharacter.GetComponent<SpellCaster>().SpellPickup -= loadSpells;
-                _currentCharacter.GetComponent<SpellCaster>().SpellPickup += loadSpells;
-            };
             
 
             loadSpells();
@@ -52,7 +47,7 @@ namespace Vain.SpellSystem.UI
                 child.QueueFree();
             }
 
-            var channelers = _currentCharacter.GetComponent<SpellCaster>().SpellChannelers;
+            var channelers = _currentCharacter.Reference.GetComponent<SpellCaster>().SpellChannelers;
             foreach (SpellChanneler channeler in channelers)
             {
                 

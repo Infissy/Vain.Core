@@ -14,24 +14,16 @@ namespace Vain.UI
         {
             base._Ready();
             
-            var player =  SingletonManager.GetSingleton<Player>();
-            var healthComponent = player.CurrentCharacter.GetComponent<HealthComponent>();
-
-            base.Health = healthComponent.CurrentHealth;
-            base.MaxHealth = healthComponent.MaxHealth;
-           
-            healthComponent.HealthUpdate += updateHealthHandler;
-
-            player.CurrentCharacterChanged += (oldCharacter) =>
-            {
-                oldCharacter.GetComponent<HealthComponent>().HealthUpdate -= updateHealthHandler;
-                player.CurrentCharacter.GetComponent<HealthComponent>().HealthUpdate += updateHealthHandler;
-            };
+            var player = SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER);
+            var healthComponent = player.GetComponent<HealthComponent>();
             
-            
+            healthComponent.RegisterToSignal(HealthComponent.SignalName.HealthUpdate,new Callable(this,MethodName.UpdateHealthHandler));
+
+
+          
         }
 
-        void updateHealthHandler(float health)
+        public void UpdateHealthHandler(float health)
         {
             Health = health;
         }

@@ -19,8 +19,10 @@ namespace Vain.CommandSystem
 
     public partial class Command
     {
-        public delegate void Function(params object[] parameters);
+
+
         
+        public delegate void Function(params object[] parameters);
         
         public string CommandName = "default";
 
@@ -58,21 +60,32 @@ namespace Vain.CommandSystem
             CommandName  = "playerpos",
 
 
-            CommandFunction = (pm) => Logger.Information(SingletonManager.GetSingleton<Player>().CurrentCharacter.Position.ToString())
+            CommandFunction = (pm) => 
+            {
+                var player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
+                
+                if(player == null)
+                {
+                    Logger.Information("No player in the scene");
+                    return;
+                }
 
+                    
+                Logger.Information(player.Reference.Position.ToString());
+
+            }
 
         };
-
 
         
         public static Command CharacterPosition = new Command
         {
-            CommandName  = "entitypos",
+            CommandName  = "characterpos",
 
 
             CommandFunction = (pm) => {
                 
-                var entity = SingletonManager.GetSingleton<LevelManager>().Characters.Where(e => e.RuntimeID == int.Parse(pm[0] as string)).First();
+                var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.Where(e => e.RuntimeID == int.Parse(pm[0] as string)).First();
 
                 Logger.Information(entity.Position.ToString());
             }
@@ -81,16 +94,15 @@ namespace Vain.CommandSystem
         };
         
 
-
-         public static Command ListAvailableCommands = new Command
+        public static Command ListAvailableCommands = new Command
         {
             CommandName  = "?",
             
             CommandFunction = (_) => 
 
             {
-                var runner = Runner.Instance;
-                foreach (var command in Runner.Instance.Commands)
+                var runner = CommandRunner.Instance;
+                foreach (var command in CommandRunner.Instance.Commands)
                 {
                     Logger.Command(command.CommandName,command.CommandParameters, false);
                 }
@@ -98,11 +110,6 @@ namespace Vain.CommandSystem
 
 
         };
-
-
-
-        
-
 
         
         public static Command Entities = new Command
@@ -112,13 +119,18 @@ namespace Vain.CommandSystem
 
                 var msg = "\n";
                 
+                var levelManager = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference;
+
+                if(levelManager == null)
+                {
+                    Logger.Information("No Level Manager in the scene.");
+                }   
+                    
 
 
-                foreach (var entity in SingletonManager.GetSingleton<LevelManager>().Entities)
+                foreach (var entity in SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Entities)
                 {
                     msg += $"   ({entity.RuntimeID}){(entity as Node).Name}  \n";
-                
-
                 }
 
                 Logger.Information(msg);
@@ -130,10 +142,7 @@ namespace Vain.CommandSystem
 
         };
 
-            
-
-
-        /*
+        
         public static Command Components = new Command
         {
             CommandName  = "components",
@@ -162,13 +171,13 @@ namespace Vain.CommandSystem
                 
                 
                 
-                var entity = Character.Where(e => e.ID == id).First();
+                var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Entities.Where(e => e.RuntimeID == id).First();
 
                 var msg = "\n";
                 
 
                 
-                foreach (var component in entity.ComponentContainer.Components)
+                foreach (var component in (entity as Character).GetComponents())
                 {
                     msg += $"   {component.GetType().Name } \n";
                 
@@ -180,7 +189,66 @@ namespace Vain.CommandSystem
 
 
         };
-                */
+
+
+        public static Command Spawn = new Command
+        {
+
+            CommandName = "spawn",
+            
+
+            CommandParameters = "entity : text",
+            
+
+            CommandFunction = (pm) => 
+            {
+
+                var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.Entities;
+
+                if(!entities.ContainsKey(pm[0].ToString()))
+                {
+                    Logger.Information($"No entity found with identifier {pm[0].ToString()}");
+                    return;
+                }
+
+
+                
+                var entity = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.Entities[pm[0].ToString()];
+
+
+                SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.AddChild((entity as PackedScene).Instantiate());
+                
+            }
+        
+        };  
+
+        
+        public static Command SingletonList = new Command
+        {
+
+            CommandName = "singletons",
+            
+
+            
+
+            CommandFunction = (pm) => 
+            {
+
+                var singletons = SingletonManager.GetSingletonsList();
+                string singletonList = "\n";
+                foreach (var singleton in singletons)
+                {
+                    singletonList += singleton + '\n';
+                }
+                Logger.Information(singletonList);
+                
+            }
+        
+        };  
+
+
+
+
         
 
     }

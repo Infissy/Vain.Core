@@ -30,7 +30,7 @@ namespace Vain.EnemySystem
 
 		Dictionary<string,uint> _enemiesToSpawn = new Dictionary<string, uint>();
 		uint _diedEnemies;
-		Character? _player;
+		Singleton<Character>? _player;
 
 
 
@@ -45,7 +45,7 @@ namespace Vain.EnemySystem
 		public override void _EnterTree()
 		{
 			base._EnterTree();
-			SingletonManager.Register(this);
+			SingletonManager.Register(SingletonManager.Singletons.ENEMY_SPAWNER,this);
 		}
 
 
@@ -54,7 +54,7 @@ namespace Vain.EnemySystem
 		{ 
 			
 			
-			_player = SingletonManager.GetSingleton<Player>().CurrentCharacter;
+			_player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.ENEMY_SPAWNER);
 			
 			if(SpawnInfo != null)
 			{
@@ -126,7 +126,7 @@ namespace Vain.EnemySystem
 				
 				
 				AddChild(instance);
-				instance.GlobalPosition = _player!.GlobalPosition + deltapos;
+				instance.GlobalPosition = _player!.Reference.GlobalPosition + deltapos;
 				
 				//TODO: Fix resource instantiation, even duplicate can't avoid making the resource shared between enemies, at the moment every enemy has their own spells preassigned
 				//TODO: Create a system to check if a system is enabled as to add components

@@ -64,9 +64,7 @@ namespace Vain.SpellSystem
                 
                 
                 //Choose which layer the spell is, not the best way to select it 
-                spellInstance.CollisionMask = caster is Player ? SpellLayer.NPC : SpellLayer.PLAYER;
-
-
+         
                 spellInstance.Caster = caster;
 
                 //TODO: Better hierarchy

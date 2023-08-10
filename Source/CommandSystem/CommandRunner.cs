@@ -11,11 +11,11 @@ namespace Vain.CommandSystem
     ///<summary>
     /// Main Class that handles command execution
     ///</summary>
-    public partial class Runner 
+    internal class CommandRunner 
     {
-        static Runner _instance = new Runner();
+        static CommandRunner _instance = new CommandRunner();
         
-        public static Runner Instance 
+        public static CommandRunner Instance 
         {
             get => _instance;
         }
@@ -24,22 +24,24 @@ namespace Vain.CommandSystem
         public Dictionary<string, Command> _commands = new Dictionary<string, Command>();
 
 
-        public Runner()
+        public CommandRunner()
         {
             RegisterCommand(DefaultCommands.Print);
-            /*
+            
             RegisterCommand(DefaultCommands.PlayerPos);
-            RegisterCommand(DefaultCommands.EntityPos);
-            */
+            RegisterCommand(DefaultCommands.CharacterPosition);
+            
 
             RegisterCommand(DefaultCommands.ListAvailableCommands);
                 
-            /*
+            
 
             RegisterCommand(DefaultCommands.Entities);
             RegisterCommand(DefaultCommands.Components);
+            
+            RegisterCommand(DefaultCommands.Spawn);
 
-            */
+            RegisterCommand(DefaultCommands.SingletonList);
 
         }
 
@@ -70,6 +72,12 @@ namespace Vain.CommandSystem
             {
                 //TODO : Implement suggestions
                 Logger.Information($"Not Enough parameters");
+            }
+            catch(Exception e)
+            {
+                Logger.Critical($"Error running '{command}' command.");
+                Logger.Debug(e.Message);
+                throw;
             }
         
         

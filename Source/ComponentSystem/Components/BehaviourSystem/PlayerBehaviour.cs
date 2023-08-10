@@ -10,7 +10,7 @@ namespace Vain.Core.ComponentSystem
     {
         public override void _Ready()
         {
-            SingletonManager.Register(this.Character);
+            SingletonManager.Register<Character>(SingletonManager.Singletons.PLAYER,this.Character);
         }
         
     }

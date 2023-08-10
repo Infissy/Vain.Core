@@ -1,6 +1,10 @@
 using Godot;
 
 using Vain.Singleton;
+using Vain.Log;
+
+
+
 namespace Vain.Core
 {
 
@@ -15,7 +19,7 @@ namespace Vain.Core
         /// Character to follow.
         /// </summary>
 
-        public Character? Player {get;set;}        
+        public Singleton<Character>? Player {get;set;}        
         
     
         /// <summary>
@@ -41,12 +45,12 @@ namespace Vain.Core
         {
             base._Ready();
             
-            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
 
-            if(Player == null)
-                throw new RequiredSingletonMissingException(SingletonManager.Singletons.PLAYER,typeof(Character));
+            var successfulSetup = setupSingletons();
 
-            _oldPlayerPosition = Player.GlobalPosition;
+
+            if(successfulSetup)
+                _oldPlayerPosition = Player!.Reference!.GlobalPosition;
 
    
         }   
@@ -55,12 +59,16 @@ namespace Vain.Core
         {
             base._Process(delta);
             
-            var relMotion =  Player.GlobalPosition - _oldPlayerPosition;
+            if(Player == null || Player.Disposed)
+                setupSingletons();
+
+
+            var relMotion =  Player!.Reference!.GlobalPosition - _oldPlayerPosition;
         
 
             this.GlobalTranslate(relMotion);
             //TODO: Add smoothing and eventually clipping
-            _oldPlayerPosition = Player.GlobalPosition; 
+            _oldPlayerPosition = Player.Reference.GlobalPosition; 
 
         }
 
@@ -102,6 +110,24 @@ namespace Vain.Core
                 }
             
         
+        }
+
+        bool setupSingletons()
+        {
+            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, lateInitializationHandle);
+
+            if(Player == null)
+            {
+                SetProcess(false);
+                return false;
+            }
+            return true;
+        }
+        void lateInitializationHandle()
+        {
+            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
+            SetProcess(true);
+                
         }
 
      

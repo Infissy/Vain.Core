@@ -12,14 +12,14 @@ namespace Vain.InteractionSystem
         public override void _EnterTree()
         {
             base._EnterTree();
-            SingletonManager.Register(this);
+            SingletonManager.Register(SingletonManager.Singletons.INTERACTION_HANDLER,this);
         }
 
         public override void _Ready()
         {
             base._Ready();
 
-            GD.Print(SingletonManager.GetSingleton<InteractionHandler>());
+            GD.Print(SingletonManager.GetSingleton<InteractionHandler>(SingletonManager.Singletons.INTERACTION_HANDLER));
         }
     
 

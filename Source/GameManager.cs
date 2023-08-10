@@ -20,30 +20,8 @@ namespace Vain.Core
         [Signal]
         public delegate void SceneChangeEventHandler();
 
-
-
-        public override void _Ready()
-        {
-            var player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
-            if(player == null)
-                return;
-
-
-
-            player.CharacterKilled += () =>
-            {
-                
-                GetTree().ReloadCurrentScene();
-                EmitSignal(SignalName.SceneChange);
-
-
-            };
-                
-            
-            
-           
-        }
         
+
 
 
     }

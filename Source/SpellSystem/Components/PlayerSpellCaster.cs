@@ -21,10 +21,7 @@ namespace Vain.SpellSystem
 			public const string SLOT8 = "player_cast_slot8";
 
 
-			static public bool IsCastAction()
-			{
-				
-			}
+		
 		}
 	
 		

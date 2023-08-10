@@ -21,9 +21,11 @@ namespace Vain.InteractionSystem
    
         Area3D _area;
 
-        InteractionHandler _system;
+        Singleton<InteractionHandler> _system;
         List<InteractibleComponent> _interactibles = new List<InteractibleComponent>();
         
+    
+
         public override void _Ready()
         {
             base._Ready();
@@ -33,7 +35,7 @@ namespace Vain.InteractionSystem
             _area.BodyEntered += _bodyEntered;
             _area.BodyExited += _bodyExited;
 
-            _system = SingletonManager.GetSingleton<InteractionHandler>();
+            _system = SingletonManager.GetSingleton<InteractionHandler>(SingletonManager.Singletons.INTERACTION_HANDLER);
 
             //Disable component if no interactionHandler is available 
             if(_system == null)

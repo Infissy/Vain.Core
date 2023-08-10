@@ -125,7 +125,7 @@ namespace Vain.Log
         {
 
             //TODO: parameters will define formatting
-            SingletonManager.GetSingleton<DebugOverlay>().Log(label,message);
+            SingletonManager.GetSingleton<DebugOverlay>(SingletonManager.Singletons.UI.DEBUG_OVERLAY).Reference.Log(label,message);
         }
 
         static protected void outputMessage ( List<FormattedMessage> messages, LogLevel level)

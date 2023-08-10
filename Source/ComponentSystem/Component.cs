@@ -11,8 +11,8 @@ namespace Vain.Core.ComponentSystem
         
         public Character Character { get; private set; } = null!;
 
-
-
+        [Signal]
+        public delegate void CharacterKilledEventHandler();
         
         public override void _Ready()
         {
