@@ -1,8 +1,8 @@
+using Godot;
 
 using System;
 using System.Collections.Generic;
 using Vain.Log;
-
 using Vain.SpellSystem;
 // Effectable component for a entity to be able to get an effect from a spell
 
@@ -10,7 +10,7 @@ using Vain.SpellSystem;
 //TODO: Refactor 
 namespace Vain.Core.ComponentSystem
 {
-	
+	[GlobalClass]
 	partial class EffectableComponent : Component
 	{
 

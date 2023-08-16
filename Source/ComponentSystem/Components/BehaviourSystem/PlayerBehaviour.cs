@@ -6,7 +6,7 @@ using Vain.Singleton;
 namespace Vain.Core.ComponentSystem
 {
     [GlobalClass]
-    public partial class PlayerBehaviour : CharacterBehaviour
+    public partial class PlayerBehaviour : CharacterBehaviourComponent
     {
         public override void _Ready()
         {

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ComponentIndexResource" load_steps=7 format=3 uid="uid://blwpfcxe02nlp"]
+
+[ext_resource type="Script" path="res://Source/ComponentSystem/ComponentIndexResource.cs" id="1_o145j"]
+[ext_resource type="PackedScene" uid="uid://cmesgi1pmug3o" path="res://Prefabs/Components/health_component.tscn" id="1_pkutu"]
+[ext_resource type="PackedScene" uid="uid://c2gyjvxyfwpte" path="res://Prefabs/Components/interactor_component.tscn" id="2_0onu2"]
+[ext_resource type="PackedScene" uid="uid://coouk88r02tny" path="res://Prefabs/Components/movement_controller_component.tscn" id="3_7mil0"]
+[ext_resource type="PackedScene" uid="uid://66q1u3y8a3fe" path="res://Prefabs/Components/animation_controller_component.tscn" id="4_cqaoe"]
+[ext_resource type="PackedScene" uid="uid://cwecko608klli" path="res://Prefabs/Components/character_behaviour_component.tscn" id="5_kflqy"]
+
+[resource]
+script = ExtResource("1_o145j")
+Components = {
+"animation_controller": ExtResource("4_cqaoe"),
+"character_behaviour": ExtResource("5_kflqy"),
+"health": ExtResource("1_pkutu"),
+"interactor": ExtResource("2_0onu2"),
+"movement_controller": ExtResource("3_7mil0")
+}

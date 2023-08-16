@@ -3,7 +3,8 @@ using Godot.Collections;
 
 namespace Vain.Core.ComponentSystem
 {
-    public abstract partial class CharacterBehaviour : Component
+    [GlobalClass]
+    public abstract partial class CharacterBehaviourComponent : Component
     {
         
     }

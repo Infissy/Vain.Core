@@ -26,9 +26,6 @@ namespace Vain.CommandSystem
 
         public CommandRunner()
         {
-            RegisterCommand(DefaultCommands.Print);
-            
-            RegisterCommand(DefaultCommands.PlayerPos);
             RegisterCommand(DefaultCommands.CharacterPosition);
             
 
@@ -50,12 +47,42 @@ namespace Vain.CommandSystem
         public void Run(string command, params string[] parameters)
         {
 
+            var parsedParameters = new object[parameters.Length];
+
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                
+
+                int n;
+                if(int.TryParse(parameters[i],System.Globalization.NumberStyles.Integer,null,out n))
+                {
+                    parsedParameters[i] = n;
+                    continue;
+                }
+
+                float f;
+                if(float.TryParse(parameters[i],System.Globalization.NumberStyles.Float,null,out f))
+                {
+                    parsedParameters[i] = f;
+                    continue;
+                }
+
+                parsedParameters[i] = parameters[i];
+
+                 
+
+
+            }
+
+
+
             try
             {
                 Logger.Command(command, string.Join(" ", parameters));
                 Command commandInstance;
                 if(_commands.TryGetValue(command,out commandInstance))
-                    commandInstance.CommandFunction(parameters);
+                    commandInstance.Run(parsedParameters);
                 else
                     Logger.Information($"Command \"{command}\" not found.");
 
@@ -91,7 +118,7 @@ namespace Vain.CommandSystem
             return _commands.Keys.Where(c => c.StartsWith(start)).ToArray();
         }
 
-        public void RegisterCommand (string name, Command.Function function)
+        public void RegisterCommand (string name, Delegate function)
         {
 
 

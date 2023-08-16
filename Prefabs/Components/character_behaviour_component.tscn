@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwecko608klli"]
+
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/CharacterBehaviourComponent.cs" id="1_emf0a"]
+
+[node name="CharacterBehaviour" type="Node"]
+script = ExtResource("1_emf0a")

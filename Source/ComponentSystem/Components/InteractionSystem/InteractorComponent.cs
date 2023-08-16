@@ -7,7 +7,7 @@ using Vain.Singleton;
 
 namespace Vain.InteractionSystem
 {
- 
+    [GlobalClass]
     //TODO: At the moment all the system is focused to the interaction between NPC and Player, maybe allow NPC to NPC interaction for more complex social behaviours 
     public partial class InteractorComponent : Component
     {

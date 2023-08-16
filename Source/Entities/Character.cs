@@ -20,10 +20,10 @@ namespace Vain.Core
 
         List<Component> _components;
 
-        CharacterBehaviour _behaviour;
+        CharacterBehaviourComponent _behaviour;
 
         [Export] 
-        public CharacterBehaviour CharacterBehaviour 
+        public CharacterBehaviourComponent CharacterBehaviour 
         {   
             get => _behaviour;
             set
@@ -43,7 +43,7 @@ namespace Vain.Core
         [Signal]
         public delegate void CharacterKilledEventHandler();
         [Signal]
-        public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviour OldBehaviour);
+        public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviourComponent OldBehaviour);
 
 
       

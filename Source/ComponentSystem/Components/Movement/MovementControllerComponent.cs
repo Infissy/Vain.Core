@@ -2,6 +2,7 @@
 
 namespace Vain.Core.ComponentSystem
 {
+    [GlobalClass]
     public partial class MovementControllerComponent : Component
     {
         NavigationAgent3D _agent = default!;
