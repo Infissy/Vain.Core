@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using Vain.CommandSystem;
+using Vain.CLI;
 using Vain.Log;
 
 
@@ -66,7 +66,7 @@ namespace Vain.Console
 
             var parsed = text.Split(' ');
                 
-            CommandRunner.Instance.Run(parsed[0], parsed.Skip(1).ToArray());
+            CommandRunner.Instance.Run(text);
 
 
             _inputBox.Clear();

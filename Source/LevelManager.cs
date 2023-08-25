@@ -30,7 +30,7 @@ namespace Vain.Core
 		public uint Register(Character character)
 		{
 			
-			_characters.Append(character);
+			_characters.Add(character);
 
 			return Register(character as IEntity);
 

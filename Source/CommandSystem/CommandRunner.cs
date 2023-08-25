@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using Godot;
 using Vain.Log;
-namespace Vain.CommandSystem
+namespace Vain.CLI
 
 {
 
@@ -13,76 +14,68 @@ namespace Vain.CommandSystem
     ///</summary>
     internal class CommandRunner 
     {
-        static CommandRunner _instance = new CommandRunner();
-        
-        public static CommandRunner Instance 
-        {
-            get => _instance;
-        }
-        public Command[] Commands {get => _commands.Values.ToArray();}
-    
-        public Dictionary<string, Command> _commands = new Dictionary<string, Command>();
 
+
+      
+        readonly Dictionary<string, Program> _commands = new();
+
+        readonly Dictionary<string,string> _variables = new();
+
+
+        
+        public Program[] Commands  => _commands.Values.ToArray();
+    
+
+
+
+
+
+        static CommandRunner _instance = new();
+        public static CommandRunner Instance => _instance;
 
         public CommandRunner()
         {
-            RegisterCommand(DefaultCommands.CharacterPosition);
-            
-
-            RegisterCommand(DefaultCommands.ListAvailableCommands);
-                
-            
-
-            RegisterCommand(DefaultCommands.Entities);
-            RegisterCommand(DefaultCommands.Components);
-            
-            RegisterCommand(DefaultCommands.Spawn);
-
-            RegisterCommand(DefaultCommands.SingletonList);
+            RegisterCommand(DefaultPrograms.CharacterPosition);
+            RegisterCommand(DefaultPrograms.ListAvailableCommands);
+            RegisterCommand(DefaultPrograms.Entities);
+            RegisterCommand(DefaultPrograms.Components);
+            RegisterCommand(DefaultPrograms.Spawn);
+            RegisterCommand(DefaultPrograms.SingletonList);
 
         }
 
 
        
-        public void Run(string command, params string[] parameters)
+        public void Run(string command)
         {
 
-            var parsedParameters = new object[parameters.Length];
-
-
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                
-
-                int n;
-                if(int.TryParse(parameters[i],System.Globalization.NumberStyles.Integer,null,out n))
-                {
-                    parsedParameters[i] = n;
-                    continue;
-                }
-
-                float f;
-                if(float.TryParse(parameters[i],System.Globalization.NumberStyles.Float,null,out f))
-                {
-                    parsedParameters[i] = f;
-                    continue;
-                }
-
-                parsedParameters[i] = parameters[i];
-
-                 
-
-
-            }
-
-
+           
+            var parsed = command.Split(' ');
+            
 
             try
             {
+
+                var outputVar = "$";
+                List<string> commandParameters = new();
+
+                if(parsed[0].StartsWith('$'))
+                {
+                    if(!parsed[0].Contains('=') || !parsed[1].StartsWith('$'))
+                        throw new Exception("Wrong format for variable assignment.");
+
+
+                    if(parsed[0].Contains('='))
+                    {
+                        var split = parsed[0].Split('=');
+
+                    }
+                }
+
                 Logger.Command(command, string.Join(" ", parameters));
-                Command commandInstance;
+                Program commandInstance;
                 if(_commands.TryGetValue(command,out commandInstance))
-                    commandInstance.Run(parsedParameters);
+                    _variables[].commandInstance.Run(parameters);
                 else
                     Logger.Information($"Command \"{command}\" not found.");
 
@@ -124,9 +117,9 @@ namespace Vain.CommandSystem
 
         }
 
-        public void RegisterCommand ( Command command)
+        public void RegisterCommand ( Program command)
         {
-            _commands.Add(command.CommandName,command);
+            _commands.Add(command.ProgramName,command);
         }
         
 
