@@ -35,51 +35,64 @@ namespace Vain.CLI
 
         public CommandRunner()
         {
-            RegisterCommand(DefaultPrograms.CharacterPosition);
-            RegisterCommand(DefaultPrograms.ListAvailableCommands);
-            RegisterCommand(DefaultPrograms.Entities);
-            RegisterCommand(DefaultPrograms.Components);
-            RegisterCommand(DefaultPrograms.Spawn);
-            RegisterCommand(DefaultPrograms.SingletonList);
+            RegisterProgram(DefaultPrograms.CharacterPosition);
+            RegisterProgram(DefaultPrograms.ListAvailableCommands);
+            RegisterProgram(DefaultPrograms.Entities);
+            RegisterProgram(DefaultPrograms.Components);
+            RegisterProgram(DefaultPrograms.Spawn);
+            RegisterProgram(DefaultPrograms.SingletonList);
 
         }
 
 
        
-        public void Run(string command)
+        public void Run(string input)
         {
 
-           
-            var parsed = command.Split(' ');
+            var instructions = input.Split(';');
             
+     
 
+
+            
             try
             {
 
-                var outputVar = "$";
-                List<string> commandParameters = new();
 
-                if(parsed[0].StartsWith('$'))
+                foreach (var instruction in instructions)
                 {
-                    if(!parsed[0].Contains('=') || !parsed[1].StartsWith('$'))
-                        throw new Exception("Wrong format for variable assignment.");
+                    
+
+                    string program;
+                    string[] parameters;
+                    string envVar;
+                    
+                    parseInstruction(instruction,out program, out parameters,out envVar);
+                    
+                    Logger.Information(instruction);
 
 
-                    if(parsed[0].Contains('='))
+
+                    Program programInstance;
+                    if(program.StartsWith('$'))
                     {
-                        var split = parsed[0].Split('=');
+                        var variable = "";
+                        _variables.TryGetValue(program,out variable);
 
+                        Logger.Information(variable);
+                        return;
                     }
+
+
+                    if(_commands.TryGetValue(program,out programInstance))
+                         _variables[envVar] = programInstance.Run(parameters);
+                    else
+                        Logger.Information($"Command \"{input}\" not found.");
+        
+
                 }
-
-                Logger.Command(command, string.Join(" ", parameters));
-                Program commandInstance;
-                if(_commands.TryGetValue(command,out commandInstance))
-                    _variables[].commandInstance.Run(parameters);
-                else
-                    Logger.Information($"Command \"{command}\" not found.");
-
-
+             
+         
                 
             }
             catch (InvalidParameterException)
@@ -95,7 +108,7 @@ namespace Vain.CLI
             }
             catch(Exception e)
             {
-                Logger.Critical($"Error running '{command}' command.");
+                Logger.Critical($"Error running '{input}' command.");
                 Logger.Debug(e.Message);
                 throw;
             }
@@ -103,7 +116,7 @@ namespace Vain.CLI
         
         }
 
-
+        
 
 
         public string[] Hint(string start)
@@ -111,17 +124,57 @@ namespace Vain.CLI
             return _commands.Keys.Where(c => c.StartsWith(start)).ToArray();
         }
 
-        public void RegisterCommand (string name, Delegate function)
-        {
-
-
-        }
-
-        public void RegisterCommand ( Program command)
+        public void RegisterProgram ( Program command)
         {
             _commands.Add(command.ProgramName,command);
         }
-        
+
+
+
+
+        void parseInstruction(string instruction, out string program, out string[] parameters, out string envVar)
+        {
+            
+            envVar = "$";
+
+
+            
+            instruction = instruction.Trim();
+            var parsed = instruction.Split(' ','=');
+
+
+            List<string> commandParameters = new();
+
+            if(!parsed[0].StartsWith('$'))
+            {
+                program = parsed[0];
+                parameters = parsed.Length > 1 ?  parsed[1..] : Array.Empty<string>();
+                return;
+            }
+
+
+
+
+            if(!instruction.Contains('='))
+            {
+                if(parsed.Length > 1)
+                    throw new Exception("Wrong format for variable assignment.");
+                
+
+                program = parsed[0];
+                parameters = Array.Empty<string>();
+                return;
+            }
+
+            
+            envVar = parsed[0];
+            program = parsed[1];
+            parameters = parsed.Length > 2 ? parsed[2..] : Array.Empty<string>();
+
+            parameters.Select(p => p.StartsWith('$') ? _variables[p] : p);
+          
+        }
+            
 
     }
 

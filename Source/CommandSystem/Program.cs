@@ -57,8 +57,8 @@ namespace Vain.CLI
             if(workingCommand == null)
                 throw new InvalidParameterException();
             
-
-            return workingCommand.Action.DynamicInvoke(parsedParameters) as string;
+            var result =  workingCommand.Action.DynamicInvoke(parsedParameters);
+            return result == null ? "" : result as string;
         }
 
         
@@ -279,7 +279,7 @@ namespace Vain.CLI
                         if(!entities.ContainsKey(entity))
                         {
                             Logger.Information($"No entity found with identifier {entity}");
-                            return;
+                            return "";
                         }
 
 
@@ -293,6 +293,9 @@ namespace Vain.CLI
                         
                         SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.AddChild(instance);
                         
+
+
+                        return (instance as IEntity).RuntimeID.ToString();
                     }
                 ),
                 new Command
