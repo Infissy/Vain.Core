@@ -94,7 +94,7 @@ namespace Vain.SpellSystem
 			}
 		}
 
-		public void CastSpell(int index, Vector3 target){
+		public void CastSpell(int index, Vector2 target){
 			
 			
 			if(SpellChannelers[index] != null  && SpellChannelers[index].CastCount > 0)

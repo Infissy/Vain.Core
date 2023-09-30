@@ -9,28 +9,19 @@ namespace Vain.SpellSystem
 
 
         [Export]
-        public float Speed {get; protected set;}
-        
-        
-        
-        public Vector3 Direction{get; protected set;}
-      
+        public float Speed {get; set;}
         [Export]
-        public Vector3 Weight {get; protected set;}
+        public Vector2 Weight {get; set;}
+        
+        public Vector2 Direction {get; set;}
+      
 
     
 
         public override void _Process(double delta)
         {   
             base._Process(delta);
-
-
             GlobalTranslate((Direction + Weight).Normalized() * (float) delta * Speed);
-
-
-
-            
-            
 
         }
          

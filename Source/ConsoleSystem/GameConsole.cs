@@ -11,7 +11,7 @@ namespace Vain.Console
     ///<summary>
     /// GameConsole is the main  <see cref="P:Godot.Node"/> that contains the logic for the output.
     ///</summary>
-    public partial class GameConsole : Godot.Node, IFormattedOutput
+    public partial class GameConsole : Node, IFormattedOutput
     {
         
         [Signal]
@@ -35,7 +35,7 @@ namespace Vain.Console
         public  override void _Ready(){
 
             //TODO : Change format, specially for build releases where debug stuff should not be showed
-            Logger.RegisterOutput(this, (LogLevel) 63 );
+            Logger.GlobalLogger.RegisterOutput(this, (LogLevel) 63 );
             
             
             var button = GetNode("VBoxContainer/HBoxContainer/Button") as Button;

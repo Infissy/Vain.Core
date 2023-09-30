@@ -111,7 +111,7 @@ namespace Vain.Core.ComponentSystem
 					
 					eff.Duration -= delta;
 					
-					Logger.SetContext(Character).Debug(eff.Duration.ToString());
+					Logger.GlobalLogger.SetContext(Character).Debug(eff.Duration.ToString());
 					effectsApplied[i] = eff; 
 
 				}

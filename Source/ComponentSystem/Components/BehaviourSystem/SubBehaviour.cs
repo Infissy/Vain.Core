@@ -4,10 +4,10 @@ namespace Vain.Core.ComponentSystem
 {
     public abstract partial class SubBehaviour : Node
     {
-        protected CharacterBehaviourComponent BehaviourCluster {get;private set;}
+        protected CharacterBehaviourComponent BehaviourComponent {get;private set;}
         public override void _Ready()
         {
-            BehaviourCluster = GetParent<CharacterBehaviourComponent>();
+            BehaviourComponent = GetParent<CharacterBehaviourComponent>();
         }
     }
 }

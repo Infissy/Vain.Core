@@ -40,14 +40,13 @@ namespace Vain.Singleton
             if(_singletons.ContainsKey(key))
                 return _singletons[key] as Singleton<T>;
 
-            if(callback == null)
-                return null;
-                
             if(!_initializationCallbacks.ContainsKey(key))
                 _initializationCallbacks.Add(key,new List<Action>());
             _initializationCallbacks[key].Add(callback);
 
-            return null;
+
+            _singletons[key] = new Singleton<T>(null);
+            return _singletons[key] as Singleton<T>;
         }
 
    

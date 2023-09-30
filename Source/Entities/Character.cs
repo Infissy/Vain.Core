@@ -13,7 +13,7 @@ namespace Vain.Core
     /// <summary>
     /// Character is the base class for all Characters in the game. Any special characters to be considered as such and have any component need a Character parent.
     /// </summary>
-    public partial class Character : CharacterBody3D , IEntity
+    public partial class Character : CharacterBody2D , IEntity
     {
         
 
@@ -52,10 +52,13 @@ namespace Vain.Core
         {
             base._Ready();
 
-            if(_components == null)
-                loadComponents();
+          
 
-            SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference?.Register(this);
+
+            if(_components == null)
+                LoadComponents();
+
+            RuntimeID = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Register(this);
             
         
 
@@ -77,7 +80,7 @@ namespace Vain.Core
 
             //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
             if(_components == null)
-                loadComponents();
+                LoadComponents();
        
             return _components.Where((c) => c is T).FirstOrDefault() as T;
 
@@ -88,7 +91,7 @@ namespace Vain.Core
 
             //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
             if(_components == null)
-                loadComponents();
+                LoadComponents();
        
             return _components.Where((c) => c.GetType() == type).FirstOrDefault();
 
@@ -112,7 +115,7 @@ namespace Vain.Core
 
 
 
-        void loadComponents()
+        void LoadComponents()
         {
         
             _components = new List<Component>();
@@ -127,6 +130,9 @@ namespace Vain.Core
 
         }
 
+
+        //Used mainly for the useragent to 
+   
     
     }
 }

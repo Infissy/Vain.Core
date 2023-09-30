@@ -41,13 +41,16 @@ namespace Vain.CLI
             RegisterProgram(DefaultPrograms.Components);
             RegisterProgram(DefaultPrograms.Spawn);
             RegisterProgram(DefaultPrograms.SingletonList);
-
+            RegisterProgram(DefaultPrograms.Exec);
+            RegisterProgram(DefaultPrograms.SubBehaviour);
         }
 
 
        
         public void Run(string input)
         {
+            if(input == String.Empty)
+                return;
 
             var instructions = input.Split(';');
             
@@ -67,9 +70,9 @@ namespace Vain.CLI
                     string[] parameters;
                     string envVar;
                     
-                    parseInstruction(instruction,out program, out parameters,out envVar);
+                    ParseInstruction(instruction,out program, out parameters,out envVar);
                     
-                    Logger.Information(instruction);
+                    Logger.GlobalLogger.Information(instruction);
 
 
 
@@ -79,15 +82,20 @@ namespace Vain.CLI
                         var variable = "";
                         _variables.TryGetValue(program,out variable);
 
-                        Logger.Information(variable);
+                        Logger.GlobalLogger.Information(variable);
                         return;
                     }
 
 
                     if(_commands.TryGetValue(program,out programInstance))
-                         _variables[envVar] = programInstance.Run(parameters);
+                    {
+                        var res = programInstance.Run(parameters);
+                        
+                        
+                        _variables[envVar] = res;
+                    }
                     else
-                        Logger.Information($"Command \"{input}\" not found.");
+                        Logger.GlobalLogger.Information($"Command \"{input}\" not found.");
         
 
                 }
@@ -98,18 +106,18 @@ namespace Vain.CLI
             catch (InvalidParameterException)
             {
                 
-                Logger.Information("Invalid parameters.");
+                Logger.GlobalLogger.Information("Invalid parameters.");
                 
             }
             catch(ParameterNotFoundException)
             {
                 //TODO : Implement suggestions
-                Logger.Information($"Not Enough parameters");
+                Logger.GlobalLogger.Information($"Not Enough parameters");
             }
             catch(Exception e)
             {
-                Logger.Critical($"Error running '{input}' command.");
-                Logger.Debug(e.Message);
+                Logger.GlobalLogger.Critical($"Error running '{input}' command.");
+                Logger.GlobalLogger.Debug(e.Message);
                 throw;
             }
         
@@ -132,7 +140,7 @@ namespace Vain.CLI
 
 
 
-        void parseInstruction(string instruction, out string program, out string[] parameters, out string envVar)
+        void ParseInstruction(string instruction, out string program, out string[] parameters, out string envVar)
         {
             
             envVar = "$";
@@ -140,7 +148,7 @@ namespace Vain.CLI
 
             
             instruction = instruction.Trim();
-            var parsed = instruction.Split(' ','=');
+            var parsed = instruction.Split(new char[]{' ','='},StringSplitOptions.RemoveEmptyEntries);
 
 
             List<string> commandParameters = new();
@@ -149,6 +157,7 @@ namespace Vain.CLI
             {
                 program = parsed[0];
                 parameters = parsed.Length > 1 ?  parsed[1..] : Array.Empty<string>();
+                parameters = parameters.Select(p => p.StartsWith('$') ? _variables[p] : p).ToArray();
                 return;
             }
 
@@ -163,6 +172,7 @@ namespace Vain.CLI
 
                 program = parsed[0];
                 parameters = Array.Empty<string>();
+                parameters = parameters.Select(p => p.StartsWith('$') ? _variables[p] : p).ToArray();
                 return;
             }
 
@@ -170,8 +180,7 @@ namespace Vain.CLI
             envVar = parsed[0];
             program = parsed[1];
             parameters = parsed.Length > 2 ? parsed[2..] : Array.Empty<string>();
-
-            parameters.Select(p => p.StartsWith('$') ? _variables[p] : p);
+            parameters = parameters.Select(p => p.StartsWith('$') ? _variables[p] : p).ToArray();
           
         }
             

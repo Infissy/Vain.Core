@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ciboqetp0qt7e"]
-
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/EffectableComponent.cs" id="1_nel3y"]
-
-[node name="EffectableComponent" type="Node"]
-script = ExtResource("1_nel3y")

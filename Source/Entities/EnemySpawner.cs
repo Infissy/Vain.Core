@@ -122,7 +122,7 @@ namespace Vain.EnemySystem
 				
 	
 
-				Vector3 deltapos = (new Vector3(GD.Randf(), 0, GD.Randf()).Normalized() * 30);
+				Vector2 deltapos = new Vector2(GD.Randf(), GD.Randf()).Normalized() * 30;
 				
 				
 				AddChild(instance);

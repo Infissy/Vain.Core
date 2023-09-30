@@ -93,10 +93,10 @@ namespace Vain.CLI
                     var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.Where(e => e.RuntimeID == index).FirstOrDefault();
                     if(entity == null)
                     {
-                        Logger.Information($"No entity found with given ID ({index})");
+                        Logger.GlobalLogger.Information($"No entity found with given ID ({index})");
                         return;
                     }
-                    Logger.Information(entity.Position.ToString());
+                    Logger.GlobalLogger.Information(entity.Position.ToString());
                 }),
 
 
@@ -109,7 +109,7 @@ namespace Vain.CLI
                         if(code == "player")
                         {
                             var entity = SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER);
-                            Logger.Information(entity.Reference.Position.ToString());
+                            Logger.GlobalLogger.Information(entity.Reference.Position.ToString());
                         }
                     }
                 )
@@ -135,7 +135,7 @@ namespace Vain.CLI
                         var runner = CommandRunner.Instance;
                         foreach (var command in CommandRunner.Instance.Commands)
                         {
-                            Logger.Command(command.ProgramName,command.ProgramDescription, false);
+                            Logger.GlobalLogger.Command(command.ProgramName,command.ProgramDescription, false);
                         }
 
                 })
@@ -160,7 +160,7 @@ namespace Vain.CLI
 
                         if(levelManager == null)
                         {
-                            Logger.Information("No Level Manager in the scene.");
+                            Logger.GlobalLogger.Information("No Level Manager in the scene.");
                         }   
                             
 
@@ -170,7 +170,7 @@ namespace Vain.CLI
                             msg += $"   {entity.RuntimeID}  | {(entity as Node).Name}  \n";
                         }
 
-                        Logger.Information(msg);
+                        Logger.GlobalLogger.Information(msg);
 
 
 
@@ -197,7 +197,7 @@ namespace Vain.CLI
                     () =>
                     {
                             
-                        var components = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.ComponentIndex.Components.Keys;
+                        var components = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.ComponentIndex.IndexedEntities.Keys;
                     
                         var outputComponents = "\nAvailable Components:\n";
 
@@ -206,7 +206,7 @@ namespace Vain.CLI
                             outputComponents += $"      {component}\n";
                         }
                         outputComponents += "\n";
-                        Logger.Information(outputComponents);
+                        Logger.GlobalLogger.Information(outputComponents);
                     }
                 ),
                 new Command 
@@ -227,7 +227,7 @@ namespace Vain.CLI
                         
 
                         }
-                        Logger.Information(msg);
+                        Logger.GlobalLogger.Information(msg);
                     }
                 ),
 
@@ -237,24 +237,105 @@ namespace Vain.CLI
                     (int id, string componentName) => {
 
                         GodotObject componentScene;
-                        var componentSuccessfulyFetched = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.ComponentIndex.Components.TryGetValue(componentName,out componentScene);
+                        var componentSuccessfulyFetched = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.ComponentIndex.IndexedEntities.TryGetValue(componentName,out componentScene);
                         if(!componentSuccessfulyFetched)
-                            throw new InvalidParameterException();
+                        {
+                           Logger.GlobalLogger.Warning($"No component found with name '{componentName}.'");
+                           return;
+                        }
 
-                        var component = (componentScene as PackedScene).Instantiate<Component>();
+                        
+                        var component = (componentScene as IndexedResourceWrapper).Instantiate() as Component;
 
                         var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.Where(e => e.RuntimeID == id).First();
                         entity.AddComponent(component);
                       
 
                         
-                        Logger.Information($"Component {componentName} successfully added.");
+                        Logger.GlobalLogger.Information($"Component {componentName} successfully added.");
                     }
                 )
 
             }
         };
 
+        public static readonly Program SubBehaviour = new()
+        {
+            ProgramName  = "sub_behaviour",
+
+            ProgramDescription = "character id : number list/add/remove",
+            
+            
+            CommandFunction =  
+            {
+
+                new Command
+                (
+                    "list",
+                    () =>
+                    {
+                            
+                        var behaviours = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.BehaviourIndex.IndexedEntities.Keys;
+                    
+                        var outputBehaviours = "\nAvailable Behaviour:\n";
+
+                        foreach (var behaviour in behaviours)
+                        {
+                            outputBehaviours += $"      {behaviour}\n";
+                        }
+                        outputBehaviours += "\n";
+                        Logger.GlobalLogger.Information(outputBehaviours);
+                    }
+                ),
+                new Command 
+                (
+                    "list ?:n",
+                    (int id) => {
+                        
+                       
+                        var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.Where(e => e.RuntimeID == id).First();
+
+                        var msg = "\n";
+                        
+
+                        
+                        foreach (var component in (entity as Character).GetComponents())
+                        {
+                            msg += $"   {component.GetType().Name } \n";
+                        
+
+                        }
+                        Logger.GlobalLogger.Information(msg);
+                    }
+                ),
+
+                new Command 
+                (
+                    "add ?:n ?:s",
+                    (int id, string behaviourName) => {
+
+                        GodotObject behaviourScene;
+                        var componentSuccessfulyFetched = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.BehaviourIndex.IndexedEntities.TryGetValue(behaviourName,out behaviourScene);
+                        if(!componentSuccessfulyFetched)
+                        {
+
+                           Logger.GlobalLogger.Warning($"Behaviour with name {behaviourName} was not found.");
+                           return;
+                        }
+
+                        var behaviour = (behaviourScene as IndexedResourceWrapper).Instantiate() as SubBehaviour;
+
+                        var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.Where(e => e.RuntimeID == id).First();
+                        entity.GetComponent<CharacterBehaviourComponent>().AddChild(behaviour);
+                      
+
+                        
+                        Logger.GlobalLogger.Information($"Component {behaviourName} successfully added.");
+                    }
+                )
+
+            }
+        };
 
         public static readonly Program Spawn = new()
         {
@@ -272,20 +353,20 @@ namespace Vain.CLI
                     "?:s",
                     (string entity) => 
                     {
-                        var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.Entities;
+                        var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities;
                         
 
 
                         if(!entities.ContainsKey(entity))
                         {
-                            Logger.Information($"No entity found with identifier {entity}");
+                            Logger.GlobalLogger.Information($"No entity found with identifier {entity}");
                             return "";
                         }
 
 
                         
                         
-                        var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.Entities[entity];
+                        var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities[entity];
 
                         var instance = (entityPrefab as PackedScene).Instantiate();
                         
@@ -301,27 +382,27 @@ namespace Vain.CLI
                 new Command
                 (
                     "?:s ?:f ?:f ?:f",
-                    (string entity,float x, float y, float z) => 
+                    (string entity,float x, float y) => 
                     {
 
 
                         
 
 
-                        var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.Entities;
+                        var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities;
                         
 
 
                         if(!entities.ContainsKey(entity))
                         {
-                            Logger.Information($"No entity found with identifier {entity}");
-                            return;
+                            Logger.GlobalLogger.Information($"No entity found with identifier {entity}");
+                            return "";
                         }
 
 
                         
                         
-                        var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.Entities[entity];
+                        var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities[entity];
 
                         var instance = (entityPrefab as PackedScene).Instantiate();
                         
@@ -330,7 +411,10 @@ namespace Vain.CLI
                         SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.AddChild(instance);
                         
                     
-                        (instance as Node3D).GlobalPosition = new Vector3(Convert.ToSingle(entity),Convert.ToSingle(entity),Convert.ToSingle(entity));
+                        (instance as Node2D).GlobalPosition = new Vector2(x,y);
+
+
+                        return (instance as IEntity).RuntimeID.ToString();
                         
                     }
                 
@@ -361,12 +445,42 @@ namespace Vain.CLI
                         {
                             singletonList += singleton + '\n';
                         }
-                        Logger.Information(singletonList);
+                        Logger.GlobalLogger.Information(singletonList);
                         
                     }
                 )
             }
         };  
+
+
+        public static readonly Program Exec = new()
+        {
+
+            ProgramName = "exec",
+            
+
+            
+
+            CommandFunction = 
+            {
+                new Command 
+                (
+                    "?:s",
+                    (string scriptName) => 
+                    {
+                        var script = ScriptLoader.LoadScript(scriptName.Contains(".cfg") ? scriptName : scriptName + ".cfg");
+                        
+                        if(script == null)
+                        {
+                            Logger.GlobalLogger.Warning($"Script {scriptName} does not exist.");
+                            return;
+                        }
+                        script.Run();
+                    }
+                )
+            }
+        };  
+
 
 
 

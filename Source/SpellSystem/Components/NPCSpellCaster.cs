@@ -27,11 +27,11 @@ namespace Vain.SpellSystem
 		    if (HostileCharacter == null)
                 return;
 
-             if(AggressionLevel < HostileCharacter.GlobalPosition.DistanceTo(BehaviourCluster.Character.GlobalPosition))
+             if(AggressionLevel < HostileCharacter.GlobalPosition.DistanceTo(BehaviourComponent.Character.GlobalPosition))
                 return;
 
 
-            var spellCasterComponent = BehaviourCluster.Character.GetComponent<SpellCaster>();
+            var spellCasterComponent = BehaviourComponent.Character.GetComponent<SpellCaster>();
             var spellChannelers = spellCasterComponent.SpellChannelers;
             
             if (GD.Randf() < ChanceToCast * delta)

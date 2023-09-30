@@ -5,16 +5,11 @@ using Vain.Console;
 namespace Vain.Core.ComponentSystem.Behaviour
 {
 
-	  
-	
-	
 	public partial class AIController : SubBehaviour 
 	{
 
 		
 
-		CsgSphere3D _debugMesh;
-		
 		
 		//TODO:: Handle a table of aggros in case it's needed
 		[Export]
@@ -28,12 +23,8 @@ namespace Vain.Core.ComponentSystem.Behaviour
 
 
 		[Export]
-		Area3D _avoidanceArea;
+		Area2D _avoidanceArea;
 
-		[ExportGroup("Debug")]
-		[Export]
-		public bool Debug_ShowTarget{ get; set;}
-		
 
 
 
@@ -46,7 +37,7 @@ namespace Vain.Core.ComponentSystem.Behaviour
 		public override void _Ready()
 		{
 
-            _avoidanceArea = GetNode<Area3D>("Area3D");
+            _avoidanceArea = GetNode<Area2D>("Area2D");
 
             var collider = _avoidanceArea.GetChild<CollisionShape3D>(0).Shape as SphereShape3D;
             collider.Radius = AvoidanceDistance;
@@ -60,40 +51,37 @@ namespace Vain.Core.ComponentSystem.Behaviour
         public override void _Process(double delta)
 		{
 		 
-			var targetPosition = AI.BehaviourTick(BehaviourCluster.Character,this);
+			var targetPosition = AI.BehaviourTick(BehaviourComponent.Character,this);
 			
 
 
-			targetPosition = avoidFilter(targetPosition);
+			targetPosition = AvoidFilter(targetPosition);
 
 
 			//TODO: add human like delay to movements to simulate reaction time. 
 
 
-			if(Debug_ShowTarget)
-				_debugMesh.GlobalPosition = targetPosition;
-
-            
+			
 		
 
 		}
 	
 		//TODO: Maybe look into moving the filter to the external behaviour to be adaptive to the situation
-		Vector3 avoidFilter(Vector3 targetLocation)
+		Vector2 AvoidFilter(Vector2 targetLocation)
 		{
 			
-			var character = BehaviourCluster.Character;
+			var character = BehaviourComponent.Character;
 
             var insideBodies = _avoidanceArea.GetOverlappingBodies().Where(npc => npc != character);
 
     
 
-            if (insideBodies.Count() > 0)
+            if (insideBodies.Any())
             {
-                var relativePositions = insideBodies.Select<Node3D, Vector3>(body => body.GlobalPosition - character.GlobalPosition);
+                var relativePositions = insideBodies.Select<Node2D, Vector2>(body => body.GlobalPosition - character.GlobalPosition);
 
 
-                Vector3 sum = Vector3.Zero;
+                Vector2 sum = Vector2.Zero;
                 foreach (var position in relativePositions)
                 {
                     sum += position;

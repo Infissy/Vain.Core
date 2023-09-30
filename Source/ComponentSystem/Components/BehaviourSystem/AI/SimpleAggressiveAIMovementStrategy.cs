@@ -22,7 +22,7 @@ namespace Vain.Core.ComponentSystem.Behaviour
 		NPCAIBehaviour AIBehaviourType {get;set;}
 		
 
-        public override Vector3 BehaviourTick(Character character,AIController controller)
+        public override Vector2 BehaviourTick(Character character,AIController controller)
         {	
 			
 			if(controller.AggressionLevel < controller.HostileCharacter.Position.DistanceTo(character.GlobalPosition) )
@@ -30,7 +30,7 @@ namespace Vain.Core.ComponentSystem.Behaviour
 
 
 
-            Vector3 targetPosition = character.GlobalPosition; 
+            Vector2 targetPosition = character.GlobalPosition; 
 		
 
 

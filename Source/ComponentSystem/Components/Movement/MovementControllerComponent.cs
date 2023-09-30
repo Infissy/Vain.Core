@@ -1,11 +1,12 @@
 ﻿using Godot;
+using Vain.Log;
 
 namespace Vain.Core.ComponentSystem
 {
     [GlobalClass]
     public partial class MovementControllerComponent : Component
     {
-        NavigationAgent3D _agent = default!;
+        NavigationAgent2D _agent = default!;
 
         [Export]
         public float Speed {get; private set;} = 10.0f;
@@ -14,7 +15,7 @@ namespace Vain.Core.ComponentSystem
         
 
         [Export]
-        public Vector3 Target
+        public Vector2 Target
         {
             get => _agent.TargetPosition;
             set => _agent.TargetPosition = value;
@@ -24,11 +25,14 @@ namespace Vain.Core.ComponentSystem
         public override void _Ready()
         {
             base._Ready();
-            var agent = GetNode<NavigationAgent3D>("../NavigationAgent3D");
+            var agent = GetNode<NavigationAgent2D>("../NavigationAgent2D");
             
+            #if DEBUG
+            agent.DebugEnabled = true;
+            #endif
 
-            if(agent == null)
-                //TODO:: Error
+            //if(agent == null)
+                
 
             _agent = agent!;
 
@@ -44,20 +48,18 @@ namespace Vain.Core.ComponentSystem
             base._PhysicsProcess(delta);
 
 
-
             var nextLoc = _agent.GetNextPathPosition();
             var relVec =  nextLoc - Character.GlobalPosition;
             
-           
+
             if(!_agent.IsTargetReached())
             {   
                 Character.Velocity = relVec.Normalized() * Speed;
 
                 Character.MoveAndSlide();
                 
-                nextLoc.Y = Character.GlobalPosition.Y;
-
-                Character.LookAt(nextLoc,Vector3.Up);
+          
+                Character.LookAt(nextLoc);
                 
                 if(Player != null && !Player.IsPlaying())
                 {
