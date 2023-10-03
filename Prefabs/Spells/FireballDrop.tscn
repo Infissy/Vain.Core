@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://yp5uc3r0b4yd"]
+
+[ext_resource type="Script" path="res://Source/SpellSystem/SpellDrop.cs" id="1_72f5u"]
+
+[sub_resource type="SphereShape2D" id="1"]
+resource_local_to_scene = false
+resource_name = ""
+
+[node name="Fireball" type="Area2D"]
+script = ExtResource("1_72f5u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1")

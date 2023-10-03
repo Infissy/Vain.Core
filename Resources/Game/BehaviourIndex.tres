@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="IndexResource" load_steps=13 format=3 uid="uid://cqjo0aqq2255"]
+
+[ext_resource type="PackedScene" uid="uid://6os68fvollxw" path="res://Prefabs/Components/Behaviours/AIController.tscn" id="1_181x1"]
+[ext_resource type="Script" path="res://Source/IndexResource.cs" id="1_r2aw5"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/Player/PlayerSpellCasterSubBehaviour.cs" id="2_pwxcg"]
+[ext_resource type="Script" path="res://Source/IndexedResourceWrapper.cs" id="2_xqfuh"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/Player/PlayerMovementSubBehaviour.cs" id="4_nwq1n"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Components/NPCSpellCaster.cs" id="5_1o5aj"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/Player/PlayerEntitySubBehaviour.cs" id="6_oar65"]
+
+[sub_resource type="Resource" id="Resource_iliga"]
+script = ExtResource("2_xqfuh")
+Resource = ExtResource("1_181x1")
+
+[sub_resource type="Resource" id="Resource_5yvlf"]
+script = ExtResource("2_xqfuh")
+Resource = ExtResource("5_1o5aj")
+
+[sub_resource type="Resource" id="Resource_mjbno"]
+script = ExtResource("2_xqfuh")
+Resource = ExtResource("6_oar65")
+
+[sub_resource type="Resource" id="Resource_joycd"]
+script = ExtResource("2_xqfuh")
+Resource = ExtResource("4_nwq1n")
+
+[sub_resource type="Resource" id="Resource_a0rl1"]
+script = ExtResource("2_xqfuh")
+Resource = ExtResource("2_pwxcg")
+
+[resource]
+script = ExtResource("1_r2aw5")
+IndexedEntities = {
+"ai_controller": SubResource("Resource_iliga"),
+"npc_spell_caster": SubResource("Resource_5yvlf"),
+"player_entity": SubResource("Resource_mjbno"),
+"player_movement": SubResource("Resource_joycd"),
+"player_spell_caster": SubResource("Resource_a0rl1")
+}

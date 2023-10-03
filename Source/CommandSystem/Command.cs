@@ -1,188 +1,92 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
-
-using Vain.Log;
-using Vain.UI;
-
-
-
-
-//Not working
-
-
-namespace Vain.Command{
-
-    public partial class Command
+namespace Vain.CLI
+{
+    public class Command
     {
-        public delegate void Function(params object[] parameters);
-        
-        
-        public string CommandName;
-
-        public string CommandParameters;
-
-        public Function CommandFunction;
-        
-
-
-        
-
-        
-    }
-
-    public static class DefaultCommands
-    {
-
-        
-        public static Command Print = new Command
+        public string[] Path {get;private set;}
+        public Delegate Action {get; private set;}
+        public Command(string path, Delegate action)
         {
 
-            CommandName = "print",
-            
 
-            CommandParameters = "message : text",
-            
-
-            CommandFunction = (pm) => Logger.Information($"\"{pm[0] as string}\"")
-        
-        };  
+            var stringParams = path.Split(' ',StringSplitOptions.RemoveEmptyEntries);
+            Path = stringParams;
 
 
-        public static Command PlayerPos = new Command
+
+            Action = action;
+        }
+
+        static class InputType
         {
-            CommandName  = "playerpos",
+            public const string FLOAT = "?:f";
+            public const string INT = "?:n";
+            public const string STRING = "?:s";
+            public const string CONST_STRING = "c:s";
+        }
 
 
-           // CommandFunction = (pm) => Logger.Information(Player.Instance.Entity.Position.ToString())
 
-
-        };
-
-
-        /*
-        public static Command EntityPos = new Command
+        public bool TryParseParameters(string[] parameters, out object[] parsedParameters)
         {
-            CommandName  = "entitypos",
+            parsedParameters = null;
+            if(parameters.Length != Path.Length)
+                return false;
 
 
-            CommandFunction = (pm) => {
-                
-                var entity = Entity.Entities.Where(e => e.ID == int.Parse(pm[0] as string)).First();
+            object[] localParameters = new object[parameters.Length];
 
-               // Logger.Information(entity.Position.ToString());
-            }
-
-
-        };
-        */
-
-
-         public static Command ListAvailableCommands = new Command
-        {
-            CommandName  = "?",
-            
-            CommandFunction = (_) => 
-
+            for (int i = 0; i < parameters.Length; i++)
             {
-                var runner = Runner.Instance;
-                foreach (var command in Runner.Instance.Commands)
+                switch (Path[i])
                 {
-                    Logger.Command(command.CommandName,command.CommandParameters, false);
-                }
-            }
+                    case InputType.FLOAT:
+                        
+                        float f;
+                        if(!float.TryParse(parameters[i],NumberStyles.Float | NumberStyles.AllowThousands,CultureInfo.GetCultureInfo("en-US"), out f))
+                            return false;
 
+                        localParameters[i] = f;
+                        break;
 
-        };
-
-
-
-        
-
-
-        /*
-        public static Command Entities = new Command
-        {
-            CommandName  = "entities",
-
-            
-            CommandFunction = (pm) => {
-
-                var msg = "\n";
-                
-
-
-                foreach (var entity in Entity.Entities)
-                {
-                    msg += $"   ({entity.ID}){entity.Name}  \n";
-                
-
-                }
-
-                Logger.Information(msg);
-
-
-
-            }
-
-
-        };
-
-            */
-
-
-        /*
-        public static Command Components = new Command
-        {
-            CommandName  = "components",
-
-            CommandParameters = "entity id : number",
-            
-            
-            CommandFunction = (pm) => {
-
-                var id = -1;
-                
-                try
-                {
-                    id = int.Parse(pm[0] as string);
                     
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    
-                    throw new ParameterNotFoundException();
-                }
-                catch(InvalidCastException)
-                {
-                    throw new InvalidParameterException();
-                }
-                
-                
-                
-                var entity = Character.Where(e => e.ID == id).First();
+                    case InputType.INT:
+                        
+                        int n;
+                        if(!int.TryParse(parameters[i],NumberStyles.Integer,CultureInfo.GetCultureInfo("en-US"), out n))
+                            return false;
 
-                var msg = "\n";
-                
+                        localParameters[i] = n;
+                        break;
 
-                
-                foreach (var component in entity.ComponentContainer.Components)
-                {
-                    msg += $"   {component.GetType().Name } \n";
-                
 
-                }
-                Logger.Information(msg);
+                    case InputType.STRING:
+                        
+                        localParameters[i] = parameters[i];
+
+
+                        break;
+
+
+                    default:
+                        if(parameters[i] != Path[i])
+                            return false;
+                        localParameters[i] = null;
+                        break;
+                }     
+
             }
 
+            parsedParameters = localParameters.Where(p => p != null).ToArray();
+     
+            return true;
 
 
-        };
-                */
-        
 
+        }
     }
-
-
 }

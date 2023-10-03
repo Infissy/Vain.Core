@@ -4,102 +4,111 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
+using Vain.Core;
+using Vain.Log.Visualizer;
+using Vain.Singleton;
 
 namespace Vain.Log
 {
-    //Logger can register outputs to output any message they receive
-    public partial class Logger
+    
+    public partial class Logger : ILogger
     {
 
+
+
+
+
+
+
+        Dictionary<IOutput, LogLevel> _outputs = new Dictionary<IOutput, LogLevel>();
+        static Logger _globalLogger;
+
+        
+
+
+
+
         //? Static private property? Not the best looking solution
-        static TimeSpan Timestamp{
+        static TimeSpan Timestamp => DateTime.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
+
+     
+
+        public static Logger GlobalLogger
+        {
             get
             {
-
-            return DateTime.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
+                if(_globalLogger == null)
+                {
+                    _globalLogger = new Logger();
+                    _globalLogger.RegisterOutput(new ProxyGodotConsole(),(LogLevel) 63);
+                }
+                return _globalLogger;
             }
         }
-
-
-
-
-
-
-        static Dictionary<IOutput, LogLevel> _outputs = new Dictionary<IOutput, LogLevel>();
-
-
-        public static ContextLogger SetContext(Godot.Node context){
-            /*
-            var contextLogger = new ContextLogger(context.Name , (context.Owner is Entity) ? (context.Owner as Entity).ID.ToString() : "Godot");
-
-            return contextLogger;
-            */
-            return null;
-        }
-
-
-        public static void RegisterOutput(IOutput output, LogLevel level){
+        public void RegisterOutput(IOutput output, LogLevel level){
             _outputs.Add(output, level);
         }
 
 
 
-        public static void Critical(string message)
-        {   
-             var formattedMessage  = new List<FormattedMessage>();
-            formattedMessage.Add(timestamp());
+        public void Critical(string message)
+        {
+            var formattedMessage = new List<FormattedMessage>
+            {
+                timestamp()
+            };
 
             formattedMessage.AddRange(formatMessage(message,LogLevel.Critical));
-            outputMessage(formattedMessage,LogLevel.Critical);
+            OutputMessage(formattedMessage,LogLevel.Critical);
 
             
         }
-        public static void Warning(string message)
+        public void Warning(string message)
         {     
             var formattedMessage  = new List<FormattedMessage>();
             formattedMessage.Add(timestamp());
 
             formattedMessage.AddRange(formatMessage(message,LogLevel.Warnings));
-            outputMessage(formattedMessage,LogLevel.Warnings);
+            OutputMessage(formattedMessage,LogLevel.Warnings);
 
             
         }
-        public static void Debug(string message)
+        public void Debug(string message)
         {
              var formattedMessage  = new List<FormattedMessage>();
             formattedMessage.Add(timestamp());
 
             formattedMessage.AddRange(formatMessage(message,LogLevel.Debug));
-            outputMessage(formattedMessage,LogLevel.Debug);
+            OutputMessage(formattedMessage,LogLevel.Debug);
 
             
         }
 
-        public static void Important(string message)
+        public void Important(string message)
         {
              var formattedMessage  = new List<FormattedMessage>();
             formattedMessage.Add(timestamp());
 
             formattedMessage.AddRange(formatMessage(message,LogLevel.Important));
-            outputMessage(formattedMessage,LogLevel.Important);
+            OutputMessage(formattedMessage,LogLevel.Important);
 
             
         }
 
 
-        public static void Information(string message)
+        public void Information(string message)
         {
              var formattedMessage  = new List<FormattedMessage>();
             formattedMessage.Add(timestamp());
 
             formattedMessage.AddRange(formatMessage(message,LogLevel.Information));
-            outputMessage(formattedMessage,LogLevel.Information);
+            OutputMessage(formattedMessage,LogLevel.Information);
 
             
         }
         
 
-         public static void Command(string message, string parameters = "", bool showTimestamp = true)
+        public void Command(string message, string parameters = "", bool showTimestamp = true)
         {
             var formattedMessage  = new List<FormattedMessage>();
             if (showTimestamp)
@@ -108,12 +117,36 @@ namespace Vain.Log
             formattedMessage.AddRange( formatMessage(message,LogLevel.Command));
 
             formattedMessage.AddRange(formatMessage(parameters, LogLevel.Command, OutputFormat.Italics));
-            outputMessage(formattedMessage,LogLevel.Command);
+            OutputMessage(formattedMessage,LogLevel.Command);
 
             
         }
 
-        static  protected void outputMessage ( List<FormattedMessage> messages, LogLevel level)
+
+        //FIXME: Runtime has to work only in debug, or choose if some information is accessible to the user, that can improve performance also
+        public void Runtime(string label,string message, string parameters="")
+        {
+
+            //TODO: parameters will define formatting
+            SingletonManager.GetSingleton<DebugOverlay>(SingletonManager.Singletons.UI.DEBUG_OVERLAY).Reference.Log(label,message);
+        }
+
+
+        public ContextLogger SetContext(Node context){
+            
+            //TODO: Temporarely set script as identifier, later on should be implemented with ids 
+            var contextLogger = new ContextLogger(context.Name , "Script");
+            
+            foreach (var output in _outputs)
+                contextLogger.RegisterOutput(output.Key,output.Value);
+
+            return contextLogger;
+            
+          
+        }
+
+
+        protected void OutputMessage ( List<FormattedMessage> messages, LogLevel level)
         
         {
             //TODO: Optimize
@@ -259,7 +292,7 @@ namespace Vain.Log
             var injectedMessage = injectMetadata(formattedMessage);
             
             
-            outputMessage(injectedMessage,level);
+            OutputMessage(injectedMessage,level);
 
         }
         

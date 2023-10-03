@@ -1,4 +1,4 @@
-namespace Vain.Command
+namespace Vain.CLI
 {
     public partial class ParameterNotFoundException : CommandException
     {

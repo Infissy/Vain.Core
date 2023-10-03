@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c4y68oca4arwn"]
+
+[ext_resource type="Script" path="res://Source/SpellSystem/Effect.cs" id="1_uu1e0"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_uu1e0")
+effectType = 5
+Duration = 0.0
+Value = 10.0

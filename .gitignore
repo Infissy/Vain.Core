@@ -23,3 +23,15 @@ Test/obj/*
 .vscode/
 .vs/
 .godot/
+
+
+# build/
+
+
+
+addons/zy
+
+
+# Big files
+Resources/Assets/
+

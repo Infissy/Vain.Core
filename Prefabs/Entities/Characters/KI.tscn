@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt1jpno2iok1t"]
+
+[ext_resource type="Script" path="res://Source/Entities/Character.cs" id="1_jt6ob"]
+[ext_resource type="Texture2D" uid="uid://77gfjcs0sn6b" path="res://Resources/Assets/2D/Characters/Character.png" id="2_8ufyh"]
+
+[node name="Character" type="CharacterBody2D"]
+script = ExtResource("1_jt6ob")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+target_desired_distance = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_8ufyh")
+region_enabled = true
+region_rect = Rect2(0, 0, 24, 24)

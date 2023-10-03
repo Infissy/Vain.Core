@@ -2,6 +2,10 @@ using Godot;
 
 namespace Vain.SpellSystem.UI
 {
+
+    /// <summary>
+    /// UI Slot that contains sprite and number of casts left.
+    /// </summary>
     partial class SpellSlot : Control
     {
 

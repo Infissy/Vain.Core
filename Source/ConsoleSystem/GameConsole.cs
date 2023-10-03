@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using Vain.Command;
+using Vain.CLI;
 using Vain.Log;
 
 
@@ -11,12 +11,12 @@ namespace Vain.Console
     ///<summary>
     /// GameConsole is the main  <see cref="P:Godot.Node"/> that contains the logic for the output.
     ///</summary>
-    public partial class GameConsole : Godot.Node, IFormattedOutput
+    public partial class GameConsole : Node, IFormattedOutput
     {
         
-
-        public delegate void UpdateHandler();
-        public event UpdateHandler OnUpdate;
+        [Signal]
+        public delegate void OnUpdateEventHandler();
+        
 
 
         LineEdit _inputBox;
@@ -35,22 +35,18 @@ namespace Vain.Console
         public  override void _Ready(){
 
             //TODO : Change format, specially for build releases where debug stuff should not be showed
-            Logger.RegisterOutput(this, (LogLevel) 63 );
+            Logger.GlobalLogger.RegisterOutput(this, (LogLevel) 63 );
             
             
-            var button = GetNode("Button") as Button;
-            _inputBox = GetNode("LineEdit") as LineEdit;
+            var button = GetNode("VBoxContainer/HBoxContainer/Button") as Button;
+            _inputBox = GetNode("VBoxContainer/HBoxContainer/LineEdit") as LineEdit;
 
 
 
+            button.Pressed += buttonPressed;
+            _inputBox.TextSubmitted += buttonPressed;
 
-
-            button.Connect("pressed",new Callable(this,"buttonPressed"));
-
-
-            _inputBox.Connect("text_entered",new Callable(this,"buttonPressed"));
-            
-            
+        
         }
         
 
@@ -64,34 +60,24 @@ namespace Vain.Console
         public void buttonPressed(string text){
 
             
-            if(text != "?")
-            {
+            if(text.Length == 0)
+                return;
 
+
+            var parsed = text.Split(' ');
+                
+            CommandRunner.Instance.Run(text);
+
+
+            _inputBox.Clear();
         
-                var parsed = text.Split(' ');
-                
-                Runner.Instance.Run(parsed[0], parsed.Skip(1).ToArray());
-
-
-                _inputBox.Clear();
-            }
-            else
-            {
-                var parsed = text.Split(' ');
-                
-                Runner.Instance.Run(parsed[0], parsed.Skip(1).ToArray());
-
-
-                _inputBox.Clear();
-            }
-
         }
 
         public void Write(string output)
         {
             _buffer.Add(output);
-            if (OnUpdate == null) return;
-                OnUpdate.Invoke();
+           
+            EmitSignal(SignalName.OnUpdate);
         }
 
         public void Write(FormattedMessage[] formattedOutput)
@@ -106,8 +92,7 @@ namespace Vain.Console
             
 
             _buffer.Add(message);
-            if (OnUpdate == null) return;
-                OnUpdate.Invoke();
+            EmitSignal(SignalName.OnUpdate);
         }
 
 
@@ -126,11 +111,11 @@ namespace Vain.Console
             
 
             if((format & OutputFormat.Red) == OutputFormat.Red)
-                color.r = 255;
+                color.R = 255;
             if((format & OutputFormat.Blue) == OutputFormat.Blue)
-                color.g = 255;
+                color.G = 255;
             if((format & OutputFormat.Green) == OutputFormat.Green)
-                color.b = 255;
+                color.B = 255;
             if((format & OutputFormat.Grey) == OutputFormat.Grey)
                 color = Colors.DarkSlateGray;
 
@@ -139,7 +124,7 @@ namespace Vain.Console
             if((format & FormatMasks.ColorMask ) == 0)
                 color = Colors.White;
 
-            parsedMessage = $"[color=#{color.ToHTML(false)}]{parsedMessage}[/color]";
+            parsedMessage = $"[color=#{color.ToHtml(false)}]{parsedMessage}[/color]";
 
             
          

@@ -4,34 +4,62 @@ using System.Collections.Generic;
 
 using Godot;
 
-namespace Vain
+using Vain.Core.ComponentSystem;
+using Vain.Singleton;
+
+namespace Vain.Core
 {
-    public partial class Character : CharacterBody3D 
+
+    /// <summary>
+    /// Character is the base class for all Characters in the game. Any special characters to be considered as such and have any component need a Character parent.
+    /// </summary>
+    public partial class Character : CharacterBody2D , IEntity
     {
         
- 
+
+
         List<Component> _components;
 
+        CharacterBehaviourComponent _behaviour;
+
+        [Export] 
+        public CharacterBehaviourComponent CharacterBehaviour 
+        {   
+            get => _behaviour;
+            set
+            {
+                var oldBehaviour = _behaviour;
+
+                _behaviour = value;
+
+                
+            }
+        }
         
-        
-        
-        
+        public bool ActionLock {get; private set;}
+
+        public uint RuntimeID {get; protected set;}
+
         [Signal]
         public delegate void CharacterKilledEventHandler();
+        [Signal]
+        public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviourComponent OldBehaviour);
 
 
-   
-        
-        
+      
         
         public override void _Ready()
         {
             base._Ready();
 
-            if(_components == null)
-                loadComponents();
-            
+          
 
+
+            if(_components == null)
+                LoadComponents();
+
+            RuntimeID = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Register(this);
+            
         
 
         }
@@ -45,28 +73,39 @@ namespace Vain
         }
 
 
+       
 
-        public T GetComponent<T>(bool optional = false) where T : Node
+        public T? GetComponent<T>() where T : Component
         {   
 
             //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
             if(_components == null)
-                loadComponents();
-            
-          
+                LoadComponents();
+       
+            return _components.Where((c) => c is T).FirstOrDefault() as T;
 
-            if(optional)
-                return _components.Where((c) => c is T).FirstOrDefault() as T;
+        }
+         
+        public Component GetComponent(Type type) 
+        {   
 
-            return _components.Where(c => c is T).First() as T;
+            //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
+            if(_components == null)
+                LoadComponents();
+       
+            return _components.Where((c) => c.GetType() == type).FirstOrDefault();
+
         }
 
-
+        public IReadOnlyCollection<Component> GetComponents()
+        {
+            return _components.AsReadOnly();
+        }
 
         public virtual void Kill()
         {
 
-            EmitSignal(nameof(CharacterKilled));
+            EmitSignal(SignalName.CharacterKilled);
            
             this.QueueFree();
 
@@ -76,7 +115,7 @@ namespace Vain
 
 
 
-        void loadComponents()
+        void LoadComponents()
         {
         
             _components = new List<Component>();
@@ -84,13 +123,16 @@ namespace Vain
 
             foreach ( var node in GetChildren())
             {
-                if(node is Component)
-                    _components.Add(node as Component);
+                if(node is Component component)
+                    _components.Add(component);
             }
             
 
         }
 
+
+        //Used mainly for the useragent to 
+   
     
     }
 }
