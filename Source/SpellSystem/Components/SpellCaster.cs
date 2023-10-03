@@ -12,23 +12,6 @@ namespace Vain.SpellSystem
 	public abstract partial class SpellCaster : Component
 	{
 
-
-		[Signal]
-		public delegate void SpellPickupEventHandler();
-		[Signal]
-		public delegate void SpellCastEventHandler(SpellChanneler channeler);
-		
-
-		
-
-
-		
-		
-
-
-        
-		
-
 		[Export]
 		public Array<SpellChanneler> SpellChannelersExport {get;set;} = new Array<SpellChanneler>();
 
@@ -36,17 +19,16 @@ namespace Vain.SpellSystem
 
 		
 	
-
-		
-		
+		[Signal]
+		public delegate void SpellPickupEventHandler();
+		[Signal]
+		public delegate void SpellCastEventHandler();
 
 		public override void _Ready()
 		{
 			base._Ready();
 			
-			EmitSignal(SignalName.SpellCast);
-
-
+			
 
 			Character.CharacterKilled += OnKill;
 			
@@ -56,7 +38,7 @@ namespace Vain.SpellSystem
 			{
 				SpellChannelers.Add(spellChanneler?.Duplicate() as SpellChanneler);
 			}
-		
+
 						
 		}
 
@@ -112,7 +94,7 @@ namespace Vain.SpellSystem
 			}
 		}
 
-		public void CastSpell(int index, Vector3 target){
+		public void CastSpell(int index, Vector2 target){
 			
 			
 			if(SpellChannelers[index] != null  && SpellChannelers[index].CastCount > 0)

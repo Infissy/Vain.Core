@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8blg1vxqvnti"]
+
+[ext_resource type="Script" path="res://Source/SpellSystem/Spells/Fireball.cs" id="1_b2oyj"]
+[ext_resource type="Resource" uid="uid://c4y68oca4arwn" path="res://Prefabs/Spells/Effect.tres" id="2_8tl83"]
+
+[node name="Fireball" type="Area2D"]
+collision_layer = 3
+script = ExtResource("1_b2oyj")
+Speed = 30.0
+LifeTime = 10.0
+effects = [ExtResource("2_8tl83")]

@@ -16,7 +16,7 @@ namespace Vain.Log.Visualizer
 	    public override void _EnterTree()
 		{
 			base._EnterTree();
-			SingletonManager.Register(this);
+			SingletonManager.Register(SingletonManager.Singletons.UI.DEBUG_OVERLAY,this);
             this.ZIndex = 100;
 		}
         public override void _Ready()

@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="IndexResource" load_steps=47 format=3 uid="uid://cyo30bfixhma6"]
+
+[ext_resource type="Script" path="res://Source/GameManager.cs" id="1_2ky63"]
+[ext_resource type="Script" path="res://Source/GameRegistry.cs" id="2_ujgdt"]
+[ext_resource type="Script" path="res://Source/IndexResource.cs" id="3_sv7ql"]
+[ext_resource type="Script" path="res://Source/IndexedResourceWrapper.cs" id="4_gdxfw"]
+[ext_resource type="Script" path="res://Source/LevelManager.cs" id="5_lnii8"]
+[ext_resource type="Script" path="res://Source/MainCamera.cs" id="6_e8fqc"]
+[ext_resource type="Script" path="res://Source/UISystem/CharacterHealthBar.cs" id="7_d33sd"]
+[ext_resource type="Script" path="res://Source/UISystem/DialogueBox.cs" id="8_njcte"]
+[ext_resource type="Script" path="res://Source/UISystem/DialogueHandler.cs" id="9_h2qk5"]
+[ext_resource type="Script" path="res://Source/UISystem/HealthBar.cs" id="10_5ws3e"]
+[ext_resource type="Script" path="res://Source/UISystem/PlayerHealthBar.cs" id="11_3etyq"]
+[ext_resource type="Script" path="res://Source/UISystem/SpellBar.cs" id="12_1kev8"]
+[ext_resource type="Script" path="res://Source/UISystem/SpellSlot.cs" id="13_7sml2"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Effect.cs" id="14_75qxp"]
+[ext_resource type="Script" path="res://Source/SpellSystem/SpellChanneler.cs" id="15_5u8y1"]
+[ext_resource type="Script" path="res://Source/SpellSystem/SpellDrop.cs" id="16_o3gfj"]
+[ext_resource type="Script" path="res://Source/SpellSystem/SpellSystem.cs" id="17_aqwld"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Spells/Concentrate.cs" id="18_e75xn"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Spells/Fireball.cs" id="19_evul0"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Spells/IceShard.cs" id="20_3gj0f"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Spells/Reflect.cs" id="21_kblb5"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Components/NPCSpellCaster.cs" id="22_712ad"]
+[ext_resource type="Script" path="res://Source/SpellSystem/Components/PlayerSpellCaster.cs" id="23_bx4o0"]
+[ext_resource type="Script" path="res://Source/SingletonSystem/SingletonManager.cs" id="24_v6ns5"]
+[ext_resource type="Script" path="res://Source/Logger/OutputContainer.cs" id="25_4ngip"]
+[ext_resource type="Script" path="res://Source/Logger/Visualizer/DebugOverlay.cs" id="26_52wil"]
+[ext_resource type="Script" path="res://Source/Logger/Visualizer/Field.cs" id="27_uegp7"]
+[ext_resource type="Script" path="res://Source/Entities/Character.cs" id="28_tw75j"]
+[ext_resource type="Script" path="res://Source/Entities/EnemySpawner.cs" id="29_h6tr4"]
+[ext_resource type="Script" path="res://Source/Entities/SpawnInfo.cs" id="30_k5cih"]
+[ext_resource type="Script" path="res://Source/Entities/WorldNPCInfo.cs" id="31_imypj"]
+[ext_resource type="Script" path="res://Source/ConsoleSystem/ConsoleContainer.cs" id="32_alxmd"]
+[ext_resource type="Script" path="res://Source/ConsoleSystem/GameConsole.cs" id="33_etog3"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/AnimationControllerComponent.cs" id="34_j6yjq"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/MovementControllerComponent.cs" id="35_my5eq"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/DialogueInteraction.cs" id="36_23tae"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractibleComponent.cs" id="37_ueprq"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractionHandler.cs" id="38_xwb0c"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractorComponent.cs" id="39_h8iow"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/EffectableComponent.cs" id="40_riep8"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/HealthComponent.cs" id="41_q7qvy"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/CharacterBehaviourComponent.cs" id="42_ckcex"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/Player/PlayerMovementSubBehaviour.cs" id="43_ol1qe"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/Player/PlayerSpellCasterSubBehaviour.cs" id="44_aev62"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/AI/AIController.cs" id="44_nhaaa"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/AI/SimpleAggressiveAIMovementStrategy.cs" id="45_ybwic"]
+
+[resource]
+script = ExtResource("3_sv7ql")
+IndexedEntities = {
+"AIController": ExtResource("44_nhaaa"),
+"AnimationControllerComponent": ExtResource("34_j6yjq"),
+"Character": ExtResource("28_tw75j"),
+"CharacterBehaviourComponent": ExtResource("42_ckcex"),
+"CharacterHealthBar": ExtResource("7_d33sd"),
+"Concentrate": ExtResource("18_e75xn"),
+"ConsoleContainer": ExtResource("32_alxmd"),
+"DebugOverlay": ExtResource("26_52wil"),
+"DialogueBox": ExtResource("8_njcte"),
+"DialogueHandler": ExtResource("9_h2qk5"),
+"DialogueInteraction": ExtResource("36_23tae"),
+"Effect": ExtResource("14_75qxp"),
+"EffectableComponent": ExtResource("40_riep8"),
+"EnemySpawner": ExtResource("29_h6tr4"),
+"Field": ExtResource("27_uegp7"),
+"Fireball": ExtResource("19_evul0"),
+"GameConsole": ExtResource("33_etog3"),
+"GameManager": ExtResource("1_2ky63"),
+"GameRegistry": ExtResource("2_ujgdt"),
+"HealthBar": ExtResource("10_5ws3e"),
+"HealthComponent": ExtResource("41_q7qvy"),
+"IceShard": ExtResource("20_3gj0f"),
+"IndexResource": ExtResource("3_sv7ql"),
+"IndexedResourceWrapper": ExtResource("4_gdxfw"),
+"InteractibleComponent": ExtResource("37_ueprq"),
+"InteractionHandler": ExtResource("38_xwb0c"),
+"InteractorComponent": ExtResource("39_h8iow"),
+"LevelManager": ExtResource("5_lnii8"),
+"MainCamera": ExtResource("6_e8fqc"),
+"MovementControllerComponent": ExtResource("35_my5eq"),
+"NPCSpellCaster": ExtResource("22_712ad"),
+"OutputContainer": ExtResource("25_4ngip"),
+"PlayerHealthBar": ExtResource("11_3etyq"),
+"PlayerMovementSubBehaviour": ExtResource("43_ol1qe"),
+"PlayerSpellCaster": ExtResource("23_bx4o0"),
+"PlayerSpellCasterSubBehaviour": ExtResource("44_aev62"),
+"Reflect": ExtResource("21_kblb5"),
+"SimpleAggressiveAIMovementStrategy": ExtResource("45_ybwic"),
+"SingletonManager": ExtResource("24_v6ns5"),
+"SpawnInfo": ExtResource("30_k5cih"),
+"SpellBar": ExtResource("12_1kev8"),
+"SpellChanneler": ExtResource("15_5u8y1"),
+"SpellDrop": ExtResource("16_o3gfj"),
+"SpellSlot": ExtResource("13_7sml2"),
+"SpellSystem": ExtResource("17_aqwld"),
+"WorldNPCInfo": ExtResource("31_imypj")
+}

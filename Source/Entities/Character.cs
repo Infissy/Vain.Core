@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Godot;
 
 using Vain.Core.ComponentSystem;
-
+using Vain.Singleton;
 
 namespace Vain.Core
 {
@@ -13,17 +13,17 @@ namespace Vain.Core
     /// <summary>
     /// Character is the base class for all Characters in the game. Any special characters to be considered as such and have any component need a Character parent.
     /// </summary>
-    public partial class Character : CharacterBody3D , IEntity
+    public partial class Character : CharacterBody2D , IEntity
     {
         
 
 
         List<Component> _components;
 
-        CharacterBehaviour _behaviour;
+        CharacterBehaviourComponent _behaviour;
 
         [Export] 
-        public CharacterBehaviour CharacterBehaviour 
+        public CharacterBehaviourComponent CharacterBehaviour 
         {   
             get => _behaviour;
             set
@@ -32,7 +32,7 @@ namespace Vain.Core
 
                 _behaviour = value;
 
-                EmitSignal(SignalName.CharacterBehaviourUpdate);
+                
             }
         }
         
@@ -43,25 +43,22 @@ namespace Vain.Core
         [Signal]
         public delegate void CharacterKilledEventHandler();
         [Signal]
-        public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviour OldBehaviour);
+        public delegate void CharacterBehaviourUpdateEventHandler(CharacterBehaviourComponent OldBehaviour);
 
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-            
-        }
-        
-        
+      
         
         public override void _Ready()
         {
             base._Ready();
 
+          
+
+
             if(_components == null)
-                loadComponents();
-            
-            //SingletonManager.GetSingleton<LevelManager>().AddCharacter(this);
+                LoadComponents();
+
+            RuntimeID = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Register(this);
             
         
 
@@ -76,26 +73,34 @@ namespace Vain.Core
         }
 
 
-        public void Lock()
-        {
-            
-        }
+       
 
-        public T? GetComponent<T>() where T : Node
+        public T? GetComponent<T>() where T : Component
         {   
 
             //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
             if(_components == null)
-                loadComponents();
-            
-          
-
-           
+                LoadComponents();
+       
             return _components.Where((c) => c is T).FirstOrDefault() as T;
 
         }
+         
+        public Component GetComponent(Type type) 
+        {   
 
+            //In case we need a preload, although components in this case won't be ready, so might need some sort of warning
+            if(_components == null)
+                LoadComponents();
+       
+            return _components.Where((c) => c.GetType() == type).FirstOrDefault();
 
+        }
+
+        public IReadOnlyCollection<Component> GetComponents()
+        {
+            return _components.AsReadOnly();
+        }
 
         public virtual void Kill()
         {
@@ -110,7 +115,7 @@ namespace Vain.Core
 
 
 
-        void loadComponents()
+        void LoadComponents()
         {
         
             _components = new List<Component>();
@@ -125,6 +130,9 @@ namespace Vain.Core
 
         }
 
+
+        //Used mainly for the useragent to 
+   
     
     }
 }

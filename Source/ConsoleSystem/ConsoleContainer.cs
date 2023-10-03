@@ -25,16 +25,25 @@ public partial class ConsoleContainer : VBoxContainer{
             if (@event is InputEventKey){
                 var keyevent = @event as InputEventKey;
                 if(keyevent.Pressed  &&  keyevent.Keycode  == Key.Backslash ){
-                    
-                    if(!visible)
-                        Show();
-                    else
-                        Hide();
-
-                    visible = !visible;
                 }
 
 
             }
+        }
+
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+            if (!Input.IsActionJustPressed("ui_console"))
+                return;
+
+    
+            if(!visible)
+                Show();
+            else
+                Hide();
+
+            visible = !visible;
+
         }
 }

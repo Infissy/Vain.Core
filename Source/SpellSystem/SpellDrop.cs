@@ -7,7 +7,7 @@ using Vain.Core;
 
 namespace Vain.SpellSystem
 {
-	public partial class SpellDrop : Area3D 
+	public partial class SpellDrop : Area2D 
 	{
 		public SpellChanneler SpellChanneler {get ; set;}
 		
@@ -26,7 +26,7 @@ namespace Vain.SpellSystem
 		
 
 
-		void bodyEnteredHandler(Node3D body)
+		void bodyEnteredHandler(Node2D body)
 		{
 			if(body is Character character)
 			{

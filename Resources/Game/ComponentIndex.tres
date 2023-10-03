@@ -1,0 +1,57 @@
+[gd_resource type="Resource" load_steps=19 format=3 uid="uid://blwpfcxe02nlp"]
+
+[ext_resource type="Script" path="res://Source/UISystem/CharacterHealthBar.cs" id="1_ubq7k"]
+[ext_resource type="Script" path="res://Source/IndexedResourceWrapper.cs" id="2_iromc"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/BehaviourSystem/CharacterBehaviourComponent.cs" id="3_4up4n"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/EffectableComponent.cs" id="4_3ai0r"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Combat/HealthComponent.cs" id="5_gtm05"]
+[ext_resource type="PackedScene" uid="uid://66q1u3y8a3fe" path="res://Prefabs/Components/animation_controller_component.tscn" id="6_mbpua"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/Movement/MovementControllerComponent.cs" id="7_bn1ws"]
+[ext_resource type="Script" path="res://Source/ComponentSystem/Components/InteractionSystem/InteractibleComponent.cs" id="8_joxf0"]
+[ext_resource type="PackedScene" uid="uid://c2gyjvxyfwpte" path="res://Prefabs/Components/interactor_component.tscn" id="9_pgg23"]
+[ext_resource type="Script" path="res://Source/IndexResource.cs" id="10_ru4nm"]
+
+[sub_resource type="Resource" id="Resource_laiq0"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("6_mbpua")
+
+[sub_resource type="Resource" id="Resource_q1hyb"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("3_4up4n")
+
+[sub_resource type="Resource" id="Resource_jplhm"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("1_ubq7k")
+
+[sub_resource type="Resource" id="Resource_36r12"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("4_3ai0r")
+
+[sub_resource type="Resource" id="Resource_rf21n"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("5_gtm05")
+
+[sub_resource type="Resource" id="Resource_oowbb"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("8_joxf0")
+
+[sub_resource type="Resource" id="Resource_xg3g0"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("9_pgg23")
+
+[sub_resource type="Resource" id="Resource_t5ndk"]
+script = ExtResource("2_iromc")
+Resource = ExtResource("7_bn1ws")
+
+[resource]
+script = ExtResource("10_ru4nm")
+IndexedEntities = {
+"animation_controller": SubResource("Resource_laiq0"),
+"character_behaviour": SubResource("Resource_q1hyb"),
+"character_health_bar": SubResource("Resource_jplhm"),
+"effectable": SubResource("Resource_36r12"),
+"health": SubResource("Resource_rf21n"),
+"interactible": SubResource("Resource_oowbb"),
+"interactor": SubResource("Resource_xg3g0"),
+"movement_controller": SubResource("Resource_t5ndk")
+}

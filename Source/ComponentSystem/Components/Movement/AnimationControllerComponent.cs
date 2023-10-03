@@ -4,7 +4,7 @@ using Vain.SpellSystem;
 
 namespace Vain.Core.ComponentSystem
 {  
-    
+    [GlobalClass]
     public partial class AnimationControllerComponent : Component
     {
         enum Animation 

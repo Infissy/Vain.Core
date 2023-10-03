@@ -52,9 +52,11 @@ namespace Vain.SpellSystem
 
 
 
-        public bool CastSpell(Character caster, Vector3 target)
+        public bool CastSpell(Character caster, Vector2 target)
         {
-            if(CastCount > 0)
+
+
+            if(CastCount > 0 || CastCount == -1)
             {
 
                 var spellInstance = _spellPrefab.Instantiate<SpellInstance>();
@@ -64,9 +66,7 @@ namespace Vain.SpellSystem
                 
                 
                 //Choose which layer the spell is, not the best way to select it 
-                spellInstance.CollisionMask = caster is Player ? SpellLayer.NPC : SpellLayer.PLAYER;
-
-
+         
                 spellInstance.Caster = caster;
 
                 //TODO: Better hierarchy

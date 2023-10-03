@@ -63,10 +63,14 @@ namespace Vain.Log
                 label.BbcodeEnabled = true;
 
                 label.Text = output[i];
-                label.AddThemeFontOverride("normal_font",Normal) ;
-                label.AddThemeFontOverride("bold_font",Bold) ;
-                label.AddThemeFontOverride("italics_font",Italic) ;
-                label.AddThemeFontOverride("bolditalics_font",BoldItalic) ;
+
+                if(Normal != null)
+                {
+                    label.AddThemeFontOverride("normal_font",Normal) ;
+                    label.AddThemeFontOverride("bold_font",Bold) ;
+                    label.AddThemeFontOverride("italics_font",Italic) ;
+                    label.AddThemeFontOverride("bolditalics_font",BoldItalic) ;
+                }                   
 
                 items.Add(label);
                 AddChild(label);

@@ -1,6 +1,10 @@
 using Godot;
 
 using Vain.Singleton;
+using Vain.Log;
+
+
+
 namespace Vain.Core
 {
 
@@ -8,40 +12,46 @@ namespace Vain.Core
     /// Main Game Camera
     /// </summary>
     
-    public partial class MainCamera : Camera3D
+    public partial class MainCamera : Camera2D
     {
         
         /// <summary>
         /// Character to follow.
         /// </summary>
 
-        public Character Player {get;set;}        
+        public Singleton<Character>? Player {get;set;}        
         
     
         /// <summary>
         /// Max Depth in which the camera can sample a mouse position in the scene. 
         /// </summary>
         [Export]
-        public ushort RaycastRange {get;set;} = 100;
+        public ushort RaycastRange {get;set;} = 500;
 
 
 
-        Vector3 _oldPlayerPosition;
+        Vector2 _oldPlayerPosition;
 
 
 
         public override void _EnterTree()
         {
             base._EnterTree();
-            SingletonManager.Register(this);
+            SingletonManager.Register(SingletonManager.Singletons.MAIN_CAMERA,this);
         }
+
 
         public override void _Ready()
         {
             base._Ready();
             
-            Player = SingletonManager.GetSingleton<Character>();
-            _oldPlayerPosition = Player.GlobalPosition;
+
+
+            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, ()=>{});
+
+
+            if(Player.Reference != null)
+                _oldPlayerPosition = Player!.Reference!.GlobalPosition;
 
    
         }   
@@ -50,12 +60,15 @@ namespace Vain.Core
         {
             base._Process(delta);
             
-            var relMotion =  Player.GlobalPosition - _oldPlayerPosition;
+            if(Player.Reference == null)
+                return;
+
+            var relMotion =  Player!.Reference!.GlobalPosition - _oldPlayerPosition;
         
 
             this.GlobalTranslate(relMotion);
             //TODO: Add smoothing and eventually clipping
-            _oldPlayerPosition = Player.GlobalPosition; 
+            _oldPlayerPosition = Player.Reference.GlobalPosition; 
 
         }
 
@@ -64,40 +77,11 @@ namespace Vain.Core
         /// Get the mouse position in the scene.
         /// The position is based on raycasting so it will always be on the underlying geometry.  
         /// </summary>
-        public Vector3 GetMouseScenePosition()
+        public Vector2 GetMouseScenePosition()
         {
-        
-        
-            var mousePos = GetViewport().GetMousePosition();
-            var from = base.ProjectRayOrigin(mousePos);
-            var to = from + base.ProjectRayNormal(mousePos) * RaycastRange;
-                
-
-                var space = base.GetWorld3D().DirectSpaceState;
-
-                PhysicsRayQueryParameters3D query = new PhysicsRayQueryParameters3D();
-                query.From = from;
-                query.To = to;
-        
-
-                var intersection = space.IntersectRay(query);
-
-                
-                if(intersection.Count > 0)
-                {
-                    
-                    var target = (Vector3) intersection["position"] ;
-                    
-                    return target;
-                    
-                }
-                else
-                {
-                    return Vector3.Inf;
-                }
-            
-        
+            return GetGlobalMousePosition();
         }
+
 
      
     }

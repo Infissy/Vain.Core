@@ -8,7 +8,7 @@ using Vain.Core;
 namespace Vain.SpellSystem
 {
 
-    public abstract partial class SpellInstance : Area3D
+    public abstract partial class SpellInstance : Area2D
     {
 
         
@@ -37,8 +37,8 @@ namespace Vain.SpellSystem
 
     
 
-        internal abstract bool Perform(Character owner, Vector3 target);
-        
+        internal abstract bool Perform(Character owner, Vector2 target);
+        internal abstract void Hint(Character owner, Vector2 target);
       
         
     }

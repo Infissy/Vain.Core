@@ -1,3 +1,4 @@
+#if TOOLS
 using Godot;
 
 namespace Vain.Plugins.VainUtility
@@ -7,3 +8,5 @@ namespace Vain.Plugins.VainUtility
      
     } 
 }
+
+#endif

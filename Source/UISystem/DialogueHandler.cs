@@ -19,7 +19,9 @@ namespace Vain.UI.DialogueSystem
         {
             base._Ready();
 
-            SingletonManager.GetSingleton<Player>().CurrentCharacter.GetComponent<InteractorComponent>().OnDialogue += dialogueHandler;
+            SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER)
+                    .GetComponent<InteractorComponent>()
+                    .RegisterToSignal(InteractorComponent.SignalName.OnDialogue,new Callable(this,MethodName.dialogueHandler));
         
         
         
