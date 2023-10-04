@@ -13,6 +13,7 @@ mono_crash.*
 # Mono-specific ignores
 .mono/
 data_*/
+Vain.csproj.*
 
 Test/bin/*
 Test/obj/*
@@ -28,8 +29,10 @@ Test/obj/*
 # build/
 
 
-
-addons/zy
+# addons have to be installed locally
+addons/*
+!addons/interactiongraph/
+!addons/vainutility
 
 
 # Big files
