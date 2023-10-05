@@ -35,6 +35,7 @@ addons/*
 !addons/vainutility
 
 
-# Big files
-Resources/Assets/
 
+# Game Related folders
+
+GameData/

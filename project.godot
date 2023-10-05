@@ -11,15 +11,11 @@ config_version=5
 [application]
 
 config/name="Vain"
-run/main_scene="res://Prefabs/Maps/Terrain/SimplePlaneTerrain.tscn"
 config/features=PackedStringArray("4.1", "C#")
-config/icon="res://icon.png"
 
 [autoload]
-
 SingletonManager="*res://Source/SingletonSystem/SingletonManager.cs"
 DebugOverlay="*res://Source/Logger/Visualizer/DebugOverlay.cs"
-Console="*res://Prefabs/UI/Console.tscn"
 GameRegistry="*res://Source/GameRegistry.cs"
 
 [display]
@@ -37,8 +33,7 @@ project/assembly_name="Vain"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/imrp/plugin.cfg", "res://addons/interactiongraph/plugin.cfg", "res://addons/vainutility/plugin.cfg", "res://addons/zylann.editor_debugger/plugin.cfg")
-
+enabled=PackedStringArray("res://addons/interactiongraph/plugin.cfg", "res://addons/vainutility/plugin.cfg")
 [input]
 
 player_cast_slot1={
@@ -116,7 +111,6 @@ common/enable_pause_aware_picking=true
 
 textures/canvas_textures/default_texture_filter=0
 2d/snapping/use_gpu_pixel_snap=true
-environment/default_environment="res://default_env.tres"
 
 [world]
 

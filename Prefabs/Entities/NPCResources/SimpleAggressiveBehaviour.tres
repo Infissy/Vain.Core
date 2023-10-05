@@ -1,8 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://nu6jkagtkod0"]
-
-[ext_resource type="Script" path="res://Source/ComponentSystem/Components/AI/SimpleAggressiveAIMovementStrategy.cs" id="1_j04tw"]
-
-[resource]
-script = ExtResource("1_j04tw")
-enemyAIType = 1
-DistanceToPlayer = 10.0
