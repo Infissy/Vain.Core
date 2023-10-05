@@ -34,6 +34,7 @@ project/assembly_name="Vain"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/interactiongraph/plugin.cfg", "res://addons/vainutility/plugin.cfg")
+
 [input]
 
 player_cast_slot1={
