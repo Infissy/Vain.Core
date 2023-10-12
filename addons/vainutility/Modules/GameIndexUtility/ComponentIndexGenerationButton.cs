@@ -13,9 +13,9 @@ namespace Vain.Plugins.VainUtility.GameIndex
 
     internal partial class ComponentIndexGenerationButton : ButtonModule
     {
-        const string CLASS_INDEX_PATH = "res://Resources/Game/ClassIndex.tres";
-        const string INDEX_PATH = "res://Resources/Game/ComponentIndex.tres";
-        const string COMPONENT_SCENE_FOLDER_PATH = "res://Prefabs/Components/";
+        const string CLASS_INDEX_PATH = GameData.Indices.ClassIndex;
+        const string COMPONENT_INDEX_PATH = GameData.Indices.ComponentIndex;
+        const string COMPONENT_SCENE_FOLDER_PATH = GameData.Folders.ComponentFolder;
      
         
 
@@ -75,7 +75,7 @@ namespace Vain.Plugins.VainUtility.GameIndex
             foreach (var component in componentMap)
                 index.IndexedEntities[component.Key] = new IndexedResourceWrapper{Resource = component.Value};
             index.EmitChanged();
-            ResourceSaver.Save(index,INDEX_PATH);
+            ResourceSaver.Save(index,COMPONENT_INDEX_PATH);
 
             GD.Print("Component Index Successfuly Generated");
         }

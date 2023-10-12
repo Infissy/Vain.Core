@@ -16,8 +16,10 @@ namespace Vain.Plugins.VainUtility.GameIndex
     internal partial class ClassIndexGenerationButton : ButtonModule
     {
 
-        const string CLASS_INDEX_PATH = "res://Resources/Game/ClassIndex.tres";
-        const string SOURCE_CODE_PATH = "res://Source/";
+        const string CLASS_INDEX_PATH = GameData.Indices.ClassIndex;
+        
+        //TODO: Currently work only for public code, add game specific code as well
+        const string SOURCE_CODE_PATH = GameData.Folders.SourceFolder;
         public override void _Ready()
         {
             base._Ready();

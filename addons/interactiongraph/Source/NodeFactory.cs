@@ -17,8 +17,8 @@ namespace Vain.InteractionSystem.InteractionGraph
     internal class NodeFactory 
     {
 
-        static string NPC_DIR = "res://Resources/Game/NPCs";
         static string NPC_NODE = "res://addons/interactiongraph/Nodes/CharacterNode.tscn";
+        const string NPC_DIR = GameData.Folders.CharacterInfoIndex;
 
         public static void GenerateCharacters()
         {

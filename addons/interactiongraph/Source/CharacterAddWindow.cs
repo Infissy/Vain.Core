@@ -23,7 +23,7 @@ namespace Vain.InteractionSystem.InteractionGraph
 
         void initialize()
         {
-            var propertyList = WorldNPCInfo.GetGodotPropertyList();
+            var propertyList = CharacterInfo.GetGodotPropertyList();
 
             foreach (var property in propertyList)
             {

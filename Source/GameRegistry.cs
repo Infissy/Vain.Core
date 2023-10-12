@@ -14,9 +14,9 @@ namespace Vain.Core
         {
             base._Ready();
 
-            EntityIndex = ResourceLoader.Load<IndexResource>("res://Resources/Game/EntityIndex.tres");
-            ComponentIndex = ResourceLoader.Load<IndexResource>("res://Resources/Game/ComponentIndex.tres");
-            BehaviourIndex = ResourceLoader.Load<IndexResource>("res://Resources/Game/BehaviourIndex.tres");
+            EntityIndex = ResourceLoader.Load<IndexResource>(GameData.Indices.EntityIndex);
+            ComponentIndex = ResourceLoader.Load<IndexResource>(GameData.Indices.ComponentIndex);
+            BehaviourIndex = ResourceLoader.Load<IndexResource>(GameData.Indices.BehaviourIndex);
 
 
             

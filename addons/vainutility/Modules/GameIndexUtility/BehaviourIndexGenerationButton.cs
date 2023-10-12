@@ -13,7 +13,7 @@ namespace Vain.Plugins.VainUtility.GameIndex
     {
 
 
-        const string INDEX_PATH  = "res://Resources/Game/BehaviourIndex.tres";
+        const string INDEX_PATH  = GameData.Indices.BehaviourIndex;
   
         public override void _Ready()
         {

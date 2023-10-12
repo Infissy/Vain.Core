@@ -34,7 +34,7 @@ namespace Vain.SpellSystem.UI
                         _sprites.Add(spell,null);
                         break;
                     case Spell.FIREBALL:
-                        _sprites.Add(spell, ResourceLoader.Load<Texture2D>("res://Resources/2D/Spell/Fireball.png"));
+                        _sprites.Add(spell, null);
                         break;
                 }
 
