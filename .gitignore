@@ -39,3 +39,9 @@ addons/*
 # Game Related folders
 
 GameData/
+
+
+
+# Project specific 
+
+Resources/Indices/*
