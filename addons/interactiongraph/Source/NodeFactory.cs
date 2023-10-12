@@ -17,12 +17,12 @@ namespace Vain.InteractionSystem.InteractionGraph
     internal class NodeFactory 
     {
 
-        static string NPC_NODE = "res://addons/interactiongraph/Nodes/CharacterNode.tscn";
         const string NPC_DIR = GameData.Folders.CharacterInfoIndex;
+        const string NPC_NODE = "res://addons/interactiongraph/Nodes/CharacterNode.tscn";
 
         public static void GenerateCharacters()
         {
-            var npcDataList  = new List<WorldNPCInfo>();
+            var npcDataList  = new List<CharacterInfo>();
 
 
             var dir = DirAccess.Open(NPC_DIR);
@@ -36,7 +36,7 @@ namespace Vain.InteractionSystem.InteractionGraph
 
                 if(file is PackedScene scene)
                 {
-                    npcDataList.Add(scene.Instantiate<WorldNPCInfo>());
+                    npcDataList.Add(scene.Instantiate<CharacterInfo>());
                 }
 
                 var npc = ResourceLoader.Load<PackedScene>(NPC_NODE).Instantiate<CharacterNode>();
