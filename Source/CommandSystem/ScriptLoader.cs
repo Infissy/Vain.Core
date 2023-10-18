@@ -1,3 +1,4 @@
+using Vain;
 using Godot;
 namespace Vain.CLI
 {
@@ -6,15 +7,21 @@ namespace Vain.CLI
         public static Script LoadScript(string scriptName)
         {
 
-            if(!FileAccess.FileExists($"{GameData.Folders.ScriptFolder}/{scriptName}"))
-                return null;
-           
+            var paths = ProjectConfig.LoadConfiguration(ProjectConfig.MultiSourceConfiguration.ScriptsFolder);
+            
+            foreach (var path in paths)
+            {
+                var scriptFile = FileAccess.Open($"{path}/{scriptName}",FileAccess.ModeFlags.Read);
+                if(scriptFile  != null)
+                {
+                    var text = scriptFile.GetAsText();
+                    var script = new Script(text);
+                    return script;
+                }
+            }
             
            
-            var text = FileAccess.Open($"{GameData.Folders.ScriptFolder}/{scriptName}",FileAccess.ModeFlags.Read).GetAsText();
-            var script = new Script(text);
-
-            return script;
+            return null;
             
         }
     } 

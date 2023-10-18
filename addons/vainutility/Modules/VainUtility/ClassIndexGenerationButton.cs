@@ -16,10 +16,10 @@ namespace Vain.Plugins.VainUtility.GameIndex
     internal partial class ClassIndexGenerationButton : ButtonModule
     {
 
-        const string CLASS_INDEX_PATH = GameData.Indices.ClassIndex;
+        readonly string _ClassIndexPath = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.ClassIndex);
         
         //TODO: Currently work only for public code, add game specific code as well
-        const string SOURCE_CODE_PATH = GameData.Folders.SourceFolder;
+        readonly string[] _SourceCodeFoldersPath = ProjectConfig.LoadConfiguration(ProjectConfig.MultiSourceConfiguration.SourceFolder);
         public override void _Ready()
         {
             base._Ready();
@@ -42,9 +42,10 @@ namespace Vain.Plugins.VainUtility.GameIndex
             
             
             var directoryStack = new Stack<string>();
-            directoryStack.Push(SOURCE_CODE_PATH);
+            foreach(var path in _SourceCodeFoldersPath)
+                directoryStack.Push(path);
             
-            var currentDir = DirAccess.Open(SOURCE_CODE_PATH);
+            var currentDir = DirAccess.Open(directoryStack.Peek());
        
 
 
@@ -98,7 +99,7 @@ namespace Vain.Plugins.VainUtility.GameIndex
 
             }
             
-            ResourceSaver.Save(index, CLASS_INDEX_PATH);
+            ResourceSaver.Save(index, _ClassIndexPath);
             index.EmitChanged();
 
 

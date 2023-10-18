@@ -13,9 +13,9 @@ namespace Vain.Plugins.VainUtility.GameIndex
 
     internal partial class ComponentIndexGenerationButton : ButtonModule
     {
-        const string CLASS_INDEX_PATH = GameData.Indices.ClassIndex;
-        const string COMPONENT_INDEX_PATH = GameData.Indices.ComponentIndex;
-        const string COMPONENT_SCENE_FOLDER_PATH = GameData.Folders.ComponentFolder;
+        readonly string _ClassIndexPath = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.ClassIndex);
+        readonly string _ComponentIndexPath = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.ComponentIndex);
+        readonly string[] _ComponentFolderPaths = ProjectConfig.LoadConfiguration(ProjectConfig.MultiSourceConfiguration.ComponentsFolder);
      
         
 
@@ -42,10 +42,12 @@ namespace Vain.Plugins.VainUtility.GameIndex
 			var components = assemblyTypes.Where(t => moduleType.IsAssignableFrom(t) && t != moduleType && !t.IsAbstract);
 
 
-            var componentScenes = DirAccess.GetFilesAt(COMPONENT_SCENE_FOLDER_PATH).Select( s => ResourceLoader.Load<PackedScene>($"{COMPONENT_SCENE_FOLDER_PATH}/{s}"));
-            
+            var componentScenes = _ComponentFolderPaths.Select( path => 
+                        DirAccess.GetFilesAt(path).Select( s => ResourceLoader.Load<PackedScene>($"{_ComponentFolderPaths}/{s}"))                                   
+            ).SelectMany(i => i);
         
-            var classIndex = ResourceLoader.Load<IndexResource>(CLASS_INDEX_PATH);
+        
+            var classIndex = ResourceLoader.Load<IndexResource>(_ClassIndexPath);
 
 
 
@@ -75,7 +77,7 @@ namespace Vain.Plugins.VainUtility.GameIndex
             foreach (var component in componentMap)
                 index.IndexedEntities[component.Key] = new IndexedResourceWrapper{Resource = component.Value};
             index.EmitChanged();
-            ResourceSaver.Save(index,COMPONENT_INDEX_PATH);
+            ResourceSaver.Save(index,_ComponentIndexPath);
 
             GD.Print("Component Index Successfuly Generated");
         }

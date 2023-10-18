@@ -14,13 +14,13 @@ namespace Vain.Core
         {
             base._Ready();
 
-            EntityIndex = ResourceLoader.Load<IndexResource>(GameData.Indices.EntityIndex);
-            ComponentIndex = ResourceLoader.Load<IndexResource>(GameData.Indices.ComponentIndex);
-            BehaviourIndex = ResourceLoader.Load<IndexResource>(GameData.Indices.BehaviourIndex);
+            EntityIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.EntityIndex));
+            ComponentIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.ComponentIndex));
+            BehaviourIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.BehaviourIndex));
 
 
             
-            SingletonManager.Register<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY,this);
+            SingletonManager.Register(SingletonManager.Singletons.GAME_REGISTRY,this);
         }
     }
 }

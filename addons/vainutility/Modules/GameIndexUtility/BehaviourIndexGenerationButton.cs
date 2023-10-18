@@ -13,7 +13,7 @@ namespace Vain.Plugins.VainUtility.GameIndex
     {
 
 
-        const string INDEX_PATH  = GameData.Indices.BehaviourIndex;
+        readonly string _IndexPath  = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.BehaviourIndex);
   
         public override void _Ready()
         {
@@ -61,7 +61,7 @@ namespace Vain.Plugins.VainUtility.GameIndex
             name = string.Concat(name.Replace("AI",":").Replace("NPC",";").Select((x, i) => i > 0 && (char.IsUpper(x) || x == ':' || x == ';')  ? "_" + x.ToString() : x.ToString())).ToLower().Replace(":","ai").Replace(";","npc");
 
             
-            var index = ResourceLoader.Load<IndexResource>(INDEX_PATH);
+            var index = ResourceLoader.Load<IndexResource>(_IndexPath);
             index.IndexedEntities[name] = new IndexedResourceWrapper{ Resource = resource};
             index.EmitChanged();
 
