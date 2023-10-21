@@ -15,18 +15,17 @@ run/main_scene="res://Prefabs/Levels/BaseLevel.tscn"
 config/features=PackedStringArray("4.1", "C#")
 
 [autoload]
+
 SingletonManager="*res://Source/SingletonSystem/SingletonManager.cs"
 DebugOverlay="*res://Source/Logger/Visualizer/DebugOverlay.cs"
 GameRegistry="*res://Source/GameRegistry.cs"
 
 [display]
 
-window/size/viewport_width=1107
-window/stretch/mode="2d"
-window/size/width=1280
-window/size/height=720
-window/size/test_width=1280
-window/size/test_height=720
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+window/stretch/mode="viewport"
 
 [dotnet]
 
