@@ -123,7 +123,7 @@ namespace Vain.Log
         }
 
 
-        //FIXME: Runtime has to work only in debug, or choose if some information is accessible to the user, that can improve performance also
+        //FIXME: Runtime has to work only in debug builds, or choose if some information is accessible to the user, that can improve performance also
         public void Runtime(string label,string message, string parameters="")
         {
 
