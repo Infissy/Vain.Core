@@ -12,7 +12,7 @@ namespace Vain.Core
     /// Main Game Camera
     /// </summary>
     
-    public partial class MainCamera : Camera2D
+    public partial class MainCamera : Camera2D , IEntity
     {
         
         /// <summary>
@@ -33,11 +33,14 @@ namespace Vain.Core
         Vector2 _oldPlayerPosition;
 
 
+        public uint RuntimeID {get; private set;}
+
 
         public override void _EnterTree()
         {
             base._EnterTree();
             SingletonManager.Register(SingletonManager.Singletons.MAIN_CAMERA,this);
+            SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference?.Register(this);
         }
 
 
@@ -67,7 +70,7 @@ namespace Vain.Core
         
 
             this.GlobalTranslate(relMotion);
-            //TODO: Add smoothing and eventually clipping
+   
             _oldPlayerPosition = Player.Reference.GlobalPosition; 
 
         }
@@ -82,7 +85,11 @@ namespace Vain.Core
             return GetGlobalMousePosition();
         }
 
-
+        public override void _ExitTree()
+        {
+            SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Free(this);
+            
+        }
      
     }
 }
