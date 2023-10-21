@@ -105,8 +105,14 @@ namespace Vain.Core
         public virtual void Kill()
         {
 
+        
+
             EmitSignal(SignalName.CharacterKilled);
-           
+
+            SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Free(this);
+            
+        
+
             this.QueueFree();
 
 
