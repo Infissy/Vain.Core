@@ -482,10 +482,45 @@ namespace Vain.CLI
         };  
 
 
+    
+          public static readonly Program Level = new()
+        {
+            ProgramName  = "level",
 
+            ProgramDescription = "list / load key:string",
+            
+            
+            CommandFunction =  
+            {
 
+                new Command
+                (
+                    "list",
+                    () =>
+                    {
+                            
+                        var levels = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.BehaviourIndex.IndexedEntities.Keys;
+                    
+                        var outputLevels = "\nAvailable Levels:\n";
 
-        
+                        foreach (var level in levels)
+                        {
+                            outputLevels += $"      {level}\n";
+                        }
+                        outputLevels += "\n";
+                        Logger.GlobalLogger.Information(outputLevels);
+                    }
+                ),
+                new Command 
+                (
+                    "load ?:s",
+                    (string key) => {
+                        
+                        SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference?.LoadLevel(key);
+                    }
+                ),
+            }
+        };
 
     }
 

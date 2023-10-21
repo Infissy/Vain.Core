@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://c025rj3vjfxkp"]
+
+[ext_resource type="Script" path="res://Source/LevelManager.cs" id="1_apjlu"]
+[ext_resource type="PackedScene" uid="uid://cvxv0qjcj3pic" path="res://Prefabs/Console.tscn" id="2_fialw"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_jl2c8"]
+viewport_path = NodePath("SubViewport")
+
+[node name="BaseLevel" type="Node"]
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(480, 270)
+script = ExtResource("1_apjlu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_jl2c8")
+metadata/_edit_use_anchors_ = true
+
+[node name="Console" parent="." instance=ExtResource("2_fialw")]

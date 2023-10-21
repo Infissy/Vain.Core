@@ -24,7 +24,9 @@ namespace Vain
             {SingleSourceConfiguration.EntityIndex, new string[]{"Indices", "EntityIndex"}},
             {SingleSourceConfiguration.BehaviourIndex, new string[]{"Indices", "BehaviourIndex"}},
             {SingleSourceConfiguration.ComponentIndex, new string[]{"Indices", "ComponentIndex"}},
+            {SingleSourceConfiguration.LevelIndex, new string[]{"Indices", "LevelIndex"}},
             {SingleSourceConfiguration.CharacterFolder, new string[]{"Folders", "CharacterFolder"}},
+
         };
 
         static readonly Dictionary<MultiSourceConfiguration,string[]> _MultiSourceConfigurations = new()
@@ -106,6 +108,7 @@ namespace Vain
             EntityIndex,
             ComponentIndex,
             BehaviourIndex,
+            LevelIndex,
             CharacterFolder,
         }
 

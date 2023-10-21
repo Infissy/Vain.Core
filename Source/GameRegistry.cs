@@ -9,7 +9,7 @@ namespace Vain.Core
         public IndexResource EntityIndex {get;set;} 
         public IndexResource ComponentIndex {get;set;} 
         public IndexResource BehaviourIndex {get;set;} 
-        
+        public IndexResource LevelIndex {get;set;} 
         public override void _Ready()
         {
             base._Ready();
@@ -17,6 +17,8 @@ namespace Vain.Core
             EntityIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.EntityIndex));
             ComponentIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.ComponentIndex));
             BehaviourIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.BehaviourIndex));
+            LevelIndex = ResourceLoader.Load<IndexResource>(ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.LevelIndex));
+
 
 
             

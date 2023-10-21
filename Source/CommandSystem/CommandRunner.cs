@@ -43,6 +43,7 @@ namespace Vain.CLI
             RegisterProgram(DefaultPrograms.SingletonList);
             RegisterProgram(DefaultPrograms.Exec);
             RegisterProgram(DefaultPrograms.SubBehaviour);
+            RegisterProgram(DefaultPrograms.Level);
         }
 
 
