@@ -24,11 +24,9 @@ namespace Vain.InteractionSystem.InteractionGraph
 
         public override void _ExitTree()
         { 
+         
+            dock?.QueueFree();
             
-            if (dock != null)
-            {
-                dock.QueueFree();
-            }
         }
 
         
