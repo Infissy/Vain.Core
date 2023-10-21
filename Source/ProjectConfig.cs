@@ -35,7 +35,7 @@ namespace Vain
             {MultiSourceConfiguration.ComponentsFolder, new string[]{"Folders", "ComponentFolder"}},
             {MultiSourceConfiguration.LevelsFolder, new string[]{"Folders", "LevelFolder"}},
             {MultiSourceConfiguration.ScriptsFolder, new string[]{"Folders", "ScriptFolder"}},
-            {MultiSourceConfiguration.ScriptsFolder, new string[]{"Folders", "SourceFolder"}},
+            {MultiSourceConfiguration.SourceFolder, new string[]{"Folders", "SourceFolder"}},
            
         };
 
