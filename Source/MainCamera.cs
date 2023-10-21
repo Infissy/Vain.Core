@@ -14,6 +14,12 @@ namespace Vain.Core
     
     public partial class MainCamera : Camera2D , IEntity
     {
+
+
+        Vector2 _oldPlayerPosition;
+        
+
+
         
         /// <summary>
         /// Character to follow.
@@ -30,7 +36,6 @@ namespace Vain.Core
 
 
 
-        Vector2 _oldPlayerPosition;
 
 
         public uint RuntimeID {get; private set;}
