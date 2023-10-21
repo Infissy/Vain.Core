@@ -131,8 +131,6 @@ namespace Vain.Core
         }
 
 
-        //Used mainly for the useragent to 
-   
-    
+      
     }
 }
