@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vain.CLI;
@@ -24,12 +25,11 @@ namespace Vain.Console
 
         internal ConsoleBuffer History {get;set;} = ConsoleBuffer.Instance;        
 
+        public List<string> _runtimeBuffer = new List<string>();
 
-        public List<string> _buffer = new List<string>();
-
-        public List<string> Buffer 
+        public List<string> BufferedMessages 
         {
-            get { return _buffer; }
+            get { return _runtimeBuffer; }
             
         } 
 
@@ -43,12 +43,8 @@ namespace Vain.Console
             var button = GetNode("VBoxContainer/HBoxContainer/Button") as Button;
             _inputBox = GetNode("VBoxContainer/HBoxContainer/LineEdit") as LineEdit;
 
-
-
             button.Pressed += buttonPressed;
             _inputBox.TextSubmitted += buttonPressed;
-
-        
             _inputBox.TextChanged += (string text) => 
                 {
                     _historyMode = text == History.Current() ? true : false;
@@ -93,8 +89,6 @@ namespace Vain.Console
             if(text.Length == 0)
                 return;
 
-
-            var parsed = text.Split(' ');
                 
             CommandRunner.Instance.Run(text);
             History.Add(text);
@@ -104,9 +98,11 @@ namespace Vain.Console
 
         public void Write(string output)
         {
-            _buffer.Add(output);
+            _runtimeBuffer.Add(output);
            
             EmitSignal(SignalName.OnUpdate);
+
+            _runtimeBuffer.Clear();
         }
 
         public void Write(FormattedMessage[] formattedOutput)
@@ -120,7 +116,7 @@ namespace Vain.Console
 
             
 
-            _buffer.Add(message);
+            _runtimeBuffer.Add(message);
             EmitSignal(SignalName.OnUpdate);
         }
 

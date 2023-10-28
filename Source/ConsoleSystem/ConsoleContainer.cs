@@ -1,35 +1,25 @@
 using Godot;
 
-public partial class ConsoleContainer : VBoxContainer{
 
-    bool visible = false;
-    
+namespace Vain.Console
+{
 
+    public partial class ConsoleContainer : VBoxContainer{
 
-    public override void _Ready()
-    {
-        base._Ready();
-
+        bool visible = false;
         
-        this.Hide();
-    
-    }
 
 
-    public override void _UnhandledInput(InputEvent @event)
+        public override void _Ready()
         {
+            base._Ready();
 
             
-            base._UnhandledInput(@event);
-
-            if (@event is InputEventKey){
-                var keyevent = @event as InputEventKey;
-                if(keyevent.Pressed  &&  keyevent.Keycode  == Key.Backslash ){
-                }
-
-
-            }
+            this.Hide();
+        
         }
+
+
 
         public override void _Process(double delta)
         {
@@ -46,4 +36,6 @@ public partial class ConsoleContainer : VBoxContainer{
             visible = !visible;
 
         }
+}
+
 }
