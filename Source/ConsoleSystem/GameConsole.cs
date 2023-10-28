@@ -20,7 +20,9 @@ namespace Vain.Console
 
 
         LineEdit _inputBox;
+        bool _historyMode = false;
 
+        internal ConsoleBuffer History {get;set;} = ConsoleBuffer.Instance;        
 
 
         public List<string> _buffer = new List<string>();
@@ -47,8 +49,36 @@ namespace Vain.Console
             _inputBox.TextSubmitted += buttonPressed;
 
         
+            _inputBox.TextChanged += (string text) => 
+                {
+                    _historyMode = text == History.Current() ? true : false;
+                    History.Reset();
+                };
         }
         
+
+        public override void _Input(InputEvent @input)
+        {
+
+            if(_inputBox.Text.Length == 0 || _historyMode)
+            {
+                
+
+                //FIXME: Remove static action reference, move it all into one placee 
+                if (@input.IsActionPressed("ui_up"))
+                {
+                    _inputBox.Text = History.Back();
+                    _historyMode = true;
+                }
+
+                if(@input.IsActionPressed("ui_down"))
+                {
+                    _inputBox.Text = History.Forward();
+                    _historyMode = true;
+                }
+            
+            }
+        }
 
         public void buttonPressed(){
             
@@ -67,8 +97,7 @@ namespace Vain.Console
             var parsed = text.Split(' ');
                 
             CommandRunner.Instance.Run(text);
-
-
+            History.Add(text);
             _inputBox.Clear();
         
         }
