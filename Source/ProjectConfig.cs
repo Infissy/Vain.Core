@@ -26,6 +26,8 @@ namespace Vain
             {SingleSourceConfiguration.ComponentIndex, new string[]{"Indices", "ComponentIndex"}},
             {SingleSourceConfiguration.LevelIndex, new string[]{"Indices", "LevelIndex"}},
             {SingleSourceConfiguration.CharacterFolder, new string[]{"Folders", "CharacterFolder"}},
+            {SingleSourceConfiguration.SavesFolder, new string[]{"Folders", "SavesFolder"}},
+
 
         };
 
@@ -110,6 +112,7 @@ namespace Vain
             BehaviourIndex,
             LevelIndex,
             CharacterFolder,
+            SavesFolder,
         }
 
         public enum MultiSourceConfiguration
