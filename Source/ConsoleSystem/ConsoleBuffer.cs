@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using Godot;
 
@@ -45,7 +46,8 @@ namespace Vain.Console
             if(History.Count == HISTORY_SIZE)
                 History.RemoveAt(History.Count - 1);
             
-            History.Add(command);
+            if(History.Last() != command)
+                History.Add(command);
             Reset();
         
             var path = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.SavesFolder) + "/ConsoleHistory.tres";
