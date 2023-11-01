@@ -60,16 +60,19 @@ namespace Vain.Console
             {
                 
 
-                //FIXME: Remove static action reference, move it all into one placee 
+                //FIXME: Remove static action reference, move it all into one place
                 if (@input.IsActionPressed("ui_up"))
                 {
                     _inputBox.Text = History.Back();
+                     CallDeferred(MethodName.CursorToEnd);
                     _historyMode = true;
                 }
 
                 if(@input.IsActionPressed("ui_down"))
                 {
                     _inputBox.Text = History.Forward();
+                    CallDeferred(MethodName.CursorToEnd);
+                    
                     _historyMode = true;
                 }
             
@@ -157,7 +160,12 @@ namespace Vain.Console
 
             return parsedMessage;
         }
-    
+
+
+        void CursorToEnd()
+        {
+            _inputBox.CaretColumn = _inputBox.Text.Length;
+        }    
     
     }
 
