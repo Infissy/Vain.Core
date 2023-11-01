@@ -50,7 +50,9 @@ namespace Vain.Core
             
 
 
-            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, ()=>{});
+
+
+            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, ()=> this.GlobalPosition = Player.Reference.GlobalPosition);
 
 
             if(Player.Reference != null)
