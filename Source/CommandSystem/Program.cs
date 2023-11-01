@@ -418,6 +418,53 @@ namespace Vain.CLI
                         
                     }
                 
+                ),
+                new Command
+                (
+                    "?:s ?:s",
+                    (string entity,string spawnPointTag) => 
+                    {
+
+
+                        
+
+
+                        var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities;
+                        
+
+
+                        if(!entities.ContainsKey(entity))
+                        {
+                            Logger.GlobalLogger.Information($"No entity found with identifier {entity}");
+                            return "";
+                        }
+                        
+
+                        var spawnPoint = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.SpawnPoints.GetValueOrDefault(spawnPointTag);
+                
+                        if(spawnPoint == null)
+                        {
+                            Logger.GlobalLogger.Information($"No spawn point found with tag {spawnPointTag}");
+                            return "";
+                        }
+                        
+                        
+                        var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities[entity];
+
+                        var instance = (entityPrefab as PackedScene).Instantiate();
+                        
+
+                        
+                        SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.AddChild(instance);
+                        
+                    
+                        (instance as Node2D).GlobalPosition = spawnPoint.GlobalPosition;
+
+
+                        return (instance as IEntity).RuntimeID.ToString();
+                        
+                    }
+                
                 )
             
             }
@@ -499,7 +546,7 @@ namespace Vain.CLI
                     () =>
                     {
                             
-                        var levels = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.BehaviourIndex.IndexedEntities.Keys;
+                        var levels = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.LevelIndex.IndexedEntities.Keys;
                     
                         var outputLevels = "\nAvailable Levels:\n";
 
