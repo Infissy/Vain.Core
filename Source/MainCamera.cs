@@ -84,7 +84,7 @@ namespace Vain.Core
         /// </summary>
         public Vector2 GetMouseScenePosition()
         {
-            return GetGlobalMousePosition();
+            return (GetTree().Root.GetMousePosition() - GetTree().Root.Size / 2) / 4 + this.GlobalPosition;
         }
 
         public override void _ExitTree()
