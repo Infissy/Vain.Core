@@ -14,8 +14,8 @@ namespace Vain
 
 
         static readonly string[] _ConfigurationPaths = new string[]{
-            "res://vain.config.ini",
-            "res://GameData/game.config.ini",
+            "res://Core/core.config.ini",
+            "res://Vain/vain.config.ini",
         };
         
         static readonly Dictionary<SingleSourceConfiguration,string[]> _SingleSourceConfigurations = new()
