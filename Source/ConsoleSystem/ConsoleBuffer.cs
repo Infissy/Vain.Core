@@ -20,7 +20,12 @@ namespace Vain.Console
 
                 if(_instance == null)
                 {
-                    var path = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.SavesFolder) + "/ConsoleHistory.tres";
+                    var saveFolder = ProjectConfig.LoadConfiguration(ProjectConfig.SingleSourceConfiguration.SavesFolder);
+                    
+                    DirAccess.MakeDirAbsolute(saveFolder);
+
+
+                    var path = saveFolder  + "/ConsoleHistory.tres";
                     if(!ResourceLoader.Exists(path))
                     {
                         ResourceSaver.Save(new ConsoleBuffer(),path);
@@ -46,7 +51,7 @@ namespace Vain.Console
             if(History.Count == HISTORY_SIZE)
                 History.RemoveAt(History.Count - 1);
             
-            if(History.Last() != command)
+            if(History.Count == 0 || History.Last()  != command)
                 History.Add(command);
             Reset();
         
