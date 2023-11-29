@@ -41,6 +41,7 @@ namespace Vain.Log
         {
             base._Process(delta);
 
+            //Keeps the scroll to the bottom
             if(oldCount < items.Count ){
                 container.ScrollVertical = (int)container.GetVScrollBar().MaxValue;
                 oldCount = items.Count;
@@ -50,21 +51,22 @@ namespace Vain.Log
         void OnBufferUpdate()
         {
         
-            var output = console.Buffer;
+            var output = console.BufferedMessages;
 
             for (int i = items.Count; i < output.Count; i++)
             {
-                var label = new RichTextLabel();
+                var label = new RichTextLabel
+                {
+                    FitContent = true,
 
-                label.FitContent = true;
+                    SizeFlagsHorizontal = SizeFlags.Expand | SizeFlags.Fill,
 
-                label.SizeFlagsHorizontal = SizeFlags.Expand | SizeFlags.Fill;
-                
-                label.BbcodeEnabled = true;
+                    BbcodeEnabled = true,
 
-                label.Text = output[i];
+                    Text = output[i]
+                };
 
-                if(Normal != null)
+                if (Normal != null)
                 {
                     label.AddThemeFontOverride("normal_font",Normal) ;
                     label.AddThemeFontOverride("bold_font",Bold) ;

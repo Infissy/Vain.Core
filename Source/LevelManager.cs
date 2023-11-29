@@ -18,6 +18,7 @@ namespace Vain.Core
 
 
 		List<Character> _characters = new List<Character>();
+		Dictionary<string ,SpawnPoint> _spawnPoints = new Dictionary<string, SpawnPoint>();
 		Dictionary<uint, IEntity> _entities = new Dictionary<uint, IEntity>();
 
 
@@ -28,6 +29,13 @@ namespace Vain.Core
 
 		public ReadOnlyCollection<IEntity> Entities => _entities.Values.ToList().AsReadOnly();
 
+		public ReadOnlyDictionary<string,SpawnPoint> SpawnPoints => new(_spawnPoints);
+
+		public uint Register(SpawnPoint spawnPoint)
+		{
+			_spawnPoints.Add(spawnPoint.Tag,spawnPoint);
+			return Register(spawnPoint as IEntity);
+		}
 		public uint Register(Character character)
 		{
 			

@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vain.CLI;
@@ -20,14 +21,15 @@ namespace Vain.Console
 
 
         LineEdit _inputBox;
+        bool _historyMode = false;
 
+        internal ConsoleBuffer History {get;set;} = ConsoleBuffer.Instance;        
 
+        public List<string> _runtimeBuffer = new List<string>();
 
-        public List<string> _buffer = new List<string>();
-
-        public List<string> Buffer 
+        public List<string> BufferedMessages 
         {
-            get { return _buffer; }
+            get { return _runtimeBuffer; }
             
         } 
 
@@ -41,14 +43,41 @@ namespace Vain.Console
             var button = GetNode("VBoxContainer/HBoxContainer/Button") as Button;
             _inputBox = GetNode("VBoxContainer/HBoxContainer/LineEdit") as LineEdit;
 
-
-
             button.Pressed += buttonPressed;
             _inputBox.TextSubmitted += buttonPressed;
-
-        
+            _inputBox.TextChanged += (string text) => 
+                {
+                    _historyMode = text == History.Current() ? true : false;
+                    History.Reset();
+                };
         }
         
+
+        public override void _Input(InputEvent @input)
+        {
+
+            if(_inputBox.Text.Length == 0 || _historyMode)
+            {
+                
+
+                //FIXME: Remove static action reference, move it all into one place
+                if (@input.IsActionPressed("ui_up"))
+                {
+                    _inputBox.Text = History.Back();
+                     CallDeferred(MethodName.CursorToEnd);
+                    _historyMode = true;
+                }
+
+                if(@input.IsActionPressed("ui_down"))
+                {
+                    _inputBox.Text = History.Forward();
+                    CallDeferred(MethodName.CursorToEnd);
+                    
+                    _historyMode = true;
+                }
+            
+            }
+        }
 
         public void buttonPressed(){
             
@@ -63,21 +92,20 @@ namespace Vain.Console
             if(text.Length == 0)
                 return;
 
-
-            var parsed = text.Split(' ');
                 
             CommandRunner.Instance.Run(text);
-
-
+            History.Add(text);
             _inputBox.Clear();
         
         }
 
         public void Write(string output)
         {
-            _buffer.Add(output);
+            _runtimeBuffer.Add(output);
            
             EmitSignal(SignalName.OnUpdate);
+
+            _runtimeBuffer.Clear();
         }
 
         public void Write(FormattedMessage[] formattedOutput)
@@ -91,7 +119,7 @@ namespace Vain.Console
 
             
 
-            _buffer.Add(message);
+            _runtimeBuffer.Add(message);
             EmitSignal(SignalName.OnUpdate);
         }
 
@@ -132,7 +160,12 @@ namespace Vain.Console
 
             return parsedMessage;
         }
-    
+
+
+        void CursorToEnd()
+        {
+            _inputBox.CaretColumn = _inputBox.Text.Length;
+        }    
     
     }
 

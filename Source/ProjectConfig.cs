@@ -14,8 +14,8 @@ namespace Vain
 
 
         static readonly string[] _ConfigurationPaths = new string[]{
-            "res://vain.config.ini",
-            "res://GameData/game.config.ini",
+            "res://Core/core.config.ini",
+            "res://Vain/vain.config.ini",
         };
         
         static readonly Dictionary<SingleSourceConfiguration,string[]> _SingleSourceConfigurations = new()
@@ -26,6 +26,8 @@ namespace Vain
             {SingleSourceConfiguration.ComponentIndex, new string[]{"Indices", "ComponentIndex"}},
             {SingleSourceConfiguration.LevelIndex, new string[]{"Indices", "LevelIndex"}},
             {SingleSourceConfiguration.CharacterFolder, new string[]{"Folders", "CharacterFolder"}},
+            {SingleSourceConfiguration.SavesFolder, new string[]{"Folders", "SavesFolder"}},
+
 
         };
 
@@ -110,6 +112,7 @@ namespace Vain
             BehaviourIndex,
             LevelIndex,
             CharacterFolder,
+            SavesFolder,
         }
 
         public enum MultiSourceConfiguration

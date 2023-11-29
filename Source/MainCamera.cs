@@ -55,7 +55,9 @@ namespace Vain.Core
             
 
 
-            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, ()=>{});
+
+
+            Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, ()=> this.GlobalPosition = Player.Reference.GlobalPosition);
 
 
             if(Player.Reference != null)
@@ -87,7 +89,7 @@ namespace Vain.Core
         /// </summary>
         public Vector2 GetMouseScenePosition()
         {
-            return GetGlobalMousePosition();
+            return (GetTree().Root.GetMousePosition() - GetTree().Root.Size / 2) / 4 + this.GlobalPosition;
         }
 
         public override void _ExitTree()
