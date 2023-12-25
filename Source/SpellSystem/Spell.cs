@@ -1,12 +1,9 @@
 using Godot;
 
+namespace Vain.SpellSystem;
 
-
-namespace Vain.SpellSystem.New
+public abstract partial class Spell : Resource
 {
-    abstract partial class Spell : Resource
-    {
-       [Export]
-       public int CastCount; 
-    }
+    [Export]
+    public int CastCount;
 }

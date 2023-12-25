@@ -5,42 +5,37 @@ using Vain.InteractionSystem;
 using Vain.Singleton;
 
 
-namespace Vain.UI.DialogueSystem
+namespace Vain.UI.DialogueSystem;
+
+//TODO: At the moment it doesn't handle character switching, fix it if necessary
+public partial class DialogueHandler : Control
 {
+    [Export]
+    PackedScene _dialogueBox;
 
-    //TODO: At the moment it doesn't handle character switching, fix it if necessary
-    public partial class DialogueHandler : Control
+
+    public override void _Ready()
     {
-        [Export]
-        PackedScene _dialogueBox;
+        base._Ready();
+
+        SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER)
+                .GetComponent<InteractorComponent>()
+                .RegisterToSignal(InteractorComponent.SignalName.OnDialogue,new Callable(this,MethodName.HandleDialogue));
+    }
 
 
-        public override void _Ready()
-        {
-            base._Ready();
-
-            SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER)
-                    .GetComponent<InteractorComponent>()
-                    .RegisterToSignal(InteractorComponent.SignalName.OnDialogue,new Callable(this,MethodName.dialogueHandler));
-        
-        
-        
-        }
+    void HandleDialogue(string dialogue)
+    {
+        if(GetChildCount() > 0)
+            GetChild(0).QueueFree();
 
 
-        void dialogueHandler(string dialogue)
-        {
-            if(GetChildCount() > 0)
-                GetChild(0).QueueFree();
+        var dialogueBox = _dialogueBox.Instantiate<DialogueBox>();
 
+        AddChild(dialogueBox);
 
-            var dialogueBox = _dialogueBox.Instantiate<DialogueBox>();
-                
-            AddChild(dialogueBox);
-
-            dialogueBox.Dialogue = dialogue;
-            
-        }
+        dialogueBox.Dialogue = dialogue;
 
     }
+
 }

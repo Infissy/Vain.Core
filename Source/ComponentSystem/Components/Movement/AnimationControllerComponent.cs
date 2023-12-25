@@ -2,49 +2,48 @@ using System;
 using Godot;
 using Vain.SpellSystem;
 
-namespace Vain.Core.ComponentSystem
-{  
-    [GlobalClass]
-    public partial class AnimationControllerComponent : Component
+namespace Vain.Core.ComponentSystem;
+
+[GlobalClass]
+public partial class AnimationControllerComponent : Component
+{
+    enum Animation 
     {
-        enum Animation 
-        {
-            RUN,
-            IDLE,
-            LAUNCH,
-            CAST
-        }
-        AnimationPlayer _animationPlayer;
-        public override void _Ready()
-        {
-            base._Ready();
+        RUN,
+        IDLE,
+        LAUNCH,
+        CAST
+    }
+    AnimationPlayer _animationPlayer;
+    public override void _Ready()
+    {
+        base._Ready();
 
-            _animationPlayer = GetChild<AnimationPlayer>(1);
+        _animationPlayer = GetChild<AnimationPlayer>(1);
 
 
-        }
-        public override void _Process(double delta)
+    }
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        
+        
+        
+        if(Character.Velocity.Length() == 0)
         {
-            base._Process(delta);
-            
-           
-            
-            if(Character.Velocity.Length() == 0)
+            if(_animationPlayer.CurrentAnimation != "Cast")
             {
-                if(_animationPlayer.CurrentAnimation != "Cast")
-                {
-                    _animationPlayer.Play("Idle");
+                _animationPlayer.Play("Idle");
 
-                }
-                
             }
             
-            
-
         }
-           
+        
+        
 
+    }
         
-        
-    } 
-}
+
+    
+    
+} 

@@ -2,20 +2,17 @@ using Godot;
 
 using Vain.Singleton;
 
+namespace Vain.Core.ComponentSystem;
 
-namespace Vain.Core.ComponentSystem
+[GlobalClass]
+/// <summary>
+/// Required to register the current character as the player
+/// </summary>
+public partial class PlayerEntitySubBehaviour : SubBehaviour
 {
-    [GlobalClass]
-    /// <summary>
-    /// Required to register the current character as the player
-    /// </summary>
-    public partial class PlayerEntitySubBehaviour : SubBehaviour
+    public override void _Ready()
     {
-        public override void _Ready()
-        {
-            base._Ready();
-            SingletonManager.Register<Character>(SingletonManager.Singletons.PLAYER,BehaviourComponent.Character);
-        }
-        
+        base._Ready();
+        SingletonManager.Register(SingletonManager.Singletons.PLAYER,BehaviourComponent.Character);
     }
 }

@@ -1,9 +1,7 @@
-namespace Vain.Core
+namespace Vain.Core;
+internal enum CharacterAction
 {
-    internal enum CharacterAction
-    {
-        MOVE,
-        INTERACT,
-        CAST
-    }
+    MOVE,
+    INTERACT,
+    CAST
 }

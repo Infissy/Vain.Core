@@ -3,90 +3,75 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Vain.CLI
+namespace Vain.CLI;
+
+public class Command
 {
-    public class Command
+    public string[] Path { get; }
+    public Delegate Action { get; }
+    public Command(string path, Delegate action)
     {
-        public string[] Path {get;private set;}
-        public Delegate Action {get; private set;}
-        public Command(string path, Delegate action)
+        Path = path.Split(' ',StringSplitOptions.RemoveEmptyEntries);
+
+        Action = action;
+    }
+
+    static class InputType
+    {
+        public const string FLOAT = "?:f";
+        public const string INT = "?:n";
+        public const string STRING = "?:s";
+        public const string CONST_STRING = "c:s";
+    }
+
+
+
+    public bool TryParseParameters(string[] parameters, out object[] parsedParameters)
+    {
+        parsedParameters = null;
+
+        if(parameters.Length != Path.Length)
+            return false;
+
+        var localParameters = new object[parameters.Length];
+
+        for (int i = 0; i < parameters.Length; i++)
         {
-
-
-            var stringParams = path.Split(' ',StringSplitOptions.RemoveEmptyEntries);
-            Path = stringParams;
-
-
-
-            Action = action;
-        }
-
-        static class InputType
-        {
-            public const string FLOAT = "?:f";
-            public const string INT = "?:n";
-            public const string STRING = "?:s";
-            public const string CONST_STRING = "c:s";
-        }
-
-
-
-        public bool TryParseParameters(string[] parameters, out object[] parsedParameters)
-        {
-            parsedParameters = null;
-            if(parameters.Length != Path.Length)
-                return false;
-
-
-            object[] localParameters = new object[parameters.Length];
-
-            for (int i = 0; i < parameters.Length; i++)
+            switch (Path[i])
             {
-                switch (Path[i])
-                {
-                    case InputType.FLOAT:
-                        
-                        float f;
-                        if(!float.TryParse(parameters[i],NumberStyles.Float | NumberStyles.AllowThousands,CultureInfo.GetCultureInfo("en-US"), out f))
-                            return false;
+                case InputType.FLOAT:
 
-                        localParameters[i] = f;
-                        break;
+                    float f;
+                    if(!float.TryParse(parameters[i],NumberStyles.Float | NumberStyles.AllowThousands,CultureInfo.GetCultureInfo("en-US"), out f))
+                        return false;
 
-                    
-                    case InputType.INT:
-                        
-                        int n;
-                        if(!int.TryParse(parameters[i],NumberStyles.Integer,CultureInfo.GetCultureInfo("en-US"), out n))
-                            return false;
+                    localParameters[i] = f;
+                    break;
 
-                        localParameters[i] = n;
-                        break;
+                case InputType.INT:
 
+                    int n;
+                    if(!int.TryParse(parameters[i],NumberStyles.Integer,CultureInfo.GetCultureInfo("en-US"), out n))
+                        return false;
 
-                    case InputType.STRING:
-                        
-                        localParameters[i] = parameters[i];
+                    localParameters[i] = n;
+                    break;
 
+                case InputType.STRING:
 
-                        break;
+                    localParameters[i] = parameters[i];
 
+                    break;
 
-                    default:
-                        if(parameters[i] != Path[i])
-                            return false;
-                        localParameters[i] = null;
-                        break;
-                }     
-
+                default:
+                    if(parameters[i] != Path[i])
+                        return false;
+                    localParameters[i] = null;
+                    break;
             }
-
-            parsedParameters = localParameters.Where(p => p != null).ToArray();
-     
-            return true;
-
-
-
         }
+
+        parsedParameters = localParameters.Where(p => p != null).ToArray();
+        return true;
     }
 }

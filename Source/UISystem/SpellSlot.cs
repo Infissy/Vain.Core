@@ -50,7 +50,7 @@ namespace Vain.SpellSystem.UI
                 else
                 {
                     GetNode<Label>("Count").Text = "";
-                    Spell = Spell.NONE;
+                    //Spell = Spell.NONE;
                 }
                 
                  

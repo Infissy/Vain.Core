@@ -1,10 +1,9 @@
 using Godot;
 
-namespace Vain
-{
+namespace Vain.InteractionSystem;
 
-    public abstract partial class Interaction : Resource
-    {
-        
-    }
+
+public abstract partial class Interaction : Resource
+{
+    
 }

@@ -1,41 +1,13 @@
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Godot;
-using Vain.Core;
-using Vain.Log.Visualizer;
-using Vain.Singleton;
+namespace Vain.Log;
 
-namespace Vain.Log
+public interface ILogger
 {
-    
-    public interface ILogger
-    {
-
-
-
-
-
-
-
-        public void Critical(string message);
-        public void Warning(string message);
-        public void Debug(string message);
-        public void Important(string message);
-        public void Information(string message);
-        public void Command(string message, string parameters = "", bool showTimestamp = true);
-
-
-        public void Runtime(string label,string message, string parameters="");
-
-       
-
-    }
-
-
-
-
-    
+    void Critical(string message);
+    void Warning(string message);
+    void Debug(string message);
+    void Important(string message);
+    void Information(string message);
+    void Command(string message, string parameters = "", bool showTimestamp = true);
+    void Runtime(string label,string message, string parameters="");
 }

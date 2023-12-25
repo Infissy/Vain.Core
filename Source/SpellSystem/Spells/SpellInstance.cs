@@ -30,7 +30,7 @@ namespace Vain.SpellSystem
 
         
         [Export]
-        public SpellChanneler? NextSpell {get; set;}
+        public SpellChanneler NextSpell {get; set;}
         
 
         public Character Caster {get; set;}

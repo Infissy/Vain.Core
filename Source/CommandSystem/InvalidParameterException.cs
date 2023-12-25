@@ -1,7 +1,6 @@
-namespace Vain.CLI
+namespace Vain.CLI;
+
+public class InvalidParameterException : CommandException
 {
-    public partial class InvalidParameterException : CommandException
-    {
-        
-    }
+
 }

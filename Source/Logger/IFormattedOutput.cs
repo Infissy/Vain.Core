@@ -1,10 +1,8 @@
-namespace Vain.Log
-{
+namespace Vain.Log;
 
-    public interface IFormattedOutput : IOutput
-    {
-        void Write(FormattedMessage[] formattedOutput);
-    
-    }
-    
+public interface IFormattedOutput : IOutput
+{
+    void Write(FormattedMessage[] formattedOutput);
+
 }
+
