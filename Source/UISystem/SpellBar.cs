@@ -15,7 +15,7 @@ namespace Vain.SpellSystem.UI
         PackedScene _spellSlot;
 
 
-        Singleton<Character>? _currentCharacter;
+        Singleton<Character> _currentCharacter;
         public override void _EnterTree()
         {
             SingletonManager.Register(SingletonManager.Singletons.UI.SPELL_BAR,this);

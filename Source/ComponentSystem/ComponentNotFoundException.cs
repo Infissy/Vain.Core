@@ -1,9 +1,8 @@
 using System;
 
-namespace Vain
-{
-    class ComponentNotFoundException : NullReferenceException
-    {
+namespace Vain.Core.ComponentSystem;
 
-    }
+class ComponentNotFoundException : NullReferenceException
+{
+
 }

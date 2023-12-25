@@ -1,11 +1,8 @@
-
 using System;
 
+namespace Vain.CLI;
 
-namespace Vain.CLI
+public abstract class CommandException : Exception
 {
-    public abstract class CommandException : Exception
-    {
 
-    }
 }

@@ -1,9 +1,8 @@
 
 
-namespace Vain.Core
+namespace Vain.Core;
+
+class RequiredChildMissingException
 {
-    class RequiredChildMissingException
-    {
-        
-    }
+    
 }

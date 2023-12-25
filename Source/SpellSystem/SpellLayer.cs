@@ -1,11 +1,9 @@
 ﻿
+namespace Vain.SpellSystem;
 
-namespace Vain.SpellSystem
+internal static class SpellLayer
 {
-	internal static class SpellLayer
-	{
-		public static uint NPC = 1024;
-		public static uint PLAYER = 2048;
+	public static uint NPC = 1024;
+	public static uint PLAYER = 2048;
 
-	}
 }

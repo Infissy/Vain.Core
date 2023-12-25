@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Godot;
-namespace Vain.SpellSystem.New
+namespace Vain.SpellSystem;
+
+partial class SpellSystem : Node
 {
-    partial class SpellSystem : Node
-    {
-        
-    }
+
 }

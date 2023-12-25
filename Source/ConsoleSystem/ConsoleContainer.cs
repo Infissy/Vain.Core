@@ -1,41 +1,36 @@
 using Godot;
 
 
-namespace Vain.Console
-{
-
-    public partial class ConsoleContainer : VBoxContainer{
-
-        bool visible = false;
-        
+namespace Vain.Console;
 
 
-        public override void _Ready()
-        {
-            base._Ready();
+public partial class ConsoleContainer : VBoxContainer{
 
-            
-            this.Hide();
-        
-        }
+    bool _visible;
+
+    public override void _Ready()
+    {
+        base._Ready();
+
+        Hide();
+    }
 
 
 
-        public override void _Process(double delta)
-        {
-            base._Process(delta);
-            if (!Input.IsActionJustPressed("ui_console"))
-                return;
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        if (!Input.IsActionJustPressed("ui_console"))
+            return;
 
-    
-            if(!visible)
-                Show();
-            else
-                Hide();
 
-            visible = !visible;
+        if(!_visible)
+            Show();
+        else
+            Hide();
 
-        }
+        _visible = !_visible;
+
+    }
 }
 
-}

@@ -2,31 +2,24 @@ using System;
 using System.Diagnostics;
 using Godot;
 
-namespace Vain.UI
+namespace Vain.UI;
+
+
+public partial class HealthBar : ProgressBar
 {
-
-    //? Temporary class, might need in case of 
-    public partial class HealthBar : ProgressBar
+    public float MaxHealth
     {
-        
-        public float MaxHealth 
+        set
         {
-            set
-            {
-                base.MaxValue = value;
-            }
+            base.MaxValue = value;
         }
-        public float Health 
-        {
-            set
-            {
-                
-                base.Value = value;
-                
-            }
-        }
-
-        
-
     }
+    public float Health
+    {
+        set
+        {
+            base.Value = value;
+        }
+    }
+
 }
