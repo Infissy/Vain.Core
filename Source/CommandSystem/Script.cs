@@ -1,22 +1,17 @@
-namespace Vain.CLI
+namespace Vain.CLI;
+
+public class Script
 {
-    public class Script
+    public string[] TextScript { get; }
+    public Script(string text)
     {
-        public string[] TextScript {get;private set;}
-        public Script(string text) 
+        TextScript = text.Split("\n");
+    }
+    public void Run()
+    {
+        foreach (var line in TextScript)
         {
-            TextScript = text.Split("\n");
+            CommandRunner.Instance.Run(line);
         }
-        public void Run()
-        {
-            foreach (var line in TextScript)
-            {
-                CommandRunner.Instance.Run(line);
-                
-            }
-        }
-
-
-        
-    }   
+    }
 }

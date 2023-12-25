@@ -1,47 +1,39 @@
 using System;
+using System.Diagnostics;
 using Godot;
-using Vain.Core;
-using Vain.Log;
+
 using Vain.Singleton;
-namespace Vain.Core.ComponentSystem.Behaviour
+
+namespace Vain.Core.ComponentSystem.Behaviour;
+
+public partial class PlayerMovementSubBehaviour : SubBehaviour
 {
-	
+	Singleton<MainCamera> _camera = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA);
 
-	public partial class PlayerMovementSubBehaviour : SubBehaviour 
+	public override void _Ready()
 	{
-		
-	 
-
-	
-		public override void _Process(double delta)
-		{
-			base._Process(delta);
-			
-			if(!Input.IsActionJustPressed("player_movement_input"))
-				return;
-
-		
-			var target = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA).Reference.GetMouseScenePosition();
-
-
-			if(target == Vector2.Inf)
-				return;
-
-
-			var controller = base.BehaviourComponent.Character.GetComponent<MovementControllerComponent>();
-			
-			if(controller == null)
-			{
-				Logger.GlobalLogger.SetContext(this).Critical("Player movements needs a CharacterController in order to work properly, please add it to the entity");
-				return;
-			}
-
-			controller.Target = target;
-			
-
-
-		}
+		base._Ready();
+		_camera = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA);
 	}
 
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		if(!Input.IsActionJustPressed("player_movement_input"))
+			return;
 
+		if(_camera.Disposed)
+			return;
+
+		var target = _camera?.Reference.GetMouseScenePosition();
+
+		if(target == Vector2.Inf)
+			return;
+
+		var controller = BehaviourComponent.Character.GetComponent<MovementControllerComponent>();
+
+		Debug.Assert(controller != null, "MovementControllerComponent not found in Character");
+
+		controller.Target = target ?? BehaviourComponent.Character.GlobalPosition;
+	}
 }

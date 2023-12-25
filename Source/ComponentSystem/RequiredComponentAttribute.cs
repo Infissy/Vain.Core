@@ -1,11 +1,9 @@
 using System;
 
-namespace Vain
-{
-    [AttributeUsage(AttributeTargets.Field)]
-    class RequiredComponentAttribute : Attribute
-    {
-        //Check Component class for explanation
-    }
+namespace Vain.Core;
 
+[AttributeUsage(AttributeTargets.Field)]
+class RequiredComponentAttribute : Attribute
+{
+    //Check Component class for explanation
 }

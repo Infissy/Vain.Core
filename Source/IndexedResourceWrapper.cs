@@ -1,21 +1,22 @@
 using Godot;
 
-namespace Vain.Core
+
+namespace Vain.Core;
+
+
+[GlobalClass]
+public partial class IndexedResourceWrapper : Resource
 {
-    [GlobalClass]
-    public partial class IndexedResourceWrapper : Resource
+    [Export]
+    public GodotObject Resource {get;set;}
+
+
+    public Node Instantiate()
     {
-        [Export]
-        public GodotObject Resource {get;set;}
-
-
-        public Node Instantiate()
-        {
-            if(Resource is PackedScene scene)
-                return scene.Instantiate();
-            if(Resource is CSharpScript script)
-                return (Node) script.New();
-            return null;
-        }
+        if(Resource is PackedScene scene)
+            return scene.Instantiate();
+        if(Resource is CSharpScript script)
+            return (Node) script.New();
+        return null;
     }
 }

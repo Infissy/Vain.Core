@@ -1,26 +1,24 @@
 using Godot;
 
-namespace Vain
+namespace Vain.UI.DialogueSystem;
+
+public partial class DialogueBox : Control
 {
-    public partial class DialogueBox : Control
+
+    Label _textLabel;
+    public string Dialogue
     {
-        
-        Label _textLabel;
-        public string Dialogue 
+        set
         {
-            set
-            {
-                _textLabel.Text = value;
-            }
+            _textLabel.Text = value;
         }
+    }
 
 
-        
-        public override void _Ready()
-        {
-            base._Ready();
-            _textLabel = GetNode<Label>("MarginContainer/Label");
+    public override void _Ready()
+    {
+        base._Ready();
+        _textLabel = GetNode<Label>("MarginContainer/Label");
 
-        }
     }
 }
