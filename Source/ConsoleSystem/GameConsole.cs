@@ -45,6 +45,9 @@ public partial class GameConsole : Node, IFormattedOutput
                 _historyMode = (text == History.Current());
                 History.ResetPointer();
             };
+
+        //!FIXME: starting script is dependent on gameconsole. Implement a separate service that can call this function
+        CommandRunner.Instance.Run("exec autoexec");
     }
 
     public override void _Input(InputEvent @input)
