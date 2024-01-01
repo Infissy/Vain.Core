@@ -114,7 +114,7 @@ public partial class GameConsole : Node, IFormattedOutput
     }
 
 
-    string ParseMessage(string message, OutputFormat format){
+    static string ParseMessage(string message, OutputFormat format){
 
         string parsedMessage = message;
 

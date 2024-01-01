@@ -10,19 +10,16 @@ public static partial class DefaultPrograms
     {
 
         Name = "exec",
-        
 
-        
-
-        Commands = 
+        Commands =
         {
-            new Command 
+            new Command
             (
                 "?:s",
-                (string scriptName) => 
+                (string scriptName) =>
                 {
                     var script = ScriptLoader.LoadScript(scriptName.Contains(".cfg") ? scriptName : scriptName + ".cfg");
-                    
+
                     if(script == null)
                     {
                         RuntimeInternalLogger.Instance.Warning($"Script {scriptName} does not exist.");
@@ -32,6 +29,6 @@ public static partial class DefaultPrograms
                 }
             )
         }
-    };  
+    };
 
 }
