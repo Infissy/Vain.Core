@@ -151,23 +151,23 @@ public class RuntimeInternalLogger : ILogger
         foreach (var output in _outputs)
         {
 
-            if((output.Value & level) != 0){
-
-                if(output.Key is IFormattedOutput formattedOutput)
-                {
-                    formattedOutput.Write(messages.ToArray());
-                    return;
-                }
+            if((output.Value & level) == 0)
+                continue;
 
 
-                var cleanMessage = "";
-                foreach (var message in messages.Select(m => m.Message))
-                {
-                    cleanMessage +=  $" {message}";
-                }
-                output.Key.Write(cleanMessage);
-
+            if(output.Key is IFormattedOutput formattedOutput)
+            {
+                formattedOutput.Write(messages.ToArray());
+                continue;
             }
+
+
+            var cleanMessage = "";
+            foreach (var message in messages.Select(m => m.Message))
+            {
+                cleanMessage +=  $" {message}";
+            }
+            output.Key.Write(cleanMessage);
 
         }
     }
