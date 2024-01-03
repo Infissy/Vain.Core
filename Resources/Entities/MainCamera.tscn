@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://bgpexdt17ydi0"]
 
-[ext_resource type="Script" path="res://Core/Source/MainCamera.cs" id="1_anx4w"]
+[ext_resource type="Script" path="res://Vain.Core/Source/MainCamera.cs" id="1_anx4w"]
+
 
 [node name="Camera2D" type="Camera2D"]
 script = ExtResource("1_anx4w")

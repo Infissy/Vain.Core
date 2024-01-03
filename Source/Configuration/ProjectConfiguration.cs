@@ -16,7 +16,7 @@ public static class ProjectConfiguration
 
 
     static readonly string[] _ConfigurationPaths = new string[]{
-        "res://Core/core.config.ini",
+        "res://Vain.Core/core.config.ini",
         "res://Vain/vain.config.ini",
     };
 

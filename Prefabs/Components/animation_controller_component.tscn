@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://cphfrger437y1"]
 
-[ext_resource type="Script" path="res://Core/Source/ComponentSystem/Components/Movement/AnimationControllerComponent.cs" id="1_5336j"]
+[ext_resource type="Script" path="res://Vain.Core/Source/ComponentSystem/Components/Movement/AnimationControllerComponent.cs" id="1_5336j"]
+
 
 [node name="AnimationControllerComponent" type="AnimationPlayer"]
 script = ExtResource("1_5336j")
