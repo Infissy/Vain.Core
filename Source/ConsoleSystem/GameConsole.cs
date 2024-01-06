@@ -20,7 +20,7 @@ public partial class GameConsole : Node, IFormattedOutput
     LineEdit _inputBox;
     bool _historyMode = false;
 
-    internal ConsoleBuffer History {get;set;} = ConsoleBuffer.Instance;
+    internal ConsoleBuffer History {get;set;} = new();
 
     public List<string> _runtimeBuffer = new();
 
@@ -28,6 +28,8 @@ public partial class GameConsole : Node, IFormattedOutput
 
     public  override void _Ready()
     {
+        base._Ready();
+
         //TODO : Change format, specially for build releases where debug stuff should not be showed
         RuntimeInternalLogger.Instance.RegisterOutput(this, LogLevel.Critical | LogLevel.Important | LogLevel.Warnings | LogLevel.Information | LogLevel.Command
             #if DEBUG
@@ -45,6 +47,8 @@ public partial class GameConsole : Node, IFormattedOutput
                 _historyMode = (text == History.Current());
                 History.ResetPointer();
             };
+
+        History.LoadHistory();
 
         //!FIXME: starting script is dependent on gameconsole. Implement a separate service that can call this function
         CommandRunner.Instance.Run("exec autoexec");
@@ -147,6 +151,12 @@ public partial class GameConsole : Node, IFormattedOutput
     void CursorToEnd()
     {
         _inputBox.CaretColumn = _inputBox.Text.Length;
+    }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        History.SaveHistory();
     }
 
 }

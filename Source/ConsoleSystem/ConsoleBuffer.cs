@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -11,39 +12,6 @@ internal partial class ConsoleBuffer : Resource
 {
     const int HISTORY_SIZE = 300;
     int _pointer;
-
-
-
-    private static ConsoleBuffer _instance;
-
-    public static ConsoleBuffer Instance
-    {
-        get
-        {
-
-
-            if(_instance == null)
-            {
-                var saveFolder = ProjectConfiguration.LoadConfiguration(ProjectConfiguration.SingleSourceConfiguration.SavesFolder);
-
-                DirAccess.MakeDirAbsolute(saveFolder);
-
-
-                var path = saveFolder  + "/ConsoleHistory.tres";
-                if(!ResourceLoader.Exists(path))
-                {
-                    ResourceSaver.Save(new ConsoleBuffer(),path);
-                }
-                _instance = ResourceLoader.Load<ConsoleBuffer>(path);
-                _instance.ResetPointer();
-            }
-
-            return _instance;
-
-        }
-    }
-
-
 
     [Export]
     protected Godot.Collections.Array<string> History {get; private set;} = new();
@@ -104,5 +72,39 @@ internal partial class ConsoleBuffer : Resource
         _pointer =  History.Count;
     }
 
+
+
+    public void LoadHistory()
+    {
+        var path = GetSavePath();
+
+        var rawHistory = FileAccess.GetFileAsString(path);
+
+        History = (Json.ParseString(rawHistory).Obj as Godot.Collections.Array<string>) ?? new Godot.Collections.Array<string>();
+
+    }
+
+    public void SaveHistory()
+    {
+        var path = GetSavePath();
+
+        var rawHistory = Json.Stringify(History);
+
+        var file = FileAccess.Open(path,FileAccess.ModeFlags.Write);
+
+        file.StoreString(rawHistory);
+
+    }
+
+
+    public static string GetSavePath()
+    {
+        var saveFolderPath = ProjectConfiguration.LoadConfiguration(ProjectConfiguration.SingleSourceConfiguration.SavesFolder);
+
+        DirAccess.MakeDirAbsolute(saveFolderPath);
+
+        return saveFolderPath  + "/console_history.json";
+
+    }
 }
 
