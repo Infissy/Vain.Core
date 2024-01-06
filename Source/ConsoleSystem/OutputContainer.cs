@@ -6,11 +6,11 @@ using Vain.Console;
 
 
 
-namespace Vain.Log;
+namespace Vain.CLI.Log;
 
 /// <summary>
 ///  OutputContainer: Class and Node that contains all the RichTextLabel containing the lines of the  <see cref="GameConsole"/>.
-/// </summary> 
+/// </summary>
 public partial class OutputContainer : VBoxContainer
 {
 
@@ -31,7 +31,6 @@ public partial class OutputContainer : VBoxContainer
 
         console = GetOwner<GameConsole>();
         console.OnUpdate += OnBufferUpdate;
-
         container = GetParent<ScrollContainer>();
 
     }
@@ -49,6 +48,7 @@ public partial class OutputContainer : VBoxContainer
 
     void OnBufferUpdate()
     {
+        GD.Print("Test");
         var output = console.BufferedMessages;
 
         for (int i = _items.Count; i < output.Count; i++)

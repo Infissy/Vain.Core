@@ -2,12 +2,11 @@
 
 [ext_resource type="Script" path="res://Vain.Core/Source/ConsoleSystem/GameConsole.cs" id="1_mqja6"]
 [ext_resource type="Script" path="res://Vain.Core/Source/ConsoleSystem/ConsoleContainer.cs" id="2_ydc5a"]
-[ext_resource type="Script" path="res://Vain.Core/Source/Logger/OutputContainer.cs" id="3_chrfe"]
+[ext_resource type="Script" path="res://Vain.Core/Source/ConsoleSystem/OutputContainer.cs" id="3_3nroj"]
 [ext_resource type="FontFile" uid="uid://detrhoahh1iij" path="res://Vain/Assets/Fonts/OpenSans/OpenSans-Bold.ttf" id="4_y4e22"]
 [ext_resource type="FontFile" uid="uid://bpiqfcerhttfy" path="res://Vain/Assets/Fonts/OpenSans/OpenSans-Italic.ttf" id="5_ye8s7"]
 [ext_resource type="FontFile" uid="uid://b5gjoq16gcoup" path="res://Vain/Assets/Fonts/OpenSans/OpenSans-BoldItalic.ttf" id="6_iidys"]
 [ext_resource type="FontFile" uid="uid://bxrl2ebwhg47d" path="res://Vain/Assets/Fonts/OpenSans/OpenSans-Regular.ttf" id="7_mll6k"]
-
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iglah"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -29,7 +28,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_iglah")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("3_chrfe")
+script = ExtResource("3_3nroj")
 Bold = ExtResource("4_y4e22")
 Italic = ExtResource("5_ye8s7")
 BoldItalic = ExtResource("6_iidys")
