@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using Godot;
 using Vain.Core;
+using Vain.HubSystem;
+using Vain.HubSystem.Query;
 using Vain.Log;
 using Vain.Singleton;
-
+using static Vain.HubSystem.Query.Queries;
+using static Vain.HubSystem.GameEvent.GameEvents.Entity;
+using Vain.HubSystem.GameEvent;
+using System.Threading.Tasks;
 
 namespace Vain.CLI;
 public static partial class DefaultPrograms
@@ -20,79 +25,55 @@ public static partial class DefaultPrograms
             new Command
             (
                 "?:s",
-                (string entity) => 
+                async (string entity) =>
                 {
-                    var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities;
-
-                    if(!entities.ContainsKey(entity))
-                    {
-                        RuntimeInternalLogger.Instance.Information($"No entity found with identifier {entity}");
-                        return "";
-                    }
-
-                    var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities[entity];
-
-                    var instance = (entityPrefab as PackedScene).Instantiate();
-
-                    SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.GetChild(0)?.AddChild(instance);
-
-                    return (instance as IEntity).RuntimeID.ToString();
+                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>();
+                    var tracking = Hub.Instance.EmitTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>(new EntitySpawnRequestEventTrackedArgs{
+                        EntityName = entity,
+                    });
+                    agent.Listen(tracking);
+                   
+                    var index = await agent.Result;
+                    var response = Hub.Instance.QueryData<EntityIndexQuery, EntityReferenceQueryRequest, EntityIndexQueryResponse>(new EntityReferenceQueryRequest(){ Entity = index.Entity});
+                    return response?.Index.ToString();
+                   
                 }
             ),
             new Command
             (
-                "?:s ?:f ?:f ?:f",
-                (string entity,float x, float y) => 
+                "?:s ?:f ?:f",
+                async (string entity, float x, float y) =>
                 {
-                    var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities;
+                    
+                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>();
+                    var tracking = Hub.Instance.EmitTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>(new EntitySpawnRequestEventTrackedArgs{
+                        EntityName = entity,
+                        Position = new Vector2(x,y),
+                    });
+                    agent.Listen(tracking);
+                   
+                    var index = await agent.Result;
+                    var response = Hub.Instance.QueryData<EntityIndexQuery, EntityReferenceQueryRequest, EntityIndexQueryResponse>(new EntityReferenceQueryRequest(){ Entity = index.Entity});
+                    return response?.Index.ToString();
+                
 
-                    if(!entities.ContainsKey(entity))
-                    {
-                        RuntimeInternalLogger.Instance.Information($"No entity found with identifier {entity}");
-                        return "";
-                    }
-
-                    var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities[entity];
-
-                    var instance = (entityPrefab as PackedScene).Instantiate();
-
-                    SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.AddChild(instance);
-
-                    (instance as Node2D).GlobalPosition = new Vector2(x,y);
-
-                    return (instance as IEntity).RuntimeID.ToString();
                 }
             ),
             new Command
             (
                 "?:s ?:s",
-                (string entity,string spawnPointTag) =>
+                async (string entity,string spawnPointTag) =>
                 {
-                    var entities = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities;
-
-                    if(!entities.ContainsKey(entity))
-                    {
-                        RuntimeInternalLogger.Instance.Information($"No entity found with identifier {entity}");
-                        return "";
-                    }
-
-                    var spawnPoint = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.SpawnPoints.GetValueOrDefault(spawnPointTag);
-
-                    if(spawnPoint == null)
-                    {
-                        RuntimeInternalLogger.Instance.Information($"No spawn point found with tag {spawnPointTag}");
-                        return "";
-                    }
-
-                    var entityPrefab = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.EntityIndex.IndexedEntities[entity];
-
-                    var instance = (entityPrefab as PackedScene).Instantiate();
-
-                    SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.AddChild(instance);
-
-                    (instance as Node2D).GlobalPosition = spawnPoint.GlobalPosition;
-
-                    return (instance as IEntity).RuntimeID.ToString();
+                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>();
+                    var tracking = Hub.Instance.EmitTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>(new EntitySpawnRequestEventTrackedArgs{
+                        EntityName = entity,
+                        SpawnTag = spawnPointTag,
+                    });
+                    agent.Listen(tracking);
+                   
+                    var index = await agent.Result;
+                    var response = Hub.Instance.QueryData<EntityIndexQuery, EntityReferenceQueryRequest, EntityIndexQueryResponse>(new EntityReferenceQueryRequest(){ Entity = index.Entity});
+                    return response?.Index.ToString();
                 }
             )
         }

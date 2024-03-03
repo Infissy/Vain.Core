@@ -3,8 +3,10 @@ using System.Linq;
 using Godot;
 using Vain.Core;
 using Vain.Core.ComponentSystem;
+using Vain.HubSystem;
 using Vain.Log;
 using Vain.Singleton;
+using static Vain.HubSystem.Query.Queries;
 
 namespace Vain.CLI;
 
@@ -23,7 +25,7 @@ public static partial class DefaultPrograms
                 "list",
                 () =>
                 {
-                    var behaviours = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.BehaviourIndex.IndexedEntities.Keys;
+                    var behaviours = GameRegistry.Instance.BehaviourIndex.IndexedEntities.Keys;
                     var outputBehaviours = "\nAvailable Behaviour:\n";
 
                     foreach (var behaviour in behaviours)
@@ -38,7 +40,21 @@ public static partial class DefaultPrograms
             (
                 "list ?:n",
                 (int id) => {
-                    var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.Where(e => e.RuntimeID == id).First();
+
+
+                    var result = Hub.Instance.QueryData<EntitiesInSceneQuery, EntitiesInSceneQueryRequest,EntityCollectionResponse>(
+                        new EntitiesInSceneQueryRequest
+                        {
+                            Type = EntitiesInSceneQueryRequest.EntitiesType.Character
+                        }
+                    );
+
+                    if(result == null)
+                    {
+                        RuntimeInternalLogger.Instance.Warning("No character list provider was found in scene. (LevelManager)");
+                        return;
+                    }
+                    var entity = result?.Entities.First(e => e.RuntimeID == id);
 
                     var msg = "\n";
                     foreach (var component in (entity as Character).GetComponents())
@@ -53,7 +69,7 @@ public static partial class DefaultPrograms
             (
                 "add ?:n ?:s",
                 (int id, string behaviourName) => {
-                    var componentSuccessfulyFetched = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.BehaviourIndex.IndexedEntities.TryGetValue(behaviourName,out GodotObject behaviourScene);
+                    var componentSuccessfulyFetched = GameRegistry.Instance.BehaviourIndex.IndexedEntities.TryGetValue(behaviourName,out GodotObject behaviourScene);
                     if(!componentSuccessfulyFetched)
                     {
                         RuntimeInternalLogger.Instance.Warning($"Behaviour with name {behaviourName} was not found.");
@@ -63,9 +79,21 @@ public static partial class DefaultPrograms
                     var behaviour = (behaviourScene as IndexedResourceWrapper).Instantiate() as SubBehaviour;
 
 
-                    behaviour.Name  = behaviourName;
+                    var result = Hub.Instance.QueryData<EntitiesInSceneQuery, EntitiesInSceneQueryRequest,EntityCollectionResponse>(
+                        new EntitiesInSceneQueryRequest
+                        {
+                            Type = EntitiesInSceneQueryRequest.EntitiesType.Character
+                        }
+                    );
 
-                    var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.First(e => e.RuntimeID == id);
+                    if(result == null)
+                    {
+                        RuntimeInternalLogger.Instance.Warning("No character list provider was found in scene. (LevelManager)");
+                        return;
+                    }
+
+
+                    var entity = result.Value.Entities.First(e => e.RuntimeID == id) as Character;
                     entity.GetComponent<CharacterBehaviourComponent>().AddChild(behaviour);
 
                     RuntimeInternalLogger.Instance.Information($"Component {behaviourName} successfully added.");

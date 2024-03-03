@@ -10,7 +10,9 @@ public interface IEntity
     /// <summary>
     /// At the moment unused, will have some backend implementation in future versions
     /// </summary>
-    /// <value></value>
-    uint RuntimeID {get;}
+
+
+    uint RuntimeID {get; set;}
+
 }
 

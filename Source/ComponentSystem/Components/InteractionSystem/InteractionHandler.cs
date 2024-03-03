@@ -9,18 +9,5 @@ namespace Vain.InteractionSystem;
 
 public partial class InteractionHandler : Node
 {
-    public override void _EnterTree()
-    {
-        base._EnterTree();
-        SingletonManager.Register(SingletonManager.Singletons.INTERACTION_HANDLER,this);
-    }
 
-    public override void _Ready()
-    {
-        base._Ready();
-
-        GD.Print(SingletonManager.GetSingleton<InteractionHandler>(SingletonManager.Singletons.INTERACTION_HANDLER));
-    }
-
-
-}    
+}

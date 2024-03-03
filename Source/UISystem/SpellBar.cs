@@ -7,8 +7,7 @@ namespace Vain.SpellSystem.UI
     /// <summary>
     /// UI Element that shows player spells.
     /// </summary>
-    
-  
+
     public partial class SpellBar : HBoxContainer
     {
         [Export]
@@ -16,24 +15,12 @@ namespace Vain.SpellSystem.UI
 
 
         Singleton<Character> _currentCharacter;
-        public override void _EnterTree()
-        {
-            SingletonManager.Register(SingletonManager.Singletons.UI.SPELL_BAR,this);
-        }
 
         public override void _Ready()
         {
             base._Ready();
 
-           
-            
-            _currentCharacter = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER);
 
-            var caster = _currentCharacter?.Reference?.GetComponent<SpellCaster>();
-            if(caster != null)
-                caster.SpellPickup += loadSpells;
-            
-            
 
             loadSpells();
         }

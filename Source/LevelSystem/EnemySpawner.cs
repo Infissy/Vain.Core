@@ -12,6 +12,12 @@ using Godot;
 
 using Vain.SpellSystem;
 using Vain.Core;
+using Vain.Core.ComponentSystem;
+using Vain.HubSystem;
+
+
+using System.Diagnostics;
+using static Vain.HubSystem.Query.Queries;
 
 namespace Vain.EnemySystem;
 
@@ -25,8 +31,6 @@ public partial class EnemySpawner : Node
 
 	Dictionary<string,uint> _enemiesToSpawn = new();
 	uint _diedEnemies;
-	Singleton<Character> _player;
-
 
 
 
@@ -37,17 +41,9 @@ public partial class EnemySpawner : Node
 	Godot.Collections.Dictionary<string,SpawnInfo> SpawnInfo {get;set;} = new Godot.Collections.Dictionary<string, SpawnInfo>();
 
 
-	public override void _EnterTree()
-	{
-		base._EnterTree();
-		SingletonManager.Register(SingletonManager.Singletons.ENEMY_SPAWNER,this);
-	}
-
-
-
 	public override void _Ready()
 	{
-		_player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.ENEMY_SPAWNER);
+
 
 		if(SpawnInfo != null)
 		{
@@ -67,7 +63,7 @@ public partial class EnemySpawner : Node
 
 	public override void _Process(double delta){
 		//TODO: Spawn for enemy type
-		if(_diedEnemies > 0 && _player != null && Active ){
+		if(_diedEnemies > 0 && Active ){
 
 			SpawnRandomEnemy(_diedEnemies);
 
@@ -90,11 +86,19 @@ public partial class EnemySpawner : Node
 
 	}
 
-	public void SpawnEnemy(String enemyName, uint count)
+	public void SpawnEnemy(string enemyName, uint count)
 	{
 
 		if(!SpawnInfo.ContainsKey(enemyName))
 			return;
+
+		var result = Hub.Instance.QueryData<PlayerPositionQuery,EmptyQueryRequest,PositionQueryResponse>();
+
+		if(result == null)
+			return;
+
+		var playerPosition = result?.Position ?? new Vector2();
+
 
 		for (int i = 0; i < count; i++)
 		{
@@ -108,7 +112,8 @@ public partial class EnemySpawner : Node
 			Vector2 deltapos = new Vector2(GD.Randf(), GD.Randf()).Normalized() * 30;
 
 			AddChild(instance);
-			instance.GlobalPosition = _player!.Reference.GlobalPosition + deltapos;
+
+			instance.GlobalPosition =  playerPosition + deltapos;
 
 			//TODO: Fix resource instantiation, even duplicate can't avoid making the resource shared between enemies, at the moment every enemy has their own spells preassigned
 			//TODO: Create a system to check if a system is enabled as to add components

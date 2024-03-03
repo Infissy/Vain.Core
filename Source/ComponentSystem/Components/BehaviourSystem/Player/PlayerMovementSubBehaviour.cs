@@ -2,38 +2,30 @@ using System;
 using System.Diagnostics;
 using Godot;
 
-using Vain.Singleton;
 
+using Vain.HubSystem;
+
+using static Vain.HubSystem.Query.Queries;
 namespace Vain.Core.ComponentSystem.Behaviour;
 
 public partial class PlayerMovementSubBehaviour : SubBehaviour
 {
-	Singleton<MainCamera> _camera = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA);
-
-	public override void _Ready()
-	{
-		base._Ready();
-		_camera = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA);
-	}
-
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
 		if(!Input.IsActionJustPressed("player_movement_input"))
 			return;
 
-		if(_camera.Disposed)
-			return;
+		var targetResponse = Hub.Instance.QueryData<MousePositionQuery, EmptyQueryRequest,PositionQueryResponse>();
 
-		var target = _camera?.Reference.GetMouseScenePosition();
-
-		if(target == Vector2.Inf)
+		if(targetResponse == null || targetResponse?.Position == Vector2.Inf)
 			return;
 
 		var controller = BehaviourComponent.Character.GetComponent<MovementControllerComponent>();
 
 		Debug.Assert(controller != null, "MovementControllerComponent not found in Character");
 
-		controller.Target = target ?? BehaviourComponent.Character.GlobalPosition;
+		controller.Target = targetResponse?.Position ?? Vector2.Zero;
 	}
 }
+

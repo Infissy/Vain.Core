@@ -51,7 +51,10 @@ public partial class GameConsole : Node, IFormattedOutput
         History.LoadHistory();
 
         //!FIXME: starting script is dependent on gameconsole. Implement a separate service that can call this function
-        CommandRunner.Instance.Run("exec autoexec");
+      
+        var timer = GetTree().CreateTimer(1);
+
+        timer.Connect("timeout", new Callable(this,MethodName.ExecAutoExec));
     }
 
     public override void _Input(InputEvent @input)
@@ -114,7 +117,8 @@ public partial class GameConsole : Node, IFormattedOutput
 
 
         _runtimeBuffer.Add(message);
-        EmitSignal(SignalName.OnUpdate);
+        CallDeferred(GameConsole.MethodName.EmitSignal, SignalName.OnUpdate);
+        
     }
 
 
@@ -152,6 +156,13 @@ public partial class GameConsole : Node, IFormattedOutput
     {
         _inputBox.CaretColumn = _inputBox.Text.Length;
     }
+
+    
+    void ExecAutoExec()
+    {
+        CommandRunner.Instance.Run("exec autoexec");
+    }
+
 
     public override void _ExitTree()
     {

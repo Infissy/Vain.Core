@@ -1,7 +1,10 @@
 using System.Linq;
+using Godot;
 using Vain.Core;
+using Vain.HubSystem;
 using Vain.Log;
 using Vain.Singleton;
+using static Vain.HubSystem.Query.Queries;
 
 namespace Vain.CLI;
 
@@ -20,23 +23,30 @@ public static partial class DefaultPrograms
             (
                 "?:n",
                 (int index) => {
-                var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.FirstOrDefault(e => e.RuntimeID == index);
-                if(entity == null)
+                var response = Hub.Instance.QueryData<EntityQuery,EntityIndexQueryRequest,EntityReferenceQueryResponse>(new EntityIndexQueryRequest{ Index = (uint) index  });
+                if(response?.Entity == null)
                 {
                     RuntimeInternalLogger.Instance.Information($"No entity found with given ID ({index})");
                     return;
                 }
-                RuntimeInternalLogger.Instance.Information(entity.Position.ToString());
+                RuntimeInternalLogger.Instance.Information((response?.Entity as Node2D).Position.ToString());
             }),
 
             new Command
             (
                 "?:s",
                 (string code) => {
-                    if(code == "player")
+
+                    switch (code)
                     {
-                        var entity = SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER);
-                        RuntimeInternalLogger.Instance.Information(entity.Reference.Position.ToString());
+                        case "player":
+                            var response = Hub.Instance.QueryData<PlayerPositionQuery, EmptyQueryRequest,PositionQueryResponse>();
+                            RuntimeInternalLogger.Instance.Information( response?.Position.ToString()  ??  "Player entity not present in scene.");
+                            break;
+
+                        default:
+                            RuntimeInternalLogger.Instance.Information("Entity code not found.");
+                            break;
                     }
                 }
             )

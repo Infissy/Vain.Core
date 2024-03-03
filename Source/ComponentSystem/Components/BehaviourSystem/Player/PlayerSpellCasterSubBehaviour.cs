@@ -1,6 +1,10 @@
 using Godot;
+using Vain.HubSystem;
 using Vain.Singleton;
 using Vain.SpellSystem;
+
+
+using static Vain.HubSystem.Query.Queries;
 
 namespace Vain.Core.ComponentSystem.Behaviour;
 
@@ -23,33 +27,36 @@ partial class PlayerSpellCasterSubBehaviour : SubBehaviour
         if(!action.Action.ToString().Contains("player_cast_slot"))
             return;
         var spellCaster = BehaviourComponent.Character.GetComponent<SpellCaster>();
-        var camera = SingletonManager.GetSingleton<MainCamera>(SingletonManager.Singletons.MAIN_CAMERA);
+
+        var targetResult = Hub.Instance.QueryData<MousePositionQuery, EmptyQueryRequest,PositionQueryResponse>();
+
+        var position = targetResult?.Position ?? Vector2.Zero;
 
         switch (action.Action)
         {
             case SLOT1:
-                spellCaster.CastSpell(0,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(0,position);
                 break;
             case SLOT2:
-                spellCaster.CastSpell(1,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(1,position);
                 break;
             case SLOT3:
-                spellCaster.CastSpell(2,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(2,position);
                 break;
             case SLOT4:
-                spellCaster.CastSpell(3,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(3,position);
                 break;
             case SLOT5:
-                spellCaster.CastSpell(4,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(4,position);
                 break;
             case SLOT6:
-                spellCaster.CastSpell(5,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(5,position);
                 break;
             case SLOT7:
-                spellCaster.CastSpell(6,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(6,position);
                 break;
             case SLOT8:
-                spellCaster.CastSpell(7,camera.Reference.GetMouseScenePosition());
+                spellCaster.CastSpell(7,position);
                 break;
         }
     }

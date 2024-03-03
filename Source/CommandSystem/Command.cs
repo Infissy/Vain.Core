@@ -1,20 +1,30 @@
 using System;
-using System.Collections.Generic;
+
 using System.Globalization;
 using System.Linq;
 
+
 namespace Vain.CLI;
+
+
 
 public class Command
 {
     public string[] Path { get; }
     public Delegate Action { get; }
+    public Type[] ListenerType { get;}
+
+    /// <summary>
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="action">It's possible to define async functions but they need to return a value, void functions can induce unexpected behaviours.</param>
     public Command(string path, Delegate action)
     {
         Path = path.Split(' ',StringSplitOptions.RemoveEmptyEntries);
 
         Action = action;
     }
+  
 
     static class InputType
     {

@@ -2,8 +2,10 @@ using System.Linq;
 using Godot;
 using Vain.Core;
 using Vain.Core.ComponentSystem;
+using Vain.HubSystem;
 using Vain.Log;
 using Vain.Singleton;
+using static Vain.HubSystem.Query.Queries;
 
 namespace Vain.CLI;
 
@@ -22,7 +24,7 @@ public static partial class DefaultPrograms
                 "list",
                 () =>
                 {
-                    var components = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference.ComponentIndex.IndexedEntities.Keys;
+                    var components = GameRegistry.Instance.ComponentIndex.IndexedEntities.Keys;
 
                     var outputComponents = "\nAvailable Components:\n";
 
@@ -38,12 +40,21 @@ public static partial class DefaultPrograms
             (
                 "list ?:n",
                 (int id) => {
-                    var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference
-                                    .Characters.First(e => e.RuntimeID == id);
+                    var response = Hub.Instance.QueryData<EntityQuery,EntityIndexQueryRequest,EntityReferenceQueryResponse>(new EntityIndexQueryRequest{ Index = (uint) id  });
 
                     var msg = "\n";
+                    if(response == null)
+                    {
+                        RuntimeInternalLogger.Instance.Warning("No entity container in scene.");
+                        return;
+                    }   
+                    if(response?.Entity == null || !(response?.Entity is Character))
+                    {
+                        RuntimeInternalLogger.Instance.Warning($"No character in scene with id : {id}.");
+                        return;
+                    }
 
-                    foreach (var component in (entity as Character).GetComponents())
+                    foreach (var component in (response?.Entity as Character).GetComponents())
                     {
                         msg += $"   {component.GetType().Name } \n";
                     }
@@ -55,7 +66,7 @@ public static partial class DefaultPrograms
             (
                 "add ?:n ?:s",
                 (int id, string componentName) => {
-                    var componentSuccessfulyFetched = SingletonManager.GetSingleton<GameRegistry>(SingletonManager.Singletons.GAME_REGISTRY).Reference
+                    var componentSuccessfulyFetched = GameRegistry.Instance
                                                         .ComponentIndex.IndexedEntities.TryGetValue(componentName,out GodotObject componentScene);
                     if(!componentSuccessfulyFetched)
                     {
@@ -66,9 +77,22 @@ public static partial class DefaultPrograms
                     var component = (componentScene as IndexedResourceWrapper).Instantiate() as Component;
                     component.Name = componentName;
 
-                    var entity = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Characters.First(e => e.RuntimeID == id);
 
-                    entity.AddComponent(component);
+                    var response = Hub.Instance.QueryData<EntityQuery,EntityIndexQueryRequest,EntityReferenceQueryResponse>(new EntityIndexQueryRequest{ Index = (uint) id  });
+
+                    if(response == null)
+                    {
+                        RuntimeInternalLogger.Instance.Warning("No entity container in scene.");
+                        return;
+                    }
+                    if(response?.Entity == null || !(response?.Entity is Character))
+                    {
+                        RuntimeInternalLogger.Instance.Warning($"No character in scene with id : {id}.");
+                        return;
+                    }
+
+
+                    (response?.Entity as Character)?.AddComponent(component);
 
                     RuntimeInternalLogger.Instance.Information($"Component {componentName} successfully added.");
                 }
