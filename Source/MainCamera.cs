@@ -1,8 +1,10 @@
 using Godot;
 
 using Vain.Singleton;
-using Vain.Log;
+using Vain.HubSystem.Query;
 
+using static Vain.HubSystem.Query.Queries;
+using Vain.HubSystem;
 
 
 namespace Vain.Core;
@@ -12,7 +14,8 @@ namespace Vain.Core;
 /// Main Game Camera
 /// </summary>
 
-public partial class MainCamera : Camera2D , IEntity
+public partial class MainCamera : Camera2D , IEntity,
+    IDataProvider<MousePositionQuery,EmptyQueryRequest,PositionQueryResponse>
 {
 
 
@@ -22,16 +25,16 @@ public partial class MainCamera : Camera2D , IEntity
     /// Character to follow.
     /// </summary>
 
-    public Singleton<Character> Player {get;set;}
 
-    public uint RuntimeID {get; private set;}
+
+    public uint RuntimeID {get; set;}
 
 
     public override void _EnterTree()
     {
         base._EnterTree();
-        SingletonManager.Register(SingletonManager.Singletons.MAIN_CAMERA,this);
-        SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference?.Register(this);
+        Hub.Instance.RegisterDataProvider(this);
+
     }
 
 
@@ -40,11 +43,11 @@ public partial class MainCamera : Camera2D , IEntity
         base._Ready();
 
 
-        Player = SingletonManager.GetSingleton<Character>(SingletonManager.Singletons.PLAYER, ()=> this.GlobalPosition = Player.Reference.GlobalPosition);
 
 
-        if(Player.Reference != null)
-            _oldPlayerPosition = Player!.Reference!.GlobalPosition;
+        var queryResult = Hub.Instance.QueryData<PlayerPositionQuery,EmptyQueryRequest,PositionQueryResponse>();
+        if(queryResult != null)
+            _oldPlayerPosition = queryResult?.Position ?? Vector2.Zero;
 
     }
 
@@ -52,17 +55,21 @@ public partial class MainCamera : Camera2D , IEntity
     {
         base._Process(delta);
 
-        if(Player.Reference == null)
+        var queryResult = Hub.Instance.QueryData<PlayerPositionQuery,EmptyQueryRequest,PositionQueryResponse>();
+        if(queryResult == null)
             return;
 
-        var relMotion =  Player!.Reference!.GlobalPosition - _oldPlayerPosition;
+        var position =  queryResult?.Position ?? Vector2.Zero;
+        var relMotion = position - _oldPlayerPosition;
 
 
         this.GlobalTranslate(relMotion);
 
-        _oldPlayerPosition = Player.Reference.GlobalPosition;
+        _oldPlayerPosition = position;
 
     }
+
+
 
 
     public Vector2 GetMouseScenePosition()
@@ -73,8 +80,17 @@ public partial class MainCamera : Camera2D , IEntity
     public override void _ExitTree()
     {
         base._EnterTree();
-        SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Free(this);
+        Hub.Instance.UnregisterDataProvider(this);
+        
 
     }
 
+
+
+    public PositionQueryResponse? Provide(EmptyQueryRequest request)
+    {
+        return new PositionQueryResponse {Position = GetMouseScenePosition() };
+    }
 }
+
+

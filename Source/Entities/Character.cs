@@ -6,6 +6,9 @@ using Godot;
 
 using Vain.Core.ComponentSystem;
 using Vain.Singleton;
+using Vain.HubSystem;
+
+using static Vain.HubSystem.GameEvent.GameEvents.Entity;
 
 namespace Vain.Core;
 
@@ -32,7 +35,7 @@ public partial class Character : CharacterBody2D , IEntity
 
     public bool ActionLock {get; private set;}
 
-    public uint RuntimeID {get; protected set;}
+    public uint RuntimeID {get; set;}
 
     [Signal]
     public delegate void CharacterKilledEventHandler();
@@ -46,14 +49,17 @@ public partial class Character : CharacterBody2D , IEntity
         if(_components == null)
             LoadComponents();
 
-        RuntimeID = SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Register(this);
+
+        Hub.Instance.Emit<EntityInstantiatedEvent, EntityInstantiatedEventArgs>(new EntityInstantiatedEventArgs{Entity = this});
+
 
     }
 
 
     public void AddComponent(Component component)
     {
-        AddChild(component);
+        //TODO: workaround since we are calling this function from the command runner (which is not in the main thread)
+        CallDeferred(MethodName.AddChild,component);
 
         _components.Add(component);
     }
@@ -91,7 +97,8 @@ public partial class Character : CharacterBody2D , IEntity
 
         EmitSignal(SignalName.CharacterKilled);
 
-        SingletonManager.GetSingleton<LevelManager>(SingletonManager.Singletons.LEVEL_MANAGER).Reference.Free(this);
+        Hub.Instance.Emit<EntityInstantiatedEvent, EntityInstantiatedEventArgs>(new EntityInstantiatedEventArgs{Entity = this});
+
 
         this.QueueFree();
 

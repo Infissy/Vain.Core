@@ -1,25 +1,29 @@
 using Godot;
 using Vain.Core;
 using Vain.Core.ComponentSystem;
+using Vain.HubSystem;
+using Vain.HubSystem.GameEvent;
 using Vain.Singleton;
+using static Vain.HubSystem.GameEvent.GameEvents;
 
 namespace Vain.UI;
-public partial class PlayerHealthBar : HealthBar
+public partial class PlayerHealthBar : HealthBar,
+    IListener<PlayerHealthUpdate,CharacterHealthUpdateArgs>
 {
     public override void _Ready()
     {
         base._Ready();
-
-        var player = SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER);
-        var healthComponent = player.GetComponent<HealthComponent>();
-
-        healthComponent.RegisterToSignal(HealthComponent.SignalName.HealthUpdate,new Callable(this,MethodName.UpdateHealthHandler));
+        Hub.Instance.Subscribe(this);
 
     }
 
-    public void UpdateHealthHandler(float health)
+    public void HandleEvent(CharacterHealthUpdateArgs args)
     {
-        Health = health;
+        Health = args.Health;
     }
 
+
+    public override void _ExitTree(){
+        Hub.Instance.Unsubscribe(this);
+    }
 }

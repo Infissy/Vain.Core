@@ -14,14 +14,7 @@ public partial class DialogueHandler : Control
     PackedScene _dialogueBox;
 
 
-    public override void _Ready()
-    {
-        base._Ready();
-
-        SingletonManager.GetCharacterSingleton(SingletonManager.Singletons.PLAYER)
-                .GetComponent<InteractorComponent>()
-                .RegisterToSignal(InteractorComponent.SignalName.OnDialogue,new Callable(this,MethodName.HandleDialogue));
-    }
+    
 
 
     void HandleDialogue(string dialogue)

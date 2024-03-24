@@ -48,7 +48,7 @@ public partial class OutputContainer : VBoxContainer
 
     void OnBufferUpdate()
     {
-        GD.Print("Test");
+
         var output = console.BufferedMessages;
 
         for (int i = _items.Count; i < output.Count; i++)

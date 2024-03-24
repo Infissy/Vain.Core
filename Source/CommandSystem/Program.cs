@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Vain.CLI;
 public class Program
@@ -25,7 +29,22 @@ public class Program
 
         if(workingCommand == null)
             throw new InvalidParameterException();
-        var result =  workingCommand.Action.DynamicInvoke(parsedParameters);
+
+
+        object result = null;
+
+        if (workingCommand.Action.Method.IsDefined(typeof(AsyncStateMachineAttribute), false))
+        {
+            dynamic tmp = workingCommand.Action.DynamicInvoke(parsedParameters);
+           
+            
+            if(workingCommand.Action.Method.ReturnType == typeof(Task<string>))
+                result = (tmp as Task<string>).Result;
+            }
+        else
+            result =  workingCommand.Action.DynamicInvoke(parsedParameters);
+           
+        
         return result == null ? "" : result as string;
     }
 }

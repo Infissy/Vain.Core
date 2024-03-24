@@ -9,6 +9,9 @@ public class Script
     }
     public void Run()
     {
+
+
+        
         foreach (var line in TextScript)
         {
             CommandRunner.Instance.Run(line);

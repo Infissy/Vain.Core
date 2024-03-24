@@ -1,10 +1,12 @@
 using Godot;
 using Godot.Collections;
-
+using System;
 using System.Collections.Generic;
 using Vain.Core;
 
 using Vain.Core.ComponentSystem;
+using Vain.HubSystem;
+using static Vain.HubSystem.GameEvent.GameEvents;
 
 namespace Vain.SpellSystem;
 
@@ -39,37 +41,14 @@ public abstract partial class SpellCaster : Component
 
 	public bool AddSpell(SpellChanneler channeler){
 
-		//Old system that regenerates the spell count on pickup
-		/*
-		bool found = false;
-		for (int i = 0; i < _spellChannelers.Count; i++)
-		{
-			if(_spellChannelers[i] != null && _spellChannelers[i].Spell == channeler.Spell){
-				
-				_spellChannelers[i].CastCount += channeler.CastCount;
 
-				found = true;
-				break;
-			}
-		}
-
-		if(!found){
-			for (int i = 0; i < _spellChannelers.Count; i++)
-			{
-				if(_spellChannelers[i] == null){
-					_spellChannelers[i] = channeler;
-					break;
-				}
-			}
-		}
-
-
-		*/
 		for (int i = 0; i < SpellChannelers.Count; i++)
 		{
 			if (SpellChannelers[i] == null)
 			{
 				SpellChannelers[i] = channeler;
+
+				Hub.Instance.Emit<SpellPickupEvent,SpellPickupEventArgs>(new SpellPickupEventArgs{ Caster = this, Spell = channeler });
 				EmitSignal(SignalName.SpellPickup);
 				return true;
 			}
@@ -77,7 +56,7 @@ public abstract partial class SpellCaster : Component
 
 		return false;
 
-		//If player then refresh ui
+
 	}
 
 

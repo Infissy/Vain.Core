@@ -96,16 +96,15 @@ public partial class SingletonManager : Node
 
         public static class UI
         {
-            public const string SPELL_BAR = "ui_spell_bar";
-            public const string HEALTH_BAR = "ui_health_bar";
+
             public const string DEBUG_OVERLAY = "ui_debug_overlay";
         }
-        public const string MAIN_CAMERA = "main_camera";
+        /*
         public const string LEVEL_MANAGER = "level_manager";
         public const string PLAYER = "entity_player";
-        public const string INTERACTION_HANDLER = "interaction_handler";
-        public const string ENEMY_SPAWNER = "enemy_spawner";
         public const string GAME_REGISTRY = "game_registry";
+    
+        */
     }
 
 }

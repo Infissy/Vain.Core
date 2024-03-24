@@ -1,4 +1,5 @@
 using Godot;
+using Vain.HubSystem;
 namespace Vain.Core;
 
 /// <summary>
@@ -8,5 +9,4 @@ public partial class GameManager : Node
 {
     [Signal]
     public delegate void SceneChangeEventHandler();
-
 }
