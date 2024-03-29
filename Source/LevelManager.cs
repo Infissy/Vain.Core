@@ -11,7 +11,7 @@ using static Vain.HubSystem.GameEvent.GameEvents;
 using Vain.HubSystem.Query;
 using static Vain.HubSystem.Query.Queries;
 using static Vain.HubSystem.GameEvent.GameEvents.Entity;
-using System.Threading.Tasks;
+
 using Vain.HubSystem;
 
 namespace Vain.Core;
@@ -19,7 +19,8 @@ namespace Vain.Core;
 //Should handle all the resources inside a single map/level
 
 public partial class LevelManager : SubViewport,
-	IListener<EntityInstantiatedEvent,EntityInstantiatedEventArgs>,
+	IListener<EntityInstantiatedEvent,EntityArgs>,
+	IListener<EntityDestroyedEvent,EntityArgs>,
 	IListener<LevelChangeRequestEvent,LevelNameEventArgs>,
 	IListenerTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>,
 	IDataProvider<EntityIndexQuery,EntityReferenceQueryRequest, EntityIndexQueryResponse>,
@@ -51,7 +52,8 @@ public partial class LevelManager : SubViewport,
     public override void _EnterTree()
     {
         base._EnterTree();
-		Hub.Instance.Subscribe<EntityInstantiatedEvent,EntityInstantiatedEventArgs>(this);
+		Hub.Instance.Subscribe<EntityInstantiatedEvent,EntityArgs>(this);
+		Hub.Instance.Subscribe<EntityDestroyedEvent,EntityArgs>(this);
 		Hub.Instance.Subscribe<EntitySpawnRequestEventTracked,EntitySpawnRequestEventTrackedArgs>(this);
 		Hub.Instance.Subscribe<LevelChangeRequestEvent,LevelNameEventArgs>(this);
 		Hub.Instance.RegisterDataProvider<EntityIndexQuery,EntityReferenceQueryRequest, EntityIndexQueryResponse>(this);
@@ -88,26 +90,29 @@ public partial class LevelManager : SubViewport,
 
 		if(_entityInstantitationTracking.TryGetValue(entity,out var tracking))
 		{
-			Hub.Instance.EmitTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>(new EntityRegisteredEventTrackedArgs{ Entity = entity, EventID  = tracking});
+			Hub.Instance.EmitTracked<EntityRegisteredEventTracked,EntityTrackedArgs>(new EntityTrackedArgs{ Entity = entity, EventID  = tracking});
 			_entityInstantitationTracking.Remove(entity);
 		}
 		return _entityIndex;
 	}
+
+
+
     public override void _Process(double delta)
     {
         base._Process(delta);
     }
 
 
-    public void Free(Character character)
+    public void Unregister(Character character)
 	{
 		_characters.Remove(character);
 
-		Free(character as IEntity);
+		Unregister(character as IEntity);
 	}
 
 	
-	public void Free(IEntity entity)
+	public void Unregister(IEntity entity)
 	{
 		if(_entityIndex < entity.RuntimeID)
 			return;
@@ -152,41 +157,6 @@ public partial class LevelManager : SubViewport,
 
 
 
-    public void HandleEvent(EntityInstantiatedEventArgs args)
-    {
-		args.Entity.RuntimeID = Register(args.Entity);
-	}
-
-    public EntityIndexQueryResponse? Provide(EntityReferenceQueryRequest request)
-    {
-        var kv = _entities.FirstOrDefault(e => e.Value == request.Entity);
-
-		if(!kv.Equals(default(KeyValuePair<uint, IEntity>)))
-			return new EntityIndexQueryResponse	{ Index = kv.Key };
-
-		var newIndex = Register(request.Entity);
-		_earlyInitializedEntities.Add(request.Entity,newIndex);
-		return new EntityIndexQueryResponse	{ Index = newIndex };
-
-	}
-
-    public EntityReferenceQueryResponse? Provide(EntityIndexQueryRequest request)
-    {
-		var queryRes = _entities.TryGetValue(request.Index, out var entity);
-
-		if(!queryRes)
-			return null;
-
-
-		return new EntityReferenceQueryResponse	{ Entity = entity };
-    }
-
-    public void HandleEvent(EntitySpawnRequestEventTrackedArgs args)
-    {
-		SpawnEntity(args.EntityName, args.SpawnTag, args.Position);
-    }
-
-
 	IEntity SpawnEntity(string entityKey, string spawnPoint = "" , Vector2 position = default)
 	{
 
@@ -220,17 +190,6 @@ public partial class LevelManager : SubViewport,
 		return instance as IEntity;
 	}
 
-    public void HandleEventTracked(EntitySpawnRequestEventTrackedArgs args)
-    {
-		var entity = SpawnEntity(args.EntityName, args.SpawnTag, args.Position);
-
-		_entityInstantitationTracking[entity] = args.EventID;
-	}
-
-    public void HandleEvent(LevelNameEventArgs args)
-    {
-		LoadLevel(args.LevelName);
-    }
 
     public EntityCollectionResponse? Provide(EntitiesInSceneQueryRequest request)
     {
@@ -238,5 +197,60 @@ public partial class LevelManager : SubViewport,
 			Entities = Entities
 		};
     }
+	
+    public EntityIndexQueryResponse? Provide(EntityReferenceQueryRequest request)
+    {
+        var kv = _entities.FirstOrDefault(e => e.Value == request.Entity);
+
+		if(!kv.Equals(default(KeyValuePair<uint, IEntity>)))
+			return new EntityIndexQueryResponse	{ Index = kv.Key };
+
+		var newIndex = Register(request.Entity);
+		_earlyInitializedEntities.Add(request.Entity,newIndex);
+		return new EntityIndexQueryResponse	{ Index = newIndex };
+
+	}
+
+    public EntityReferenceQueryResponse? Provide(EntityIndexQueryRequest request)
+    {
+		var queryRes = _entities.TryGetValue(request.Index, out var entity);
+
+		if(!queryRes)
+			return null;
+
+
+		return new EntityReferenceQueryResponse	{ Entity = entity };
+    }
+
+  	void IListener<LevelChangeRequestEvent,LevelNameEventArgs>.HandleEvent<LevelChangeRequestEvent>(LevelNameEventArgs args)
+    {
+		LoadLevel(args.LevelName);
+    }
+	void IListener<EntitySpawnRequestEventTracked,EntitySpawnRequestEventTrackedArgs>.HandleEvent<EntitySpawnRequestEventTracked>(EntitySpawnRequestEventTrackedArgs args)
+    {
+		SpawnEntity(args.EntityName, args.SpawnTag, args.Position);
+    }
+
+	
+
+    void IListener<EntityInstantiatedEvent,EntityArgs>.HandleEvent<EntityInstantiatedEvent>(EntityArgs args)
+    {
+		args.Entity.RuntimeID = Register(args.Entity);
+	}
+
+    
+	void IListener<EntityDestroyedEvent,EntityArgs>.HandleEvent<EntityDestroyedEvent>(EntityArgs args)
+    {
+		Unregister(args.Entity);
+    }
+
+	public void HandleEventTracked<EntitySpawnRequestEventTracked>(EntitySpawnRequestEventTrackedArgs args)
+    {
+		var entity = SpawnEntity(args.EntityName, args.SpawnTag, args.Position);
+
+		_entityInstantitationTracking[entity] = args.EventID;
+	}
+
+    
 }
 

@@ -50,7 +50,7 @@ public partial class Character : CharacterBody2D , IEntity
             LoadComponents();
 
 
-        Hub.Instance.Emit<EntityInstantiatedEvent, EntityInstantiatedEventArgs>(new EntityInstantiatedEventArgs{Entity = this});
+        Hub.Instance.Emit<EntityInstantiatedEvent,  EntityArgs>(new EntityArgs{Entity = this});
 
 
     }
@@ -97,7 +97,7 @@ public partial class Character : CharacterBody2D , IEntity
 
         EmitSignal(SignalName.CharacterKilled);
 
-        Hub.Instance.Emit<EntityInstantiatedEvent, EntityInstantiatedEventArgs>(new EntityInstantiatedEventArgs{Entity = this});
+        Hub.Instance.Emit<EntityDestroyedEvent, EntityArgs>(new EntityArgs{Entity = this});
 
 
         this.QueueFree();

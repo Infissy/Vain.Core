@@ -69,47 +69,28 @@ public partial class GameEvents
 
     
         //Entity Instantiation
-        public struct EntityInstantiatedEvent : IGameEvent<EntityInstantiatedEventArgs> { }
-        public struct EntityInstantiatedEventTracked : IGameEventTracked<EntityInstantiatedEventTrackedArgs> { }
-        public struct EntityInstantiatedEventTrackedArgs : IGameEventTrackedArgs, IEntityInstantiatedEventArgs
-        {
-            public uint EventID { get; set; }
-            public IEntity Entity { get; set; }
-        }
-        public struct EntityInstantiatedEventArgs : IEntityInstantiatedEventArgs
-        {
-            public IEntity Entity {get;set;}
-        }
-
-        public interface IEntityInstantiatedEventArgs : IGameEventArgs
-        {
-            public IEntity Entity {get;set;}
-        }
+        public struct EntityInstantiatedEvent : IGameEvent<EntityArgs> { }
+        public struct EntityInstantiatedEventTracked : IGameEventTracked<EntityTrackedArgs> { }
+   
 
 
         // Entity Registration
-        public struct EntityRegisteredEvent : IGameEvent<EntityRegisteredEventArgs> { }
-        public struct EntityRegisteredEventTracked : IGameEventTracked<EntityRegisteredEventTrackedArgs> { }
-        public struct EntityRegisteredEventTrackedArgs : IGameEventTrackedArgs, IEntityRegisteredEventArgs
+        public struct EntityRegisteredEvent : IGameEvent<EntityArgs> { }
+        public struct EntityRegisteredEventTracked : IGameEventTracked<EntityTrackedArgs> { }
+
+
+        //Entity Destruction
+        public struct EntityDestroyedEvent : IGameEvent<EntityArgs> { }
+
+        public struct EntityTrackedArgs : IGameEventTrackedArgs
         {
             public uint EventID { get; set; }
             public IEntity Entity { get; set; }
         }
-        public struct EntityRegisteredEventArgs : IEntityRegisteredEventArgs
+
+        public struct EntityArgs : IGameEventArgs
         {
             public IEntity Entity {get;set;}
-        }
-
-        public interface IEntityRegisteredEventArgs : IGameEventArgs
-        {
-            public IEntity Entity {get;set;}
-        }
-
-        //Entity Destruction
-        public struct EntityDestroyedEvent : IGameEvent<EntityDestroyedEventArgs> { }
-        public struct EntityDestroyedEventArgs : IGameEventArgs
-        {
-            public IEntity Entity;
         }
 
 

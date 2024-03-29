@@ -5,6 +5,7 @@ using Vain.HubSystem.Query;
 
 using static Vain.HubSystem.Query.Queries;
 using Vain.HubSystem;
+using static Vain.HubSystem.GameEvent.GameEvents.Entity;
 
 
 namespace Vain.Core;
@@ -81,7 +82,7 @@ public partial class MainCamera : Camera2D , IEntity,
     {
         base._EnterTree();
         Hub.Instance.UnregisterDataProvider(this);
-        
+        Hub.Instance.Emit<EntityDestroyedEvent,EntityArgs>(new EntityArgs{Entity = this});
 
     }
 
