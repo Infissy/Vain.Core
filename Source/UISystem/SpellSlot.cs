@@ -17,20 +17,7 @@ namespace Vain.SpellSystem.UI
         {
             set
             {
-                CastCount = value.CastCount;
-                Spell = value.Spell;                
-
-                var set_count = () => {
-                    
-                    this.CastCount = value.CastCount;
-                };
                 
-                value.Changed += set_count;
-
-                this.TreeExiting += ()=>
-                {
-                    value.Changed -= set_count;
-                };
 
             }
         }

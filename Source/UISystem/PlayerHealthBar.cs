@@ -17,7 +17,7 @@ public partial class PlayerHealthBar : HealthBar,
 
     }
 
-    public void HandleEvent(CharacterHealthUpdateArgs args)
+    public void HandleEvent<PlayerHealthUpdate>(CharacterHealthUpdateArgs args)
     {
         Health = args.Health;
     }

@@ -16,9 +16,7 @@ public partial class SpawnInfo : Resource
 	[Export]
 	public PackedScene EnemyPrefab;
 
-	[Export(PropertyHint.ArrayType)]
-	public Array<SpellChanneler> EnemySpells;
-
+	
 	[Export]
 	public uint NumberOfEnemies;
 
