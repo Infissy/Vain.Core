@@ -27,7 +27,7 @@ public interface IListener<E,A> : IListener
     where E : IGameEvent<A>
     where A : IGameEventArgs
 {
-    void HandleEvent(A args);
+    void HandleEvent<E>(A args);
 }
 
 
@@ -35,7 +35,7 @@ public interface IListenerTracked<E,A> : IListener<E,A>
     where E : IGameEventTracked<A>
     where A : IGameEventTrackedArgs
 {
-    void HandleEventTracked(A args);
+    void HandleEventTracked<E>(A args);
 }
 
 

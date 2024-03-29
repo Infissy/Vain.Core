@@ -27,7 +27,7 @@ internal class TypedEventWrapper<E,A> : EventWrapper
     {
         foreach(var listener in listeners)
         {
-            (listener as IListener<E,A>).HandleEvent((A)EventArgs);
+            (listener as IListener<E,A>).HandleEvent<E>((A)EventArgs);
         }
     }
 }
@@ -46,11 +46,11 @@ internal class TypedEventWrapperTracked<E,A> : EventWrapper
             {
                 if (listener is IListenerTracked<E, A> provider)
                 {
-                    provider.HandleEventTracked((A)EventArgs);   
+                    provider.HandleEventTracked<E>((A)EventArgs);   
                 }
                 else
                 {
-                    (listener as IListener<E, A>).HandleEvent((A)EventArgs);
+                    (listener as IListener<E, A>).HandleEvent<E>((A)EventArgs);
                 }
             }
 

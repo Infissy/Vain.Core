@@ -14,7 +14,7 @@ public class ListenerAgent<E,A> : IListener<E,A>
     {
         Hub.Instance.Subscribe(this);
     }
-    public void HandleEvent(A args)
+    public void HandleEvent<E>(A args)
     {
         Task.SetResult(args);
         Hub.Instance.Unsubscribe(this);
@@ -44,10 +44,10 @@ public class ListenerAgentTracked<E,A> : IListener<E,A>
         _tracking = tracking;
         foreach (var call in _calls)
         {
-            HandleEvent(call);   
+            HandleEvent<E>(call);   
         }
     }
-    public void HandleEvent(A args)
+    public void HandleEvent<E>(A args)
     {
 
         if(_tracking == 0)

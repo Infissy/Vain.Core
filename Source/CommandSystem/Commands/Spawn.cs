@@ -27,7 +27,7 @@ public static partial class DefaultPrograms
                 "?:s",
                 async (string entity) =>
                 {
-                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>();
+                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityTrackedArgs>();
                     var tracking = Hub.Instance.EmitTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>(new EntitySpawnRequestEventTrackedArgs{
                         EntityName = entity,
                     });
@@ -45,7 +45,7 @@ public static partial class DefaultPrograms
                 async (string entity, float x, float y) =>
                 {
                     
-                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>();
+                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityTrackedArgs>();
                     var tracking = Hub.Instance.EmitTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>(new EntitySpawnRequestEventTrackedArgs{
                         EntityName = entity,
                         Position = new Vector2(x,y),
@@ -64,7 +64,7 @@ public static partial class DefaultPrograms
                 "?:s ?:s",
                 async (string entity,string spawnPointTag) =>
                 {
-                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityRegisteredEventTrackedArgs>();
+                    var agent = new ListenerAgentTracked<EntityRegisteredEventTracked,EntityTrackedArgs>();
                     var tracking = Hub.Instance.EmitTracked<EntitySpawnRequestEventTracked, EntitySpawnRequestEventTrackedArgs>(new EntitySpawnRequestEventTrackedArgs{
                         EntityName = entity,
                         SpawnTag = spawnPointTag,

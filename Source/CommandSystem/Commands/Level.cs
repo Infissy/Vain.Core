@@ -21,7 +21,7 @@ public static partial class DefaultPrograms
             _task = task;
             Hub.Instance.Subscribe(this);
         }
-        public void HandleEvent(LevelNameEventArgs args)
+        public void HandleEvent<LevelChangedEvent>(LevelNameEventArgs args)
         {
             _task.SetResult(true);
         }
