@@ -1,7 +1,5 @@
 using Godot;
 using Vain.Configuration;
-using Vain.Core.ComponentSystem;
-using Vain.Singleton;
 
 namespace Vain.Core;
 
@@ -12,6 +10,8 @@ public partial class GameRegistry : Node
     public IndexResource ComponentIndex {get;set;}
     public IndexResource BehaviourIndex {get;set;}
     public IndexResource LevelIndex {get;set;}
+
+
     public override void _EnterTree()
     {
         base._EnterTree();

@@ -21,20 +21,46 @@ public partial class GameEvents
     }
 
 
-    public struct CharacterSpellCastEvent : IGameEvent<SpellCastEventArgs> { }
-    public struct SpellCastEventArgs: IGameEventArgs
-    {
-        public SpellCaster Caster;
-        public Spell Spell;
 
-    }
+    public static class Spell {
 
+        public struct SpellCastEvent : IGameEvent<SpellCastEventArgs> { }
+        public struct SpellCastEventArgs : IGameEventArgs
+        {
+            public Character Caster;
+            public Vector2 Target;
+            public string SpellName;
+            public string Template;
+        }
 
-    public struct SpellPickupEvent : IGameEvent<SpellPickupEventArgs> { }
-    public struct SpellPickupEventArgs : IGameEventArgs
-    {
-        public SpellCaster Caster;
-        public SpellChanneler Spell;
+        public struct SpellInstantiatedEvent : IGameEvent<SpellInstantiatedEventArgs> { }
+        public struct SpellInstantiatedEventArgs : IGameEventArgs
+        {
+            public SpellSystem.Spell Spell;
+        }
+
+        
+        public struct SpellCharacterHitEvent : IGameEvent<SpellCharacterHitEventArgs> { }
+        public struct SpellCharacterHitEventArgs : IGameEventArgs
+        {
+            public SpellSystem.Spell Spell;
+            public Character Character;
+        }
+         
+        public struct SpellCollisionEvent: IGameEvent<SpellCollisionEventArgs> { }
+        public struct SpellCollisionEventArgs : IGameEventArgs
+        {
+            public SpellSystem.Spell Caller;
+            public SpellSystem.Spell Collided;
+        }
+        
+
+        public struct PlayerSpellInputEvent : IGameEvent<PlayerSpellInputEventArgs> { }
+        public struct PlayerSpellInputEventArgs : IGameEventArgs
+        {
+            public SpellInput Input;
+        }
+        
     }
 
 

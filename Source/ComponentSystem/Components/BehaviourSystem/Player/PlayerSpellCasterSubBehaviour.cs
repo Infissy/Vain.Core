@@ -1,63 +1,136 @@
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Godot;
+
+using Vain.Core.ComponentSystem;
 using Vain.HubSystem;
-using Vain.Singleton;
-using Vain.SpellSystem;
-
-
+using Vain.HubSystem.GameEvent;
+using Vain.Log;
+using static Vain.HubSystem.GameEvent.GameEvents.Spell;
 using static Vain.HubSystem.Query.Queries;
 
-namespace Vain.Core.ComponentSystem.Behaviour;
-
-partial class PlayerSpellCasterSubBehaviour : SubBehaviour
+namespace Vain.SpellSystem;
+public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
+	IListener<PlayerSpellInputEvent,PlayerSpellInputEventArgs>
 {
-    public const string SLOT1 = "player_cast_slot1";
-    public const string SLOT2 = "player_cast_slot2";
-    public const string SLOT3 = "player_cast_slot3";
-    public const string SLOT4 = "player_cast_slot4";
-    public const string SLOT5 = "player_cast_slot5";
-    public const string SLOT6 = "player_cast_slot6";
-    public const string SLOT7 = "player_cast_slot7";
-    public const string SLOT8 = "player_cast_slot8";
 
-    public override void _UnhandledInput(InputEvent input)
+	
+
+	public override void _Ready()
+	{
+
+		base._Ready();
+		
+		
+		
+		Hub.Instance.Subscribe(this);
+		
+		var response = Hub.Instance.QueryData<SpellPathQuery,EmptyQueryRequest,SpellPathQueryResponse>(new EmptyQueryRequest());
+	
+		if(response != null)
+			BehaviourComponent.Character.GetComponent<SpellCasterComponent>().Spells = response?.NextLayerTemplates;
+	}
+	
+	int _lastInputCount	= 0;
+	List<SpellInput> _inputs = new List<SpellInput>();
+
+	private static class ACTIONS
+	{
+		public const string UP = "player_cast_up";
+		public const string DOWN = "player_cast_down";
+		public const string LEFT = "player_cast_left";
+		public const string RIGHT = "player_cast_right";
+		public const string CAST = "player_cast";
+	}
+
+
+    public override void _Process(double delta)
     {
-        if(input is not InputEventAction action)
-            return;
+        base._Process(delta);
 
-        if(!action.Action.ToString().Contains("player_cast_slot"))
-            return;
-        var spellCaster = BehaviourComponent.Character.GetComponent<SpellCaster>();
+		if(_inputs.First() == SpellInput.EnterCast && _inputs.Last() == SpellInput.ExitCast && _inputs.Count > 0)
+		{
+			Cast();
+			_inputs.Clear();
+			_lastInputCount = 0;
+			return;
+		}
+	
 
-        var targetResult = Hub.Instance.QueryData<MousePositionQuery, EmptyQueryRequest,PositionQueryResponse>();
+		if(Input.IsActionJustPressed(ACTIONS.CAST))
+			_inputs.Add(SpellInput.EnterCast);
+			
+		if(Input.IsActionJustPressed(ACTIONS.LEFT))
+			_inputs.Add(SpellInput.Left);
+		if(Input.IsActionJustPressed(ACTIONS.RIGHT))
+			_inputs.Add(SpellInput.Right);
+		if(Input.IsActionJustPressed(ACTIONS.UP))
+			_inputs.Add(SpellInput.Top);
+		if(Input.IsActionJustPressed(ACTIONS.DOWN))
+			_inputs.Add(SpellInput.Down);	
+		if(Input.IsActionJustReleased(ACTIONS.CAST))
+			_inputs.Add(SpellInput.ExitCast);
 
-        var position = targetResult?.Position ?? Vector2.Zero;
+		if(_inputs.Count > _lastInputCount)
+		{
+			_lastInputCount = _inputs.Count;
+			Hub.Instance.Emit<PlayerSpellInputEvent,PlayerSpellInputEventArgs>(new PlayerSpellInputEventArgs{Input = _inputs.Last()});
+		}
+		
 
-        switch (action.Action)
-        {
-            case SLOT1:
-                spellCaster.CastSpell(0,position);
-                break;
-            case SLOT2:
-                spellCaster.CastSpell(1,position);
-                break;
-            case SLOT3:
-                spellCaster.CastSpell(2,position);
-                break;
-            case SLOT4:
-                spellCaster.CastSpell(3,position);
-                break;
-            case SLOT5:
-                spellCaster.CastSpell(4,position);
-                break;
-            case SLOT6:
-                spellCaster.CastSpell(5,position);
-                break;
-            case SLOT7:
-                spellCaster.CastSpell(6,position);
-                break;
-            case SLOT8:
-                spellCaster.CastSpell(7,position);
-                break;
-        }
+		
+		
+	}
+  
+	void Cast(){
+	
+
+
+		var caster = BehaviourComponent.Character.GetComponent<SpellCasterComponent>();
+		var spellPath = Hub.Instance.QueryData<SpellPathQuery,EmptyQueryRequest,SpellPathQueryResponse>(new EmptyQueryRequest());
+
+		Debug.Assert(spellPath != null);	
+		_inputs.RemoveAt(0);
+		_inputs.RemoveAt(_inputs.Count - 1);
+
+		if(_inputs.Count * 4 < spellPath?.FirstLayer.Count )
+			return;
+
+
+		
+		int spellRange = spellPath?.FirstLayer.Count ?? 0 / 4;
+
+
+
+		//Input spell as base4 sequence
+		int spellIndex = 0;
+		for (int i = 0; i < spellRange; i++)
+		{
+			spellIndex += ((int)_inputs[i]) * 4 ^ i;
+		}
+
+		var spell = spellPath?.FirstLayer.ElementAtOrDefault(spellIndex);
+		if(spell == null)
+			return;
+
+		int templateIndex = 0;
+		for (int i = 0; i < spellPath?.NextLayerTemplates[spell]?.Length - spellRange; i++)
+		{
+			templateIndex += ((int)_inputs[spellRange + i]) * 4 ^ i;
+		}
+
+		var template = spellPath?.NextLayerTemplates[spell][templateIndex];
+
+
+		var response = Hub.Instance.QueryData<MousePositionQuery,EmptyQueryRequest,PositionQueryResponse>(new EmptyQueryRequest());		
+		caster.CastSpell(spell, template,response?.Position ?? BehaviourComponent.Character.Position);
+
+		RuntimeInternalLogger.Instance.Debug($"Player cast {spell} {template}");
+	}
+
+    public void HandleEvent<E>(PlayerSpellInputEventArgs args)
+    {
+        RuntimeInternalLogger.Instance.Debug($"Input: {args.Input}");
     }
 }

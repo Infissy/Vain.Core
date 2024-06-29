@@ -9,5 +9,9 @@ namespace Vain.Core.ComponentSystem;
 [GlobalClass]
 public partial class CharacterBehaviourComponent : Component
 {
-
+    public void AddSubBehaviour(SubBehaviour subBehaviour)
+    {
+        //TODO: FIX Temporary fix for multithreading
+        CallDeferred(MethodName.AddChild, subBehaviour);
+    }
 }

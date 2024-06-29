@@ -94,7 +94,7 @@ public static partial class DefaultPrograms
 
 
                     var entity = result.Value.Entities.First(e => e.RuntimeID == id) as Character;
-                    entity.GetComponent<CharacterBehaviourComponent>().AddChild(behaviour);
+                    entity.GetComponent<CharacterBehaviourComponent>().AddSubBehaviour(behaviour);
 
                     RuntimeInternalLogger.Instance.Information($"Component {behaviourName} successfully added.");
                 }

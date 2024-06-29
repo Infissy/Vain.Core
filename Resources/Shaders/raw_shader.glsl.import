@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://dq4fh3lgs6u88"
+path="res://.godot/imported/raw_shader.glsl-d22c3ea60cb3c0670aec99c0a6d214d0.res"
+
+[deps]
+
+source_file="res://Vain.Core/Resources/Shaders/raw_shader.glsl"
+dest_files=["res://.godot/imported/raw_shader.glsl-d22c3ea60cb3c0670aec99c0a6d214d0.res"]
+
+[params]
+

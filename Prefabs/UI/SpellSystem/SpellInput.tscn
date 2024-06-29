@@ -1,0 +1,84 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6sl7xb50e3h7"]
+
+[sub_resource type="GDScript" id="GDScript_i5pea"]
+script/source = "class_name SpellInput
+
+extends Control
+
+enum SpellInputType {
+	Up,
+	Down,
+	Left,
+	Right
+}
+
+
+
+var input_type_local : SpellInputType
+@export var input_type : SpellInputType:
+	get:
+		return input_type_local
+	set(value):
+		input_type_local = value
+	
+var pressed_local: bool
+
+
+
+@export var pressed : bool:
+	get: 
+		return pressed_local
+	set(value):
+		pressed_local = value
+
+
+func _ready():
+	for child : Label in get_children():
+		child.visible = false
+		child.modulate.a = 0.5
+		
+func set_visible_input():
+	for child : Label in get_children():
+		child.visible = false
+		
+	(get_child(int(input_type_local)) as Label).visible = true;
+
+	
+
+
+func set_pressed():
+	(get_child(int(input_type_local)) as Label).modulate.a = 1.0;
+"
+
+[node name="SpellInput" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_i5pea")
+
+[node name="Up" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "↑"
+
+[node name="Down" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "↓"
+
+[node name="Left" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "←"
+
+[node name="Right" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "→"

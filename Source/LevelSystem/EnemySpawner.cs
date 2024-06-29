@@ -115,12 +115,7 @@ public partial class EnemySpawner : Node
 
 			instance.GlobalPosition =  playerPosition + deltapos;
 
-			//TODO: Fix resource instantiation, even duplicate can't avoid making the resource shared between enemies, at the moment every enemy has their own spells preassigned
-			//TODO: Create a system to check if a system is enabled as to add components
-			var caster = instance.GetComponent<SpellCaster>();
-		
 
-			//caster.ChanceToCast = SpawnInfo[enemyName].ChanceToCastSpell;
 
 
 			instance.CharacterKilled += EnemyDestroyed;

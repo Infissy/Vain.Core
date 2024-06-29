@@ -13,6 +13,7 @@ using static Vain.HubSystem.Query.Queries;
 using static Vain.HubSystem.GameEvent.GameEvents.Entity;
 
 using Vain.HubSystem;
+using Vain.SpellSystem;
 
 namespace Vain.Core;
 
@@ -59,16 +60,18 @@ public partial class LevelManager : SubViewport,
 		Hub.Instance.RegisterDataProvider<EntityIndexQuery,EntityReferenceQueryRequest, EntityIndexQueryResponse>(this);
 		Hub.Instance.RegisterDataProvider<EntityQuery, EntityIndexQueryRequest, EntityReferenceQueryResponse>(this);
 		Hub.Instance.RegisterDataProvider<EntitiesInSceneQuery,EntitiesInSceneQueryRequest, EntityCollectionResponse>(this);
-    }
 
-	// Register a new entity and return its unique identifier.
-	// 
-	// Parameters:
-	//   entity - The entity to register.
-	// 
-	// Returns:
-	//   The unique identifier of the registered entity. If the entity has already an identifier, it will return that identifier.
-	public uint Register(IEntity entity)
+		
+    }
+ 
+    // Register a new entity and return its unique identifier.
+    // 
+    // Parameters:
+    //   entity - The entity to register.
+    // 
+    // Returns:
+    //   The unique identifier of the registered entity. If the entity has already an identifier, it will return that identifier.
+    public uint Register(IEntity entity)
 
 	{
 		//Hacky way to avoid entity duplication
@@ -150,7 +153,7 @@ public partial class LevelManager : SubViewport,
 		};
 		
 		this.AddChild(instance);
-	
+		AddChild(new SpellSystem.SpellSystem());
 
 	}
 

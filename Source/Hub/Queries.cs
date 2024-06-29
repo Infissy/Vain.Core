@@ -1,7 +1,10 @@
 
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using Godot;
 using Vain.Core;
+using Vain.SpellSystem;
 
 namespace Vain.HubSystem.Query;
 
@@ -53,4 +56,12 @@ public partial class Queries
     public struct EntityIndexQuery : IQuery<EntityReferenceQueryRequest, EntityIndexQueryResponse> {}
     public struct EntityQuery : IQuery<EntityIndexQueryRequest, EntityReferenceQueryResponse> {}
 
+
+    public struct SpellPathQuery : IQuery<EmptyQueryRequest, SpellPathQueryResponse> {}
+    public struct SpellPathQueryResponse : IQueryResponse
+    {
+        public List<string> FirstLayer; 
+        public Dictionary<string,string[]> NextLayerTemplates;
+        
+    }
 }
