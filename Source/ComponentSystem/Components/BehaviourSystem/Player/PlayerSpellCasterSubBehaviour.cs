@@ -15,25 +15,23 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 	IListener<PlayerSpellInputEvent,PlayerSpellInputEventArgs>
 {
 
-	
-
 	public override void _Ready()
 	{
 
 		base._Ready();
-		
-		
-		
+
+
+
 		Hub.Instance.Subscribe(this);
-		
+
 		var response = Hub.Instance.QueryData<SpellPathQuery,EmptyQueryRequest,SpellPathQueryResponse>(new EmptyQueryRequest());
-	
+
 		if(response != null)
 			BehaviourComponent.Character.GetComponent<SpellCasterComponent>().Spells = response?.NextLayerTemplates;
 	}
-	
+
 	int _lastInputCount	= 0;
-	List<SpellInput> _inputs = new List<SpellInput>();
+	List<SpellInput> _inputs = new();
 
 	private static class ACTIONS
 	{
@@ -49,18 +47,18 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
     {
         base._Process(delta);
 
-		if(_inputs.First() == SpellInput.EnterCast && _inputs.Last() == SpellInput.ExitCast && _inputs.Count > 0)
+        if (_inputs.Count > 0 && _inputs[0] == SpellInput.EnterCast && _inputs[^1] == SpellInput.ExitCast)
 		{
 			Cast();
 			_inputs.Clear();
 			_lastInputCount = 0;
 			return;
 		}
-	
+
 
 		if(Input.IsActionJustPressed(ACTIONS.CAST))
 			_inputs.Add(SpellInput.EnterCast);
-			
+
 		if(Input.IsActionJustPressed(ACTIONS.LEFT))
 			_inputs.Add(SpellInput.Left);
 		if(Input.IsActionJustPressed(ACTIONS.RIGHT))
@@ -68,29 +66,27 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 		if(Input.IsActionJustPressed(ACTIONS.UP))
 			_inputs.Add(SpellInput.Top);
 		if(Input.IsActionJustPressed(ACTIONS.DOWN))
-			_inputs.Add(SpellInput.Down);	
+			_inputs.Add(SpellInput.Down);
 		if(Input.IsActionJustReleased(ACTIONS.CAST))
 			_inputs.Add(SpellInput.ExitCast);
 
 		if(_inputs.Count > _lastInputCount)
 		{
 			_lastInputCount = _inputs.Count;
-			Hub.Instance.Emit<PlayerSpellInputEvent,PlayerSpellInputEventArgs>(new PlayerSpellInputEventArgs{Input = _inputs.Last()});
+            Hub.Instance.Emit<PlayerSpellInputEvent, PlayerSpellInputEventArgs>(new PlayerSpellInputEventArgs { Input = _inputs[^1] });
 		}
-		
 
-		
-		
 	}
-  
+
 	void Cast(){
-	
+
 
 
 		var caster = BehaviourComponent.Character.GetComponent<SpellCasterComponent>();
 		var spellPath = Hub.Instance.QueryData<SpellPathQuery,EmptyQueryRequest,SpellPathQueryResponse>(new EmptyQueryRequest());
 
-		Debug.Assert(spellPath != null);	
+		Debug.Assert(spellPath != null);
+
 		_inputs.RemoveAt(0);
 		_inputs.RemoveAt(_inputs.Count - 1);
 
@@ -98,8 +94,7 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 			return;
 
 
-		
-		int spellRange = spellPath?.FirstLayer.Count ?? 0 / 4;
+		int spellRange = (spellPath?.FirstLayer.Count ?? 0 ) / 4;
 
 
 

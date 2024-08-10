@@ -12,11 +12,11 @@ namespace Vain.SpellSystem;
 
 
 public enum SpellInput {
+    Top = 0,
+    Down = 1,
+    Left = 2,
+    Right = 3,
     EnterCast,
-    Top,
-    Down,
-    Left,
-    Right,
     ExitCast,
 }
 
