@@ -8,9 +8,9 @@ namespace Vain.InteractionSystem;
 public partial class CharacterInfo : Resource
 {
     [Export]
-    public string Name {get;set;}
+    public string Name { get; set; }
     [Export]
-    public string Description {get;set;}
+    public string Description { get; set; }
 
 
 }

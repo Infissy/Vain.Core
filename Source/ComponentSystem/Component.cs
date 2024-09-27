@@ -5,7 +5,7 @@ using Godot;
 namespace Vain.Core.ComponentSystem;
 
 [GlobalClass]
-public abstract partial class Component : Node
+public abstract partial class Component : BaseNode
 {
 
     public Character Character { get; private set; } = null!;
@@ -18,7 +18,7 @@ public abstract partial class Component : Node
         base._Ready();
 
 
-        if(!Engine.IsEditorHint())
+        if (!Engine.IsEditorHint())
             Character = GetParent<Character>();
         else
             base.UpdateConfigurationWarnings();

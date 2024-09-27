@@ -15,8 +15,8 @@ namespace Vain.Core;
 /// Main Game Camera
 /// </summary>
 
-public partial class MainCamera : Camera2D , IEntity,
-    IDataProvider<MousePositionQuery,EmptyQueryRequest,PositionQueryResponse>
+public partial class MainCamera : Camera2D, IEntity,
+    IDataProvider<MousePositionQuery, EmptyQueryRequest, PositionQueryResponse>
 {
 
 
@@ -28,7 +28,7 @@ public partial class MainCamera : Camera2D , IEntity,
 
 
 
-    public uint RuntimeID {get; set;}
+    public uint RuntimeID { get; set; }
 
 
     public override void _EnterTree()
@@ -46,8 +46,8 @@ public partial class MainCamera : Camera2D , IEntity,
 
 
 
-        var queryResult = Hub.Instance.QueryData<PlayerPositionQuery,EmptyQueryRequest,PositionQueryResponse>();
-        if(queryResult != null)
+        var queryResult = Hub.Instance.QueryData<PlayerPositionQuery, EmptyQueryRequest, PositionQueryResponse>();
+        if (queryResult != null)
             _oldPlayerPosition = queryResult?.Position ?? Vector2.Zero;
 
     }
@@ -56,11 +56,11 @@ public partial class MainCamera : Camera2D , IEntity,
     {
         base._Process(delta);
 
-        var queryResult = Hub.Instance.QueryData<PlayerPositionQuery,EmptyQueryRequest,PositionQueryResponse>();
-        if(queryResult == null)
+        var queryResult = Hub.Instance.QueryData<PlayerPositionQuery, EmptyQueryRequest, PositionQueryResponse>();
+        if (queryResult == null)
             return;
 
-        var position =  queryResult?.Position ?? Vector2.Zero;
+        var position = queryResult?.Position ?? Vector2.Zero;
         var relMotion = position - _oldPlayerPosition;
 
 
@@ -82,7 +82,7 @@ public partial class MainCamera : Camera2D , IEntity,
     {
         base._EnterTree();
         Hub.Instance.UnregisterDataProvider(this);
-        Hub.Instance.Emit<EntityDestroyedEvent,EntityArgs>(new EntityArgs{Entity = this});
+        Hub.Instance.Emit<EntityDestroyedEvent, EntityArgs>(new EntityArgs { Entity = this });
 
     }
 
@@ -90,7 +90,7 @@ public partial class MainCamera : Camera2D , IEntity,
 
     public PositionQueryResponse? Provide(EmptyQueryRequest request)
     {
-        return new PositionQueryResponse {Position = GetMouseScenePosition() };
+        return new PositionQueryResponse { Position = GetMouseScenePosition() };
     }
 }
 

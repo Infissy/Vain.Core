@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Godot;
+
 namespace Vain.Core;
 
 //Rapresents every single tangible entity in Vain
@@ -12,7 +16,13 @@ public interface IEntity
     /// </summary>
 
 
-    uint RuntimeID {get; set;}
+    uint RuntimeID { get; set; }
 
+
+
+    public static IReadOnlyDictionary<string, string> EntityPrefabs => new Dictionary<string, string>()
+    {
+        {"main_camera", "res://Vain.Core/Prefabs/Entities/MainCamera.tscn"},
+    };
 }
 

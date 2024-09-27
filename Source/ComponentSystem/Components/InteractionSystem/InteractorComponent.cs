@@ -3,11 +3,11 @@ using System.Linq;
 using Godot;
 using Vain.Core;
 using Vain.Core.ComponentSystem;
-using Vain.Singleton;
 
 namespace Vain.InteractionSystem;
 
 [GlobalClass]
+[SceneBinding("res::Vain.Core/Prefabs/Components/interactor_component.tscn")]
 //TODO: At the moment all the system is focused to the interaction between NPC and Player, maybe allow NPC to NPC interaction for more complex social behaviours 
 public partial class InteractorComponent : Component
 {
@@ -42,10 +42,11 @@ public partial class InteractorComponent : Component
 
     void _bodyEntered(Node body)
     {
-        if(body is Character character)
-        {   var interactible = character.GetComponent<InteractibleComponent>();
+        if (body is Character character)
+        {
+            var interactible = character.GetComponent<InteractibleComponent>();
 
-            if(interactible != null)
+            if (interactible != null)
                 _interactibles.Add(interactible);
 
         }
@@ -54,11 +55,11 @@ public partial class InteractorComponent : Component
 
     void _bodyExited(Node body)
     {
-        if(body is Character character)
+        if (body is Character character)
         {
             var interactible = character.GetComponent<InteractibleComponent>();
 
-            if(interactible != null)
+            if (interactible != null)
                 _interactibles.Remove(interactible);
 
         }
@@ -67,7 +68,7 @@ public partial class InteractorComponent : Component
     void CharacterActionHandler(CharacterAction action)
     {
 
-        if(action == Core.CharacterAction.INTERACT && _interactibles.Count > 0)
+        if (action == Core.CharacterAction.INTERACT && _interactibles.Count > 0)
         {
 
             InteractibleComponent nearestInteractible = _interactibles.OrderBy(
@@ -85,10 +86,10 @@ public partial class InteractorComponent : Component
 
     void handleInteraction(Interaction interaction)
     {
-        if(interaction is DialogueInteraction dialogueInteraction)
+        if (interaction is DialogueInteraction dialogueInteraction)
         {
 
-            EmitSignal(SignalName.OnDialogue,dialogueInteraction.Dialogue);
+            EmitSignal(SignalName.OnDialogue, dialogueInteraction.Dialogue);
         }
     }
 }

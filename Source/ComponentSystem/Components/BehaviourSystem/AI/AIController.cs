@@ -5,20 +5,21 @@ using Vain.Console;
 namespace Vain.Core.ComponentSystem.Behaviour;
 
 
+[SceneBindingAttribute("res::Vain.Core/Prefabs/Components/Behaviour/AIController.tscn")]
 public partial class AIController : SubBehaviour
 {
 	[Export]
-	internal float AggressionLevel {get;set;}
+	internal float AggressionLevel { get; set; }
 	[Export]
-	AIMovementStrategy AI {get;set;}
+	AIMovementStrategy AI { get; set; }
 
 	[Export]
-	internal float AvoidanceDistance{get; set;}
+	internal float AvoidanceDistance { get; set; }
 
 	[Export]
 	Area2D _avoidanceArea;
 
-	internal Character HostileCharacter{get;set;}
+	internal Character HostileCharacter { get; set; }
 	public override void _Ready()
 	{
 		_avoidanceArea = GetNode<Area2D>("Area2D");
@@ -29,7 +30,7 @@ public partial class AIController : SubBehaviour
 
 	public override void _Process(double delta)
 	{
-		var targetPosition = AI.BehaviourTick(BehaviourComponent.Character,this);
+		var targetPosition = AI.BehaviourTick(BehaviourComponent.Character, this);
 
 		targetPosition = AvoidFilter(targetPosition);
 
@@ -63,8 +64,8 @@ public partial class AIController : SubBehaviour
 		//Opposite of averageEnemyPosition, best direction(not normalized) to get away from enemies, 
 		var avoidPosition = ((character.GlobalPosition - averageEnemyPosition).Normalized() * AvoidanceDistance) + character.GlobalPosition;
 
-        //Takes the average position of the enemies, and weights on depending on the distance to the npc
-        //Nearer the average position is to the NPC more the NPC weights the direction to get away from enemies
-        return ((avoidPosition - targetLocation) * (1 - ((averageEnemyPosition - character.GlobalPosition).Length() / AvoidanceDistance))) + targetLocation;
-    }
+		//Takes the average position of the enemies, and weights on depending on the distance to the npc
+		//Nearer the average position is to the NPC more the NPC weights the direction to get away from enemies
+		return ((avoidPosition - targetLocation) * (1 - ((averageEnemyPosition - character.GlobalPosition).Length() / AvoidanceDistance))) + targetLocation;
+	}
 }

@@ -1,17 +1,20 @@
 using Vain;
 using Godot;
-using Vain.Configuration;
+
 
 namespace Vain.CLI;
 
 public static class ScriptLoader
 {
-    public static Script LoadScript(string scriptName)
+
+    static readonly string[] s_ScriptFolders = { "res://Vain.Core/Resources/Scripts", "res://Vain/Resources/Scripts" };
+
+    public static Script? LoadScript(string scriptName)
     {
-        foreach (var path in ProjectConfiguration.LoadConfiguration(ProjectConfiguration.MultiSourceConfiguration.ScriptsFolder))
+        foreach (var path in s_ScriptFolders)
         {
-            var scriptFile = FileAccess.Open($"{path}/{scriptName}",FileAccess.ModeFlags.Read);
-            if(scriptFile  != null)
+            var scriptFile = FileAccess.Open($"{path}/{scriptName}", FileAccess.ModeFlags.Read);
+            if (scriptFile != null)
             {
                 var text = scriptFile.GetAsText();
                 return new Script(text);

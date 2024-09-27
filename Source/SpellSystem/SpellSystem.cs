@@ -15,9 +15,9 @@ namespace Vain.SpellSystem;
 
 partial class SpellSystem : Node,
     IListener<SpellCastEvent, SpellCastEventArgs>,
-    IDataProvider<SpellPathQuery,EmptyQueryRequest, SpellPathQueryResponse>
+    IDataProvider<SpellPathQuery, EmptyQueryRequest, SpellPathQueryResponse>
 {
-    Dictionary<string,string[]> _templates = new();
+    Dictionary<string, string[]> _templates = new();
     Dictionary<string, Type> _aspects = new();
 
 
@@ -29,14 +29,15 @@ partial class SpellSystem : Node,
 
         AddAspect<FireballAspect>();
     }
-    
-    public void AddAspect<T>() where T : Aspect {
+
+    public void AddAspect<T>() where T : Aspect
+    {
 
         var spellName = Aspect.GetName<T>();
         var templates = Aspect.GetTemplates<T>();
 
-        _aspects.Add(spellName,typeof(T));
-        
+        _aspects.Add(spellName, typeof(T));
+
         _templates[spellName] = templates;
 
     }
@@ -49,19 +50,20 @@ partial class SpellSystem : Node,
         RuntimeInternalLogger.Instance.Debug($"Spell cast: {args.SpellName} | {args.Template} by {args.Caster} to {args.Target}");
 
 
-        var aspect = _aspects[args.SpellName];   
+        var aspect = _aspects[args.SpellName];
 
-        var spell = new Spell(args.Caster, Activator.CreateInstance(aspect) as Aspect, args.Target); 
+        var spell = new Spell(args.Caster, Activator.CreateInstance(aspect) as Aspect, args.Target);
 
         AddChild(spell);
         spell.Position = args.Caster.GlobalPosition;
-        
+
     }
 
 
     public SpellPathQueryResponse? Provide(EmptyQueryRequest request)
     {
-        return new SpellPathQueryResponse{
+        return new SpellPathQueryResponse
+        {
             FirstLayer = _aspects.Keys.ToList(),
             NextLayerTemplates = _templates,
         };

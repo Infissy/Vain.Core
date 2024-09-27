@@ -5,9 +5,10 @@ using Vain.SpellSystem;
 namespace Vain.Core.ComponentSystem;
 
 [GlobalClass]
+[SceneBindingAttribute("res::Vain.Core/Prefabs/Components/animation_controller_component.tscn")]
 public partial class AnimationControllerComponent : Component
 {
-    enum Animation 
+    enum Animation
     {
         RUN,
         IDLE,
@@ -26,24 +27,24 @@ public partial class AnimationControllerComponent : Component
     public override void _Process(double delta)
     {
         base._Process(delta);
-        
-        
-        
-        if(Character.Velocity.Length() == 0)
+
+
+
+        if (Character.Velocity.Length() == 0)
         {
-            if(_animationPlayer.CurrentAnimation != "Cast")
+            if (_animationPlayer.CurrentAnimation != "Cast")
             {
                 _animationPlayer.Play("Idle");
 
             }
-            
+
         }
-        
-        
+
+
 
     }
-        
 
-    
-    
-} 
+
+
+
+}

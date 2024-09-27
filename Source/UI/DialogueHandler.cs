@@ -14,12 +14,12 @@ public partial class DialogueHandler : Control
     PackedScene _dialogueBox;
 
 
-    
+
 
 
     void HandleDialogue(string dialogue)
     {
-        if(GetChildCount() > 0)
+        if (GetChildCount() > 0)
             GetChild(0).QueueFree();
 
 

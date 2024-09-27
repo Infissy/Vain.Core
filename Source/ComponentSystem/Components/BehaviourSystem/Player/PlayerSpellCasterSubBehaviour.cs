@@ -12,7 +12,7 @@ using static Vain.HubSystem.Query.Queries;
 
 namespace Vain.SpellSystem;
 public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
-	IListener<PlayerSpellInputEvent,PlayerSpellInputEventArgs>
+	IListener<PlayerSpellInputEvent, PlayerSpellInputEventArgs>
 {
 
 	public override void _Ready()
@@ -20,17 +20,15 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 
 		base._Ready();
 
-
-
 		Hub.Instance.Subscribe(this);
 
-		var response = Hub.Instance.QueryData<SpellPathQuery,EmptyQueryRequest,SpellPathQueryResponse>(new EmptyQueryRequest());
+		var response = Hub.Instance.QueryData<SpellPathQuery, EmptyQueryRequest, SpellPathQueryResponse>(new EmptyQueryRequest());
 
-		if(response != null)
+		if (response != null)
 			BehaviourComponent.Character.GetComponent<SpellCasterComponent>().Spells = response?.NextLayerTemplates;
 	}
 
-	int _lastInputCount	= 0;
+	int _lastInputCount = 0;
 	List<SpellInput> _inputs = new();
 
 	private static class ACTIONS
@@ -43,11 +41,13 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 	}
 
 
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
 
-        if (_inputs.Count > 0 && _inputs[0] == SpellInput.EnterCast && _inputs[^1] == SpellInput.ExitCast)
+
+
+		if (_inputs.Count > 0 && _inputs[0] == SpellInput.EnterCast && _inputs[^1] == SpellInput.ExitCast)
 		{
 			Cast();
 			_inputs.Clear();
@@ -56,45 +56,47 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 		}
 
 
-		if(Input.IsActionJustPressed(ACTIONS.CAST))
+		if (Input.IsActionJustPressed(ACTIONS.CAST))
+		{
+			_inputs.Clear();
 			_inputs.Add(SpellInput.EnterCast);
+		}
 
-		if(Input.IsActionJustPressed(ACTIONS.LEFT))
+		if (Input.IsActionJustPressed(ACTIONS.LEFT))
 			_inputs.Add(SpellInput.Left);
-		if(Input.IsActionJustPressed(ACTIONS.RIGHT))
+		if (Input.IsActionJustPressed(ACTIONS.RIGHT))
 			_inputs.Add(SpellInput.Right);
-		if(Input.IsActionJustPressed(ACTIONS.UP))
+		if (Input.IsActionJustPressed(ACTIONS.UP))
 			_inputs.Add(SpellInput.Top);
-		if(Input.IsActionJustPressed(ACTIONS.DOWN))
+		if (Input.IsActionJustPressed(ACTIONS.DOWN))
 			_inputs.Add(SpellInput.Down);
-		if(Input.IsActionJustReleased(ACTIONS.CAST))
+		if (Input.IsActionJustReleased(ACTIONS.CAST))
 			_inputs.Add(SpellInput.ExitCast);
 
-		if(_inputs.Count > _lastInputCount)
+		if (_inputs.Count > _lastInputCount && _inputs[0] == SpellInput.EnterCast)
 		{
 			_lastInputCount = _inputs.Count;
-            Hub.Instance.Emit<PlayerSpellInputEvent, PlayerSpellInputEventArgs>(new PlayerSpellInputEventArgs { Input = _inputs[^1] });
+			Hub.Instance.Emit<PlayerSpellInputEvent, PlayerSpellInputEventArgs>(new PlayerSpellInputEventArgs { Input = _inputs[^1] });
 		}
 
 	}
 
-	void Cast(){
-
-
+	void Cast()
+	{
 
 		var caster = BehaviourComponent.Character.GetComponent<SpellCasterComponent>();
-		var spellPath = Hub.Instance.QueryData<SpellPathQuery,EmptyQueryRequest,SpellPathQueryResponse>(new EmptyQueryRequest());
+		var spellPath = Hub.Instance.QueryData<SpellPathQuery, EmptyQueryRequest, SpellPathQueryResponse>(new EmptyQueryRequest());
 
 		Debug.Assert(spellPath != null);
 
 		_inputs.RemoveAt(0);
 		_inputs.RemoveAt(_inputs.Count - 1);
 
-		if(_inputs.Count * 4 < spellPath?.FirstLayer.Count )
+		if (_inputs.Count * 4 < spellPath?.FirstLayer.Count)
 			return;
 
 
-		int spellRange = (spellPath?.FirstLayer.Count ?? 0 ) / 4;
+		int spellRange = (spellPath?.FirstLayer.Count ?? 0) / 4;
 
 
 
@@ -106,7 +108,7 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 		}
 
 		var spell = spellPath?.FirstLayer.ElementAtOrDefault(spellIndex);
-		if(spell == null)
+		if (spell == null)
 			return;
 
 		int templateIndex = 0;
@@ -118,14 +120,14 @@ public partial class PlayerSpellCasterSubBehaviour : SubBehaviour,
 		var template = spellPath?.NextLayerTemplates[spell][templateIndex];
 
 
-		var response = Hub.Instance.QueryData<MousePositionQuery,EmptyQueryRequest,PositionQueryResponse>(new EmptyQueryRequest());		
-		caster.CastSpell(spell, template,response?.Position ?? BehaviourComponent.Character.Position);
+		var response = Hub.Instance.QueryData<MousePositionQuery, EmptyQueryRequest, PositionQueryResponse>(new EmptyQueryRequest());
+		caster.CastSpell(spell, template, response?.Position ?? BehaviourComponent.Character.Position);
 
 		RuntimeInternalLogger.Instance.Debug($"Player cast {spell} {template}");
 	}
 
-    public void HandleEvent<E>(PlayerSpellInputEventArgs args)
-    {
-        RuntimeInternalLogger.Instance.Debug($"Input: {args.Input}");
-    }
+	public void HandleEvent<E>(PlayerSpellInputEventArgs args)
+	{
+		RuntimeInternalLogger.Instance.Debug($"Input: {args.Input}");
+	}
 }

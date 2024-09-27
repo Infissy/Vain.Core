@@ -60,8 +60,8 @@ public partial class Queries
     public struct SpellPathQuery : IQuery<EmptyQueryRequest, SpellPathQueryResponse> {}
     public struct SpellPathQueryResponse : IQueryResponse
     {
-        public List<string> FirstLayer; 
+        public List<string> FirstLayer;
         public Dictionary<string,string[]> NextLayerTemplates;
-        
+
     }
 }

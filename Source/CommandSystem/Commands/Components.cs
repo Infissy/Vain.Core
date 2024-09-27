@@ -14,7 +14,7 @@ public static partial class DefaultPrograms
 
     public static readonly Program Components = new()
     {
-        Name  = "component",
+        Name = "component",
 
         Description = "character id : number list/add/remove",
         Commands =
@@ -24,7 +24,7 @@ public static partial class DefaultPrograms
                 "list",
                 () =>
                 {
-                    var components = GameRegistry.Instance.ComponentIndex.IndexedEntities.Keys;
+                    var components = GameRegistry.Instance.Components;
 
                     var outputComponents = "\nAvailable Components:\n";
 
@@ -36,7 +36,7 @@ public static partial class DefaultPrograms
                     RuntimeInternalLogger.Instance.Information(outputComponents);
                 }
             ),
-            new Command 
+            new Command
             (
                 "list ?:n",
                 (int id) => {
@@ -47,7 +47,7 @@ public static partial class DefaultPrograms
                     {
                         RuntimeInternalLogger.Instance.Warning("No entity container in scene.");
                         return;
-                    }   
+                    }
                     if(response?.Entity == null || !(response?.Entity is Character))
                     {
                         RuntimeInternalLogger.Instance.Warning($"No character in scene with id : {id}.");
@@ -62,19 +62,19 @@ public static partial class DefaultPrograms
                 }
             ),
 
-            new Command 
+            new Command
             (
                 "add ?:n ?:s",
                 (int id, string componentName) => {
                     var componentSuccessfulyFetched = GameRegistry.Instance
-                                                        .ComponentIndex.IndexedEntities.TryGetValue(componentName,out GodotObject componentScene);
+                                                       .Components.Contains(componentName);
                     if(!componentSuccessfulyFetched)
                     {
                         RuntimeInternalLogger.Instance.Warning($"No component found with name '{componentName}.'");
                         return;
                     }
 
-                    var component = (componentScene as IndexedResourceWrapper).Instantiate() as Component;
+                    var component = GameRegistry.Instance.Instantiate(componentName) as Component;
                     component.Name = componentName;
 
 

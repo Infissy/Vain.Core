@@ -13,7 +13,7 @@ using static Vain.HubSystem.GameEvent.GameEvents.Entity;
 namespace Vain.CLI;
 public static partial class DefaultPrograms
 {
-    class LevelLoadedProxy : IListener<LevelChangedEvent,LevelNameEventArgs>
+    class LevelLoadedProxy : IListener<LevelChangedEvent, LevelNameEventArgs>
     {
         TaskCompletionSource<bool> _task;
         public LevelLoadedProxy(TaskCompletionSource<bool> task)
@@ -33,7 +33,7 @@ public static partial class DefaultPrograms
 
     public static readonly Program Level = new()
     {
-        Name  = "level",
+        Name = "level",
 
         Description = "list / load key:string",
         Commands =
@@ -43,7 +43,7 @@ public static partial class DefaultPrograms
                 "list",
                 () =>
                 {
-                    var levels = GameRegistry.Instance.LevelIndex.IndexedEntities.Keys;
+                    var levels = GameRegistry.Instance.Levels;
 
                     var outputLevels = "\nAvailable Levels:\n";
 
@@ -53,33 +53,33 @@ public static partial class DefaultPrograms
                     }
                     outputLevels += "\n";
                     RuntimeInternalLogger.Instance.Information(outputLevels);
-                    
-                    
+
+
                     return "";
                 }
             ),
             new Command
             (
                 "load ?:s",
-                async (string key) => 
+                async (string key) =>
                 {
-                    
+
 
                     var waitingTask = new TaskCompletionSource<bool>();
                     var proxy = new LevelLoadedProxy(waitingTask);
                     Hub.Instance.Emit<LevelChangeRequestEvent,LevelNameEventArgs>(new LevelNameEventArgs{ LevelName = key});
-                    
 
-                    
 
-                    
+
+
+
                     await waitingTask.Task;
 
                     RuntimeInternalLogger.Instance.Information($"Loaded level {key}");
 
                     return "";
-                } 
-                    
+                }
+
             ),
         }
     };

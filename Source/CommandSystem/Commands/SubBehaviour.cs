@@ -14,7 +14,7 @@ public static partial class DefaultPrograms
 {
     public static readonly Program SubBehaviour = new()
     {
-        Name  = "sub_behaviour",
+        Name = "sub_behaviour",
 
         Description = "character id : number list/add/remove",
 
@@ -25,7 +25,7 @@ public static partial class DefaultPrograms
                 "list",
                 () =>
                 {
-                    var behaviours = GameRegistry.Instance.BehaviourIndex.IndexedEntities.Keys;
+                    var behaviours = GameRegistry.Instance.SubBehaviours;
                     var outputBehaviours = "\nAvailable Behaviour:\n";
 
                     foreach (var behaviour in behaviours)
@@ -36,7 +36,7 @@ public static partial class DefaultPrograms
                     RuntimeInternalLogger.Instance.Information(outputBehaviours);
                 }
             ),
-            new Command 
+            new Command
             (
                 "list ?:n",
                 (int id) => {
@@ -65,18 +65,18 @@ public static partial class DefaultPrograms
                 }
             ),
 
-            new Command 
+            new Command
             (
                 "add ?:n ?:s",
                 (int id, string behaviourName) => {
-                    var componentSuccessfulyFetched = GameRegistry.Instance.BehaviourIndex.IndexedEntities.TryGetValue(behaviourName,out GodotObject behaviourScene);
+                    var componentSuccessfulyFetched = GameRegistry.Instance.SubBehaviours.Contains(behaviourName);
                     if(!componentSuccessfulyFetched)
                     {
                         RuntimeInternalLogger.Instance.Warning($"Behaviour with name {behaviourName} was not found.");
                         return;
                     }
 
-                    var behaviour = (behaviourScene as IndexedResourceWrapper).Instantiate() as SubBehaviour;
+                    var behaviour = GameRegistry.Instance.Instantiate(behaviourName) as SubBehaviour;
 
 
                     var result = Hub.Instance.QueryData<EntitiesInSceneQuery, EntitiesInSceneQueryRequest,EntityCollectionResponse>(
